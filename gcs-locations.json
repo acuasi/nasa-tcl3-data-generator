@@ -1,0 +1,12 @@
+{
+	"location1":{ 
+		"latitude": "64.831645",
+		"longitude": "-147.38416",
+		"altitude": "144"
+	},
+	"location2":{ 
+		"latitude": "46.831645",
+		"longitude": "-174.38416",
+		"altitude": "104"
+	}
+}
