@@ -263,7 +263,7 @@ class Arducopter():
         gcsPosAlt_ft = gcs_location['altitude']
 
         # NASA no longer requires us to generate aircraft specifications file for each flight, so we'll need to store
-        # data about each configuration in this dictionary. Populate once configurations are finalized
+        # data about each configuration in this dictionary. Populate from configuration file once finalized.
         aircraft = {"N249UA": ['helicopter', 17.0], "N254MH": ['multirotor', 11.2], "N255MH": ['multirotor', 11.4]}
 
         tlog_name = os.path.basename(tlog_csv)
