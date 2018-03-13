@@ -17,11 +17,14 @@ ardu = arducopter.Arducopter()
 def test_state():
 	ardu.state(mission_insight_file_path, tlog_csv_file_path)
 	assert(os.path.exists(state_file))
+	os.remove(state_file)
 
 def test_auxiliary():
 	ardu.auxiliary(mission_insight_file_path, tlog_csv_file_path, gcs_location1)
 	assert(os.path.exists(auxiliary_file))
+	os.remove(auxiliary_file)
 
 def test_flight_plan():
 	ardu.flight(mission_insight_file_path, waypoints_file_path, tlog_csv_file_path)
 	assert(os.path.exists(aircraft_flight_plan_file))
+	os.remove(aircraft_flight_plan_file)
