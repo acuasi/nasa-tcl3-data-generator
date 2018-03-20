@@ -1,3 +1,6 @@
 {
-  "test_arducopter.py::test_waypoints": true
+  "test_arducopter.py::test_waypoints": true,
+  "test_dji.py::test_auxiliary": true,
+  "test_dji.py::test_flight_plan": true,
+  "test_dji.py::test_state": true
 }

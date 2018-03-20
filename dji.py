@@ -26,7 +26,7 @@ class Dji():
 
     leap_seconds = 18
 
-    def state(self, dji_csv_log_file, mission_insight_file):
+    def state(self, mission_insight_file, dji_csv_log_file):
         """Create UASState JSON file for NASA UTM TCL3.
 
         Args:
@@ -71,8 +71,6 @@ class Dji():
             gps_time = values_list[header_map["GPS:Time"]]
             if gps_time and int(gps_time) > 0:
                 break
-            else:
-                raise InvalidLog("No GPS lock.")
 
         # Get string value of valid gps date time
         gps_date_timestamp = values_list[header_map["GPS:dateTimeStamp"]]
@@ -100,7 +98,7 @@ class Dji():
         for line in f:
             values_list = line.split(",")
             vehiclePositionLat_deg = values_list[header_map["GPS:Lat"]] # noqa
-            vehiclePositionLon_deg = values_list[header_map["GPS:Lon"]] # noqa
+            vehiclePositionLon_deg = values_list[header_map["GPS:Long"]] # noqa
             vehiclePositionAlt_ft = values_list[header_map["relativeHeight"]] # noqa
             gpsAltitude_ft = values_list[header_map["GPS:heightMSL"]] # noqa
             hdop_nonDim = values_list[header_map["GPS:DOP:H"]] # noqa
@@ -157,7 +155,7 @@ class Dji():
 
         f.close()
 
-    def auxiliary(self, dji_csv_log_file, mission_insight_file, gcs_location):
+    def auxiliary(self, mission_insight_file, dji_csv_log_file, gcs_location):
         """Create the UASAuxiliary file for NASA UTM TCL3.
 
         Args:
@@ -169,6 +167,7 @@ class Dji():
             null
         """
         takeoff = False
+        aux_values = {}
 
         f = open(dji_csv_log_file, "r")
         m = open(mission_insight_file, "r")
@@ -206,8 +205,9 @@ class Dji():
         gcsPosLat_deg = gcs_location['latitude']         # noqa
         gcsPosLon_deg = gcs_location['longitude']        # noqa
         gcsPosAlt_ft = gcs_location['altitude']          # noqa
-        # Change this once drop-down menu added to GUI
-        testIdentifiers = "CNS1"
+        # Change these once drop-down menu added to GUI
+        testIdentifiers = "CNS1"                         # noqa
+        flightTestCardName = "ExampleTestCardName"       # noqa
 
         # Read headers and create a map bewteen header name and column number
         header_map = {}
@@ -216,30 +216,56 @@ class Dji():
         for header in headers_list:
             header_map[header] = headers_list.index(header)
 
+        # Loop through file looking for two conditions:
+        # * Non-empty string for GPS Time
+        # * GPS Time > 0, indicating GPS lock
+        for line in f:
+            values_list = line.split(",")
+            gps_time = values_list[header_map["GPS:Time"]]
+            if gps_time and (int(gps_time) > 0):
+                break
+
+        # Get string value of valid gps date time
+        gps_date_timestamp = values_list[header_map["GPS:dateTimeStamp"]]
+
+        # Create a date time object from the string value
+        gps_date = datetime.datetime.strptime(gps_date_timestamp,
+                                              "%Y-%m-%dT%H:%M:%SZ")
+        unix_time = gps_date.timestamp()
+        gpsSec = unix_time - 315964800.0 + self.leap_seconds # noqa
+        gpsWeek = int(gpsSec // 604800) # noqa
+
+        # Date time is in ISO 8601 format; convert for NASA file name
+        date, time = gps_date_timestamp.split("T")
+        date = date.replace("-", "")
+        time = time.replace("-", "").replace(":", "")[:-3]
+
+        out_file_name = "UTM-ACUASI-{}-{}-UASAuxiliary.csv".format(date, time)
+
         for line in f:
             values_list = line.split(",")
             flight_mode = values_list[header_map["flyCState"]]
             gps_lat = values_list[header_map["GPS:Lat"]]
-            gps_lon = values_list[header_map["GPS:Lon"]]
+            gps_lon = values_list[header_map["GPS:Long"]]
             gps_alt = values_list[header_map["GPS:heightMSL"]]
 
             if "takeoff" in flight_mode.lower() and not takeoff:
-                takeoffPosLat_deg = gps_lat             					# noqa
-                takeoffPosLon_deg = gps_lon             					# noqa
-                takeoffPosAlt_ft = gps_alt              					# noqa
-            	takeoffTime = values_list[header_map[GPS:dateTimeStamp]]    # noqa
+                takeoffPosLat_deg = gps_lat                                 # noqa
+                takeoffPosLon_deg = gps_lon                                 # noqa
+                takeoffPosAlt_ft = gps_alt                                  # noqa
+                takeoffTime = values_list[header_map["GPS:dateTimeStamp"]]    # noqa
                 takeoff = True
 
             # Assign every time there's a non-zero value so it ends
             # up being the last known GPS location which we assume to be
             # the landing location
             if gps_lat != 0 and gps_lon != 0:
-                landingPosLat_deg = gps_lat             					# noqa
-                landingPosLon_deg = gps_lon             					# noqa
-                landingPosAlt_deg = gps_alt             					# noqa
-                landingTime = values_list[header_map[GPS:dateTimeStamp]]    # noqa
+                landingPosLat_deg = gps_lat                                 # noqa
+                landingPosLon_deg = gps_lon                                 # noqa
+                landingPosAlt_deg = gps_alt                                 # noqa
+                landingTime = values_list[header_map["GPS:dateTimeStamp"]]    # noqa
 
-        aux_values["typeOfOperation"] = typeOfoperation
+        aux_values["typeOfOperation"] = typeOfOperation
         aux_values["flightTestCardName"] = flightTestCardName
         aux_values["testIdentifiers"] = testIdentifiers
         aux_values["takeOffWeight_lb"] = takeOffWeight_lb
@@ -255,7 +281,12 @@ class Dji():
         aux_values["gcsPosLon_deg"] = gcsPosLon_deg
         aux_values["gcsPosAlt_ft"] = gcsPosAlt_ft
 
-    def flight(self, dji_csv_log_file, mission_insight_file, waypoints):
+        json_string = json.dumps(aux_values)
+
+        of = open(out_file_name, "w")
+        of.write(json_string)
+
+    def flight(self, mission_insight_file, dji_csv_log_file, waypoints):
         """Create the UASFlight file for NASA UTM TCL3.
 
         Args:
