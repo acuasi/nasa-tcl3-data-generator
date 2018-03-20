@@ -10,6 +10,7 @@ import json
 import uas_state
 import uas_auxiliary
 import flight_plan
+from arducopter import Arducopter
 from os.path import expanduser
 from PyQt5.QtWidgets import (QWidget, QApplication, QMainWindow, QHBoxLayout,
                             QVBoxLayout, QGridLayout, QDesktopWidget, qApp,
@@ -24,6 +25,8 @@ ABOUT_TEXT = """
 
 WINDOW_WIDTH = 500
 WINDOW_HEIGHT = 350
+
+ardu = Arducopter()
 
 class ConvGUI(QMainWindow):
 
@@ -221,11 +224,11 @@ class ConvGUI(QMainWindow):
         Create modules for uas_state.py, uas_auxiliary.py and flight_plan.py.
         Generate all three output files in this function.
         """
-        uas_state.state(self.mi_file, self.tlog_file)
-        uas_auxiliary.auxiliary(self.mi_file, self.tlog_file, self.selected_gcs_location)
+        ardu.state(self.mi_file, self.tlog_file)
+        ardu.auxiliary(self.mi_file, self.tlog_file, self.selected_gcs_location)
 
         if(self.wpt_file):
-            flight_plan.flight(self.mi_file, self.wpt_file, self.tlog_file)
+            ardu.flight(self.mi_file, self.wpt_file, self.tlog_file)
 
         msgBox = QMessageBox.information(self, "Information", "Complete!")
     
