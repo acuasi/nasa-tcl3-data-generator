@@ -1,12 +1,27 @@
 {
-	"location1":{ 
-		"latitude": "64.831645",
-		"longitude": "-147.38416",
-		"altitude": "144"
+	"Butrovich":{ 
+		"latitude": "64.8574",
+		"longitude": "-147.8511",
+		"altitude": "568"
 	},
-	"location2":{ 
-		"latitude": "46.831645",
-		"longitude": "-174.38416",
-		"altitude": "104"
+	"Hillside":{ 
+		"latitude": "64.8571",
+		"longitude": "-174.8541",
+		"altitude": "592"
+	},
+	"Tracks":{
+		"latitude": "64.8555",
+		"longtiude": "-147.8585",
+		"altitude": "470"
+	},
+	"Low Field":{
+		"latitude": "64.8531",
+		"longtitude": "-147.8604",
+		"altitude": "455"
+	},
+	"High Field":{
+		"latitude": "64.8529",
+		"longtidue": "-147.8605",
+		"altitude": "455"
 	}
 }
