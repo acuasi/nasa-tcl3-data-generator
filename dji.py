@@ -24,7 +24,17 @@ class InvalidLog(Exception):
 class Dji():
     """Methods for parsing DJI csv-converted binary log files."""
 
-    leap_seconds = 18
+    leap_secs = 37
+    gps_epoch_offset = 315964800
+    gps_leap_offset = leap_secs - 19
+
+    def sys_boot_time(self, sys_time, gps_ms, gps_wks):
+        """Use GPS time and system us time to calculate boot start time as a UTC timestamp."""
+        gps_ts = round(gps_ms / 1000 + gps_wks * 86400 * 7)
+        utc_ts = gps_ts + Dji.gps_epoch_offset + Dji.gps_leap_offset
+        sys_ts = sys_time / 1E6
+        boot_ts = utc_ts - sys_ts
+        return boot_ts
 
     def state(self, mission_insight_file, dji_csv_log_file):
         """Create UASState JSON file for NASA UTM TCL3.
@@ -76,8 +86,7 @@ class Dji():
         gps_date_timestamp = values_list[header_map["GPS:dateTimeStamp"]]
 
         # Create a date time object from the string value
-        gps_date = datetime.datetime.strptime(gps_date_timestamp,
-                                              "%Y-%m-%dT%H:%M:%SZ")
+        gps_date = datetime.datetime.strptime(gps_date_timestamp, "%Y-%m-%dT%H:%M:%SZ")
         unix_time = gps_date.timestamp()
         gpsSec = unix_time - 315964800.0 + self.leap_seconds # noqa
         gpsWeek = int(gpsSec // 604800) # noqa
@@ -97,26 +106,26 @@ class Dji():
         # write to output file
         for line in f:
             values_list = line.split(",")
-            vehiclePositionLat_deg = values_list[header_map["GPS:Lat"]] # noqa
-            vehiclePositionLon_deg = values_list[header_map["GPS:Long"]] # noqa
-            vehiclePositionAlt_ft = values_list[header_map["relativeHeight"]] # noqa
-            gpsAltitude_ft = values_list[header_map["GPS:heightMSL"]] # noqa
-            hdop_nonDim = values_list[header_map["GPS:DOP:H"]] # noqa
-            numGPSvis = values_list[header_map["GPS:Visible:GPS"]] # noqa
-            numGLNASvis = values_list[header_map["GPS:Visible:GLNAS"]] # noqa
-            numGpsSat_nonDim = numGPSvis + numGLNASvis # noqa
+            vehiclePositionLat_deg = values_list[header_map["GPS:Lat"]]                 # noqa
+            vehiclePositionLon_deg = values_list[header_map["GPS:Long"]]                # noqa
+            vehiclePositionAlt_ft = values_list[header_map["relativeHeight"]]           # noqa
+            gpsAltitude_ft = values_list[header_map["GPS:heightMSL"]]                   # noqa
+            hdop_nonDim = values_list[header_map["GPS:DOP:H"]]                          # noqa
+            numGPSvis = values_list[header_map["GPS:Visible:GPS"]]                      # noqa
+            numGLNASvis = values_list[header_map["GPS:Visible:GLNAS"]]                  # noqa
+            numGpsSat_nonDim = numGPSvis + numGLNASvis                                  # noqa
             roll_deg = values_list[header_map["Roll"]]
             pitch_deg = values_list[header_map["Pitch"]]
             yaw_deg = values_list[header_map["Yaw"]]
-            mtr1CntrlThrtlCmd = values_list[header_map["Motor:PPMrecv:RFront"]] # noqa
-            mtr2CntrlThrtlCmd = values_list[header_map["Mtr:PMrev:LFront"]] # noqa
-            mtr3CntrlThrtlCmd = values_list[header_map["Motor:PPMrecv:LBack"]] # noqa
-            mtr4CntrlThrtlCmd = values_list[header_map["Motor:PPMrecv:RBack"]] # noqa
-            batteryVoltage_V = values_list[header_map["Battery:volts:total"]] # noqa
-            batteryCurrent_A = values_list[header_map["Battery:current"]] # noqa
+            mtr1CntrlThrtlCmd = values_list[header_map["Motor:PPMrecv:RFront"]]         # noqa
+            mtr2CntrlThrtlCmd = values_list[header_map["Mtr:PMrev:LFront"]]             # noqa
+            mtr3CntrlThrtlCmd = values_list[header_map["Motor:PPMrecv:LBack"]]          # noqa
+            mtr4CntrlThrtlCmd = values_list[header_map["Motor:PPMrecv:RBack"]]          # noqa
+            batteryVoltage_V = values_list[header_map["Battery:volts:total"]]           # noqa
+            batteryCurrent_A = values_list[header_map["Battery:current"]]               # noqa
 
             if vehiclePositionAlt_ft > 3:
-                aircraftAirborneState = "Airborne" # noqa
+                aircraftAirborneState = "Airborne"                                      # noqa
 
             wr.writerow([UVIN, GUFI, gpsWeek, gpsSec,
                         "vehiclePositionLat_deg", vehiclePositionLat_deg])
@@ -176,38 +185,34 @@ class Dji():
         mi_headers = m.readline().split(",")
 
         try:
-            UVIN_COL = mi_headers.index("UVIN") # noqa
-            GUFI_COL = mi_headers.index("GUFI") # noqa
+            UVIN_COL = mi_headers.index("UVIN")                         # noqa
+            GUFI_COL = mi_headers.index("GUFI")                         # noqa
 
         except ValueError:
             raise InvalidLog("Invalid Mission Insight log.")
 
         mi_values = m.readline().split(",")
 
-        UVIN = mi_values[UVIN_COL] # noqa
-        GUFI = mi_values[GUFI_COL] # noqa
+        UVIN = mi_values[UVIN_COL]                                      # noqa
+        GUFI = mi_values[GUFI_COL]                                      # noqa
 
         # NASA no longer requires us to generate aircraft specifications file
         # for each flight, so we'll need to store data about each configuration
         # in this dictionary. Populate from configuration file once finalized.
-        aircraft = {"N249UA": ['helicopter', 17.0],
-                    "N254MH": ['multirotor', 11.2],
-                    "N255MH": ['multirotor', 11.4]
-                    }
+        aircraft = json.load("aircraft-specs.json")
 
         # Placeholder until aircraft dictionary is properly populated with all
         # configuration values
         n_number = "N254MH"
 
-        typeOfOperation = "Live"                         # noqa
-        takeOffWeight_lb = aircraft[n_number][WEIGHT]    # noqa
-        typeOfAirframe = aircraft[n_number][FRAME]       # noqa
-        gcsPosLat_deg = gcs_location['latitude']         # noqa
-        gcsPosLon_deg = gcs_location['longitude']        # noqa
-        gcsPosAlt_ft = gcs_location['altitude']          # noqa
+        typeOfOperation = "Live"                                        # noqa
+        takeOffWeight_lb = aircraft[n_number][weight_lbs]               # noqa
+        gcsPosLat_deg = gcs_location['latitude']                        # noqa
+        gcsPosLon_deg = gcs_location['longitude']                       # noqa
+        gcsPosAlt_ft = gcs_location['altitude']                         # noqa
         # Change these once drop-down menu added to GUI
-        testIdentifiers = "CNS1"                         # noqa
-        flightTestCardName = "ExampleTestCardName"       # noqa
+        testIdentifiers = "CNS1"                                        # noqa
+        flightTestCardName = "ExampleTestCardName"                      # noqa
 
         # Read headers and create a map bewteen header name and column number
         header_map = {}
@@ -250,9 +255,9 @@ class Dji():
             gps_alt = values_list[header_map["GPS:heightMSL"]]
 
             if "takeoff" in flight_mode.lower() and not takeoff:
-                takeoffPosLat_deg = gps_lat                                 # noqa
-                takeoffPosLon_deg = gps_lon                                 # noqa
-                takeoffPosAlt_ft = gps_alt                                  # noqa
+                takeoffPosLat_deg = gps_lat                                   # noqa
+                takeoffPosLon_deg = gps_lon                                   # noqa
+                takeoffPosAlt_ft = gps_alt                                    # noqa
                 takeoffTime = values_list[header_map["GPS:dateTimeStamp"]]    # noqa
                 takeoff = True
 
@@ -260,9 +265,9 @@ class Dji():
             # up being the last known GPS location which we assume to be
             # the landing location
             if gps_lat != 0 and gps_lon != 0:
-                landingPosLat_deg = gps_lat                                 # noqa
-                landingPosLon_deg = gps_lon                                 # noqa
-                landingPosAlt_deg = gps_alt                                 # noqa
+                landingPosLat_deg = gps_lat                                   # noqa
+                landingPosLon_deg = gps_lon                                   # noqa
+                landingPosAlt_deg = gps_alt                                   # noqa
                 landingTime = values_list[header_map["GPS:dateTimeStamp"]]    # noqa
 
         aux_values["typeOfOperation"] = typeOfOperation

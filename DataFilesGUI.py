@@ -31,12 +31,13 @@ class ConvGUI(QMainWindow):
         super().__init__()
         self.initUI()
 
-    def initUI(self):
+    def initUI(self):   # noqa
         """Set up GUI design."""
         # Initialize to zero for checking if waypoint
         # file was opened in arduGen function
         self.wpt_file = 0
         self.gcs_loc_chosen = 0
+        self.gcs_loc_file = open("gcs-locations.json", "r")
 
         # __Actions__
         saveAct = QAction('&Save Location', self)
@@ -90,8 +91,8 @@ class ConvGUI(QMainWindow):
 
         # __Drop Down Menu__
         self.gcsLocationsMenu = QComboBox(self)
-        self.gcsLocationsMenu.addItem('Select GCS Location')
-        self.gcsLocations = json.load(open('gcs-locations.json'))
+        self.gcsLocationsMenu.addItem("Select GCS Location")
+        self.gcsLocations = json.load(self.gcs_loc_file)
         for location in self.gcsLocations:
             self.gcsLocationsMenu.addItem(location)
 
@@ -105,8 +106,8 @@ class ConvGUI(QMainWindow):
         self.gcsLocationsMenu.activated[str].connect(self.gcsLocationChosen)
 
         # __Labels__
-        arduCsvLbl = QLabel("TLog file in csv format.")
-        arduWptLbl = QLabel("Waypoint file for flight plan.")
+        arduCsvLbl = QLabel("TLog file in csv format.")                 # noqa
+        arduWptLbl = QLabel("Waypoint file for flight plan.")           # noqa
 
         # __Menubar__
         menubar = self.menuBar()
