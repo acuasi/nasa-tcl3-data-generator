@@ -1,6 +1,6 @@
 # README #
 
-This software allows ACUASI operators to load flight logs and other mission files and generate the required files for the NASA Unmanned Aircraft System (UAS) Traffic Management (UTM) Technical Capability Level 3 (TCL3) project. 
+Scripts for generating the required files for the NASA Unmanned Aircraft System (UAS) Traffic Management (UTM) Technical Capability Level 3 (TCL3) project. Partially developed GUI.
 
 See: https://utm.arc.nasa.gov/index.shtml for details.
 
@@ -14,7 +14,6 @@ See: https://utm.arc.nasa.gov/index.shtml for details.
 * Dependencies:
 	- Python 3
 	- PyQt5
-* Linux and Windows 10 binaries coming soon
 
 ### Who do I talk to? ###
 

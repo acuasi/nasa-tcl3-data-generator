@@ -1,0 +1,74 @@
+{
+	"N970UA":{
+		"type": "Multirotor", 
+		"weight_lbs": "3.3",
+		"name": "F450",
+		"num_motors": 4
+	}, 
+ 	"N979UA":{
+ 		"type": "Multirotor",
+ 		"weight_lbs": "3.7",
+ 		"name": "S500",
+ 		"num_motors": 4
+ 	},
+ 	"N971UA":{
+ 		"type": "Multirotor",
+ 		"weight_lbs": "5.1",
+ 		"name": "F550",
+ 		"num_motors": 4
+ 	},
+ 	"N253MH":{
+ 		"type": "multirotor",
+ 		"weight_lbs": 13.4,
+ 		"name": "S900",
+ 		"num_motors": 6
+ 	},
+ 	"N254MH":{
+ 		"type": "multirotor",
+ 		"weight_lbs": 16.8,
+ 		"name": "S1000-1",
+ 		"num_motors": 8
+ 	},
+ 	"N255MH":{
+ 		"type": "multirotor",
+ 		"weight_lbs": 20.5,
+ 		"name": "S1000-2",
+ 		"num_motors": 8
+ 	},
+ 	"N260MH":{
+ 		"type": "multirotor",
+ 		"weight_lbs": 17.6,
+ 		"name": "S1000-3",
+ 		"num_motors": 8
+ 	},
+ 	"N252MH":{
+ 		"type": "multirotor",
+ 		"weight_lbs": 6.2,
+ 		"name": "Inspire-1",
+ 		"num_motors": 4
+ 	},
+ 	"N251MH":{
+ 		"type": "multirotor",
+ 		"weight_lbs": 8.6,
+ 		"name": "Matrice-100",
+ 		"num_motors": 4
+ 	},
+	"N248UA":{
+		"type": "helicopter",
+		"weight_lbs": 19.2,
+		"name": "Responder 4",
+		"num_motors": 1
+	},
+	"N249UA":{
+		"type": "helicopter",
+		"weight_lbs": 19.2,
+		"name": "Responder 8",
+		"num_motors": 1
+	},
+	"N241UA":{
+		"type": "multirotor",
+		"weight_lbs": 15.0,
+		"name": "Ptar-3",
+		"num_motors": 6
+	}
+}

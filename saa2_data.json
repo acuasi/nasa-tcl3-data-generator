@@ -1,0 +1,79 @@
+{
+    "fType": "SAA2",
+    "basic": {
+        "uvin": "3f37d977-a9b4-4f70-80bb-e213daa6f898",
+        "gufi": "8a55a380-f7d0-4904-a380-bad71cda22c9",
+        "submitTime": "2018-04-05T19:14:59.297Z",
+        "ussInstanceID": "c9705268-74e1-45ee-b16b-58d567a2cc3e",
+        "ussName": "ussSimulyze1SB"
+    },
+    "geoFence": {
+        "geoFenceAvailable_nonDim": 1,
+        "geoFenceStartTime": [
+            "2018-04-18T20:55:42.000Z"
+        ],
+        "geoFenceEndTime": [
+            "2018-04-18T20:59:21.000Z"
+        ],
+        "geoFenceType_nonDim": 0,
+        "geoFenceMinAltitude_ft": 0,
+        "geoFenceMaxAltitude_ft": 1076,
+        "geoFenceCircularPointLat_deg": 64.8530146,
+        "geoFenceCircularPointLon_deg": -147.8608851,
+        "geoFenceCircularRadius_ft": 16138,
+        "geoFenceEnable": [
+            {
+                "ts": "2018-05-10T17:51:32.321Z",
+                "geoFenceEnable": 1
+            },
+            {
+                "ts": "2018-05-10T17:56:32.321Z",
+                "geoFenceEnable": 0
+            }
+        ],
+        "geoFenceDynamicPolygonPoint": [
+            {
+                "ts": "2018-05-10T17:51:33.739Z",
+                "geoFenceDynamicPolygonPoint_deg": [
+                    {
+                        "lat": 64.8422431,
+                        "lon": -147.7242334
+                    },
+                    {
+                        "lat": 64.8314444,
+                        "lon": -147.7232123
+                    },
+                    {
+                        "lat": 64.7312344,
+                        "lon": -147.7232123
+                    },
+                    {
+                        "lat": 64.7432122,
+                        "lon": -147.7541234
+                    }
+                ]
+            },
+            {
+                "ts": "2018-05-10T17:55:37.287Z",
+                "geoFenceDynamicPolygonPoint_deg": [
+                    {
+                        "lat": 64.8427431,
+                        "lon": -147.7242334
+                    },
+                    {
+                        "lat": 64.8314444,
+                        "lon": -147.7202123
+                    },
+                    {
+                        "lat": 64.7388344,
+                        "lon": -147.7232123
+                    },
+                    {
+                        "lat": 64.7432122,
+                        "lon": -147.7652554
+                    }
+                ]
+            }
+        ]
+    }
+}
