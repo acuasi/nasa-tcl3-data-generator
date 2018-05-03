@@ -2,11 +2,10 @@
 import json
 import saa2
 
-STD_PATH = "/home/samuel/SpiderOak Hive/ACUASI/NASA TO6/Data Management/"
-MI_FILE_NAME = "./example_files/mission_insight.csv"
-SAA2_TI_NAME = "./example_files/saa2-field-values-ti.csv"
-SAA2_TD_NAME = "./example_files/saa2-field-values-td.csv"
-OUTFILE_NAME = "saa2_data.json"
+MI_FILE_NAME = "./example_files/saa2/mission_insight.csv"
+SAA2_TI_NAME = "./example_files/saa2/saa2-field-values-ti.csv"
+SAA2_TD_NAME = "./example_files/saa2/saa2-field-values-td.csv"
+OUTFILE_NAME = "./example_files/saa2/saa2_data.json"
 
 saa2.generate(MI_FILE_NAME, SAA2_TI_NAME, SAA2_TD_NAME, OUTFILE_NAME)
 

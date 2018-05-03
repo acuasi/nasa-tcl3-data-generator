@@ -1,0 +1,2 @@
+geoFenceAvailable_nonDim,geoFenceStartTime,geoFenceEndTime,geoFenceType_nonDim,geoFenceMinAltitude,geoFenceMaxAltitude,geoFenceCircularPointLat_deg,geoFenceCircularPointLon_deg,geoFenceCircularRadius
+1,2018-04-23T21:05:47.000Z,2018-04-23T21:09:48.000Z,0,0,164,64.852461,-147.8612047,2624

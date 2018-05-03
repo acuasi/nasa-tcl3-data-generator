@@ -3,11 +3,10 @@ import json
 import flight_data as fd
 # pylint: disable=invalid-name
 
+MI_FILE_NAME = "./example_files/flight_data/mission_insight.csv"
+DATAFLASH_FILE_NAME = "./example_files/flight_data/flight.log"
+OUTFILE_NAME = "./example_files/flight_data/flight_data.json"
 
-STD_PATH = "/home/samuel/SpiderOak Hive/ACUASI/NASA TO6/Data Management/"
-MI_FILE_NAME = "./example_files/mission_insight.csv"
-DATAFLASH_FILE_NAME = STD_PATH + "Example Log Files/SAA2 Flights April 5/flight.log"
-OUTFILE_NAME = "data.json"
 fd.generate(MI_FILE_NAME, DATAFLASH_FILE_NAME, OUTFILE_NAME)
 
 JSON_OBJS = set(["fType", "basic", "auxiliaryUASOperation", "aircraftFlightPlan", "uasState"])
@@ -16,7 +15,7 @@ BASIC = set(["uvin", "gufi", "submitTime", "ussInstanceID", "ussName"])
 
 AUX_OP = set(["flightTestCardName", "testIdentifiers", "typeOfOperation", "takeoffWeight_lb",
               "gcsPosLat_deg", "gcsPosLon_deg", "gcsPosAlt_ft", "takeoffPosLat_deg",
-              "takeoffPosLon_deg", "takeoffPosAlt_ft", "takeoffTime", "landingPosLat_deg",
+              "takeoffPosLon_deg", "takeoffPosAlt_ft", "takeOffTime", "landingPosLat_deg",
               "landingPosLon_deg", "landingPosAlt_ft", "landingTime"])
 
 AC_FP = set(["wpTime", "wpAlt_ft", "hoverTime_sec", "wpLon_deg", "wpLat_deg",
@@ -48,8 +47,8 @@ UAS_STATE = set(["vehiclePositionLat_deg", "vehiclePositionLon_deg", "vehiclePos
                  "targetWaypointAlt_ft", "aircraftControlMode", "targetGroundSpeed_ftPerSec",
                  "targetAirSpeed_ftPerSec", "aircraftAirborneState_nonDim",
                  "minDistToDefinedAreaLateralBoundary_ft",
-                 "minDistToDefinedAreaVerticalBoundary_ft", "c2RssiAircraft_nonDim",
-                 "c2RssiGcs_nonDim", "c2NoiseAircraft_nonDim", "c2NoiseGcs_nonDim",
+                 "minDistToDefinedAreaVerticalBoundary_ft", "c2RssiAircraft_dBm",
+                 "c2RssiGcs_dBm", "c2NoiseAircraft_dBm", "c2NoiseGcs_dBm",
                  "c2PacketLossRateAircraftPrct_nonDim", "c2PacketLossRateGcsPrct_nonDim",
                  "lateralNavPositionError_ft", "verticalNavPositionError_ft",
                  "lateralNavVelocityError_ftPerSec", "verticalNavVelocityError_ftPerSec"])
@@ -89,6 +88,6 @@ def test_uas_state_vars():
     """Verify all required variables are present in output file."""
     keys = set()
     for value in flight_data["uasState"]:
-        keys.add(value["sensor"])
+        keys.add(value["sensor"][0])
     print(keys ^ UAS_STATE)
     assert not bool(keys ^ UAS_STATE)
