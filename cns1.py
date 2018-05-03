@@ -47,7 +47,7 @@ def sys_ts_converter(sys_time, boot_ts):
     unix_ts = (sys_time / 1.0E6) + boot_ts
     return datetime.utcfromtimestamp(unix_ts).isoformat(timespec="milliseconds")+"Z"
 
-def generate(mi_file_name, dataflash_file_name, field_vars_file_name):
+def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_name):
     """Generate cns1 json file for NASA TCL3 TO6 flights."""
     #pylint: disable=too-many-statements
     #pylint: disable=too-many-locals
@@ -217,3 +217,27 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name):
                         ts = sys_ts_converter(int(row[1]), boot_ts)
                         time_manuever_verification.append({"ts": ts})
                 ac_mode = row[2]
+
+    cns1_data["fType"] = ftype
+    cns1_data["UTM-TLC3-DMP-RevF-CNSPDF"] = pdf
+    cns1_data["basic"] = basic
+    cns1_data["plannedContingency"] = planned_contingency
+    cns1_data["cns1TestType"] = cns1_test_type
+    cns1_data["contingencyCause"] = contingency_cause
+    cns1_data["contingencyResponse"] = contingency_response
+    cns1_data["contingencyLoiterAlt"] = contingency_loiter_alt
+    cns1_data["contingencyLoiterType"] = contingency_loiter_type
+    cns1_data["contingencyLoiterRadius"] = contingency_loiter_radius
+    cns1_data["contingencyLanding"] = contingency_landing
+    cns1_data["maneuverCommand"] = maneuver_command
+    cns1_data["timeManeuverCommandSent"] = time_maneuver_command_sent
+    cns1_data["estimatedTimeToVerifyManeuver"] = est_time_verify_maneuver
+    cns1_data["timeManeuverVerification"] = time_manuever_verification
+    cns1_data["primaryLinkDescription"] = primary_link_description
+    cns1_data["redundantLinkDescription"] = redundant_link_description
+    cns1_data["timePrimaryLinkDisconnect"] = time_primary_link_disconnect
+    cns1_data["timeRedundantLinkSwitch"] = time_redundant_link_switch
+
+    outfile = open(outfile_name, "w")
+    json.dump(cns1_data, outfile, indent=4)
+    outfile.close()
