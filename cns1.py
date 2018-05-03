@@ -1,4 +1,5 @@
 """Generate CNS1 json file for NASA UTM TCL3."""
+import sys
 import csv
 import json
 from datetime import datetime
@@ -12,6 +13,26 @@ CM_TO_FT = 0.328
 MM_TO_FT = 0.00328
 PA_TO_PSI = 0.000145038
 
+RFD900 = """
+The two RFD900 Radio Modems are a high powered 900Mhz, ISM band radio modems
+designed for long range communication operating between 902 to 928Mhz at a 57600
+baud rate.
+"""
+
+UAVCAST = """
+The UAVCast is a system designed to provide HD video as well as telemetry over a 4G/LTE
+cellular network. The UAVCast Client software will expose the MAVLink channel as a local
+TTP server.
+"""
+
+PRIMARY = ""
+REDUN = ""
+
+PRIM_CMD = """Takeoff in Auto mode and begin flight plan."""
+
+REDUN_CMD = """Fly to POI in Guided mode."""
+
+LINK = {"RFD900": RFD900, "UAVCast": UAVCAST}
 
 def sys_boot_time(sys_time, gps_ms, gps_wks):
     """Use GPS time and system us time to calculate boot start time as a UTC timestamp."""
@@ -26,7 +47,7 @@ def sys_ts_converter(sys_time, boot_ts):
     unix_ts = (sys_time / 1.0E6) + boot_ts
     return datetime.utcfromtimestamp(unix_ts).isoformat(timespec="milliseconds")+"Z"
 
-def generate(mi_file_name, dataflash_file_name):
+def generate(mi_file_name, dataflash_file_name, field_vars_file_name):
     """Generate cns1 json file for NASA TCL3 TO6 flights."""
     #pylint: disable=too-many-statements
     #pylint: disable=too-many-locals
@@ -36,25 +57,28 @@ def generate(mi_file_name, dataflash_file_name):
     cns1_test_type = []
     contingency_cause = []
     contingency_response = []
-    contingency_loiter_alt = []
-    contingency_loiter_type = []
-    contingency_loiter_radius = []
+    contingency_loiter_alt = [None]
+    contingency_loiter_type = [None]
+    contingency_loiter_radius = [None]
     contingency_landing = []
-    manuever_command = []
+    maneuver_command = []
     time_maneuver_command_sent = []
-    estimated_time_to_verify_maneuver = []
+    est_time_verify_maneuver = []
     time_manuever_verification = []
     primary_link_description = []
     redundant_link_description = []
     time_primary_link_disconnect = []
     time_redundant_link_switch = []
+    ac_mode = ""
+    ac_link = "Primary"
 
     gps = {"sys_time": 0, "gps_ms": 0, "gps_wk": 0, "lat": 0, "lon": 0, "alt": 0}
 
     arm_flag = 0
     boot_ts_flag = 0
 
-    ftype = "SAA2"
+    ftype = "CNS1"
+    pdf = "UTM-ACUASI-CNS-1.pdf"
 
     with open(mi_file_name, "r") as mi_file:
         mi_reader = csv.DictReader(mi_file)
@@ -69,6 +93,71 @@ def generate(mi_file_name, dataflash_file_name):
     basic["ussInstanceID"] = mi_dict["USS_INSTANCE_ID"]
     basic["ussName"] = mi_dict["USS_NAME"]
 
+    with open(field_vars_file_name, "r") as field_vars_file:
+        headers = field_vars_file.readline()
+        for line in field_vars_file:
+            row = line.split(",")
+
+            if row[0] == "contingencyCause_nonDim":
+                variable = "contingencyCause_nonDim"
+                value = int(row[1])
+                if value:
+                    ts = row[2]
+                    contingency_cause.append({"ts": ts, variable: value})
+
+            elif row[0] == "contingencyResponse_nonDim":
+                variable = "contingencyResponse_nonDim"
+                value = int(row[1])
+                if value:
+                    ts = row[2]
+                    contingency_response.append({"ts": ts, variable: value})
+
+            elif row[0] == "cns1TestType_nonDim":
+                variable = "cns1TestType_nonDim"
+                value = int(row[1])
+                ts = row[2]
+                cns1_test_type.append({"ts": ts, variable: value})
+
+            elif row[0] == "PrimaryLink":
+                PRIMARY = LINK[row[1]]
+
+            elif row[0] == "SecondaryLink":
+                REDUN = LINK[row[1]]
+
+            elif row[0] == "timeManeuverCommandSent":
+                variable = "timeManeuverCommandSent"
+                ts = row[2]
+                time_maneuver_command_sent.append({"ts": ts})
+                if ac_link == "Primary":
+                    primary_link_description.append({"ts": ts, "primaryLinkDescription": PRIMARY})
+                    maneuver_command.append({"ts": ts, "maneuverCommand": PRIM_CMD})
+                    value = {"ts": ts, "estimatedTimeToVerifyManeuver_sec": 1.500}
+                    est_time_verify_maneuver.append(value)
+                elif ac_link == "Redundant":
+                    redundant_link_description.append({"ts": ts, "redundantLinkDescription": REDUN})
+                    maneuver_command.append({"ts": ts, "maneuverCommand": REDUN_CMD})
+                    value = {"ts": ts, "estimatedTimeToVerifyManeuver_sec": 0.250}
+                    est_time_verify_maneuver.append(value)
+
+            elif row[0] == "timePrimaryLinkDisconnect":
+                variable = "timePrimaryLinkDisconnect"
+                ts = row[2]
+                time_primary_link_disconnect.append({"ts": ts})
+
+            elif row[0] == "timeRedundantLinkSwitch":
+                if ac_link == "Primary":
+                    variable = "timeRedundantLinkSwitch"
+                    ts = row[2]
+                    time_redundant_link_switch.append({"ts": ts})
+                    ac_link = "Redundant"
+                else:
+                    print("ERROR: Invalid link logic.")
+                    sys.exit(0)
+
+            else:
+                print("ERROR: Invalid variable.")
+                sys.exit(0)
+
     with open(dataflash_file_name, "r") as dataflash_file:
         for line in dataflash_file:
             # Split by commas and strip leading and trailing whitespaces
@@ -80,16 +169,16 @@ def generate(mi_file_name, dataflash_file_name):
 
             # 5 Hz
             if row[0] == "GPS":
-                gps["sys_time"] = row[1]
-                gps["gps_ms"] = row[3]
-                gps["gps_wk"] = row[4]
-                gps["lat"] = row[7]
-                gps["lon"] = row[8]
+                gps["sys_time"] = int(row[1])
+                gps["gps_ms"] = int(row[3])
+                gps["gps_wk"] = int(row[4])
+                gps["lat"] = float(row[7])
+                gps["lon"] = float(row[8])
                 gps["alt"] = float(row[9])
                 gps["speed"] = float(row[10]) # m/s
-                gps["ground_course"] = row[11]
-                gps["hdop"] = row[6]
-                gps["num_sats"] = row[5]
+                gps["ground_course"] = float(row[11])
+                gps["hdop"] = float(row[6])
+                gps["num_sats"] = int(row[5])
 
                 # Check for valid GPS position and time and then calculate timestamp of system boot
                 if float(row[7]) != 0 and \
@@ -101,12 +190,14 @@ def generate(mi_file_name, dataflash_file_name):
                     boot_ts_flag = 1
 
             if arm_flag and boot_ts_flag:
-                cl_point = "[{},{}]".format(gps["lat"], gps["lon"])
-                cl_point_alt = "[{}]".format(str(float(gps["alt"]) * M_TO_FT))
+                cl_point = [{"lat": gps["lat"], "lon": gps["lon"]}]
+                cl_point_alt = [gps["alt"]]
+                # cl_point = "[{},{}]".format(gps["lat"], gps["lon"])
+                # cl_point_alt = "[{}]".format(float(gps["alt"]) * M_TO_FT)
                 planned_contingency["plannedContingencyLandingPoint_deg"] = cl_point
                 planned_contingency["plannedContingencyLandingPointAlt_ft"] = cl_point_alt
-                planned_contingency["plannedContingencyLoiterAlt_ft"] = ""
-                planned_contingency["plannedContingencyLoiterRadius_ft"] = ""
+                planned_contingency["plannedContingencyLoiterAlt_ft"] = None
+                planned_contingency["plannedContingencyLoiterRadius_ft"] = None
 
             # 1 Hz
             if row[0] == "RAD":
@@ -114,3 +205,15 @@ def generate(mi_file_name, dataflash_file_name):
                 cl = {"ts": ts, "contingencyLandingPoint_deg": cl_point,
                       "contingencyLandingPointAlt_ft": cl_point_alt}
                 contingency_landing.append(cl)
+
+            if row[0] == "MODE":
+                if ac_mode == "Loiter" or ac_mode == "Stabilize":
+                    if row[2] == "Auto":
+                        ts = sys_ts_converter(int(row[1]), boot_ts)
+                        time_manuever_verification.append({"ts": ts})
+
+                if ac_mode == "RTL" or ac_mode == "Auto":
+                    if row[2] == "Guided":
+                        ts = sys_ts_converter(int(row[1]), boot_ts)
+                        time_manuever_verification.append({"ts": ts})
+                ac_mode = row[2]

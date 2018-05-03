@@ -128,39 +128,39 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
 
                 if boot_ts_flag:
                     timestamp = sys_ts_converter(int(gps["sys_time"]), boot_ts)
-                    sensor = "vehiclePositionLat_deg"
+                    sensor = ["vehiclePositionLat_deg"]
                     value = [gps["lat"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "vehiclePositionLon_deg"
+                    sensor = ["vehiclePositionLon_deg"]
                     value = [gps["lon"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "vehiclePositionAlt_ft"
+                    sensor = ["vehiclePositionAlt_ft"]
                     value = [gps["alt"] * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "groundSpeed_ftPerSec"
+                    sensor = ["groundSpeed_ftPerSec"]
                     value = [gps["speed"] * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "groundCourse_deg"
+                    sensor = ["groundCourse_deg"]
                     value = [gps["ground_course"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "hdop_nonDim"
+                    sensor = ["hdop_nonDim"]
                     value = [gps["hdop"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "vdop_nonDim"
+                    sensor = ["vdop_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "numGpsSatellitesInView_nonDim"
+                    sensor = ["numGpsSatellitesInView_nonDim"]
                     value = [gps["num_sats"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "numGpsSat_nonDim"
+                    sensor = ["numGpsSat_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -170,126 +170,126 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
                 if boot_ts_flag:
                     sys_time = int(row[1])
                     timestamp = sys_ts_converter(sys_time, boot_ts)
-                    sensor = "c2RssiGcs_dBm"
+                    sensor = ["c2RssiGcs_dBm"]
                     value = [(float(row[2]) / 1.9) - 127]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "c2RssiAircraft_dBm"
+                    sensor = ["c2RssiAircraft_dBm"]
                     value = [(float(row[3]) / 1.9) - 127]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "c2NoiseGcs_dBm"
+                    sensor = ["c2NoiseGcs_dBm"]
                     value = [(float(row[5]) / 1.9) - 127]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "c2NoiseAircraft_dBm"
+                    sensor = ["c2NoiseAircraft_dBm"]
                     value = [(float(row[6]) / 1.9) - 127]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "c2PacketLossRateGcsPrct_nonDim"
+                    sensor = ["c2PacketLossRateGcsPrct_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "c2PacketLossRateAircraftPrct_nonDim"
+                    sensor = ["c2PacketLossRateAircraftPrct_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
 
                     if take_off_flag:
-                        sensor = "aircraftAirborneState_nonDim"
+                        sensor = ["aircraftAirborneState_nonDim"]
                         value = [1]
                     else:
-                        sensor = "aircraftAirborneState_nonDim"
+                        sensor = ["aircraftAirborneState_nonDim"]
                         value = [0]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
 
                     # Write empty strings for parameters we can't provide values for
                     # Use current timestamp in state_value
-                    sensor = "indicatedAirspeed_ftPerSec"
+                    sensor = ["indicatedAirspeed_ftPerSec"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "trueAirspeed_ftPerSec"
+                    sensor = ["trueAirspeed_ftPerSec"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "groundSpeed_ftPerSec"
+                    sensor = ["groundSpeed_ftPerSec"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
 
                     for i in range(num_motors, 16):
-                        sensor = "motor" + str(i + 1) + "ControlThrottleCommand_nonDim"
+                        sensor = ["motor" + str(i + 1) + "ControlThrottleCommand_nonDim"]
                         value = None
                         state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                         uas_state.append(state_value)
 
-                    sensor = "aileronActuatorCommand_nonDim"
+                    sensor = ["aileronActuatorCommand_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "elevatorActuatorCommand_nonDim"
+                    sensor = ["elevatorActuatorCommand_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "rudderActuatorCommand_nonDim"
+                    sensor = ["rudderActuatorCommand_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "flapActuatorCommand_nonDim"
+                    sensor = ["flapActuatorCommand_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "landingGearActuatorCommand_nonDim"
+                    sensor = ["landingGearActuatorCommand_nonDim"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "angleOfAttack_deg"
+                    sensor = ["angleOfAttack_deg"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "sideSlip_deg"
+                    sensor = ["sideSlip_deg"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "targetGroundSpeed_ftPerSec"
+                    sensor = ["targetGroundSpeed_ftPerSec"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "targetAirSpeed_ftPerSec"
+                    sensor = ["targetAirSpeed_ftPerSec"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "minDistToDefinedAreaLateralBoundary_ft"
+                    sensor = ["minDistToDefinedAreaLateralBoundary_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "minDistToDefinedAreaVerticalBoundary_ft"
+                    sensor = ["minDistToDefinedAreaVerticalBoundary_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "lateralNavPositionError_ft"
+                    sensor = ["lateralNavPositionError_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "verticalNavPositionError_ft"
+                    sensor = ["verticalNavPositionError_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "lateralNavVelocityError_ftPerSec"
+                    sensor = ["lateralNavVelocityError_ftPerSec"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "verticalNavVelocityError_ftPerSec"
+                    sensor = ["verticalNavVelocityError_ftPerSec"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "radarSensorAltitude_ft"
+                    sensor = ["radarSensorAltitude_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "acousticSensorAltitude_ft"
+                    sensor = ["acousticSensorAltitude_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -309,31 +309,31 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
 
                 if boot_ts_flag:
                     state_value["ts"] = sys_ts_converter(int(baro["sys_time"]), boot_ts)
-                    sensor = "barometricAltitude_ft"
+                    sensor = ["barometricAltitude_ft"]
                     value = [baro["alt"] * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "barometricPressure_psi"
+                    sensor = ["barometricPressure_psi"]
                     value = [baro["pressure"] * PA_TO_PSI]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "altitudeUsedByAutopilot_ft"
+                    sensor = ["altitudeUsedByAutopilot_ft"]
                     value = [baro["alt"] * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "aboveTerrainAltitude_ft"
+                    sensor = ["aboveTerrainAltitude_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "laserSensorAltitude_ft"
+                    sensor = ["laserSensorAltitude_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "opticalSensorAltitude_ft"
+                    sensor = ["opticalSensorAltitude_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "imageSensorAltitude_ft"
+                    sensor = ["imageSensorAltitude_ft"]
                     value = None
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -346,7 +346,7 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
                 if boot_ts_flag:
                     state_value["ts"] = sys_ts_converter(int(rcout["sys_time"]), boot_ts)
                     for i in range(num_motors):
-                        sensor = "motor" + str(i+1) + "ControlThrottleCommand_nonDim"
+                        sensor = ["motor" + str(i+1) + "ControlThrottleCommand_nonDim"]
                         value = [rcout["motor" + str(i+1)]]
                         state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                         uas_state.append(state_value)
@@ -359,15 +359,15 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
 
                 if boot_ts_flag:
                     state_value["ts"] = sys_ts_converter(float(att["sys_time"]), boot_ts)
-                    sensor = "roll_deg"
+                    sensor = ["roll_deg"]
                     value = [att["roll"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "pitch_deg"
+                    sensor = ["pitch_deg"]
                     value = [att["pitch"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "yaw_deg"
+                    sensor = ["yaw_deg"]
                     value = [att["yaw"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -380,15 +380,15 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
 
                 if boot_ts_flag:
                     state_value["ts"] = sys_ts_converter(float(nkf1["sys_time"]), boot_ts)
-                    sensor = "velNorth_ftPerSec"
+                    sensor = ["velNorth_ftPerSec"]
                     value = [float(nkf1["vel_north"]) * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "velEast_ftPerSec"
+                    sensor = ["velEast_ftPerSec"]
                     value = [float(nkf1["vel_east"]) * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "velDown_ftPerSec"
+                    sensor = ["velDown_ftPerSec"]
                     value = [float(nkf1["vel_down"]) * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -400,11 +400,11 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
 
                 if boot_ts_flag:
                     state_value["ts"] = sys_ts_converter(float(curr["sys_time"]), boot_ts)
-                    sensor = "batteryVoltage_v"
+                    sensor = ["batteryVoltage_v"]
                     value = [curr["voltage"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "batteryCurrent_a"
+                    sensor = ["batteryCurrent_a"]
                     value = [curr["current"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -412,15 +412,15 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
             if row[0] == "RATE":
                 if boot_ts_flag:
                     state_value["ts"] = sys_ts_converter(float(row[1]), boot_ts)
-                    sensor = "rollRate_degPerSec"
+                    sensor = ["rollRate_degPerSec"]
                     value = [float(row[4])]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "pitchRate_degPerSec"
+                    sensor = ["pitchRate_degPerSec"]
                     value = [float(row[7])]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "yawRate_degPerSec"
+                    sensor = ["yawRate_degPerSec"]
                     value = [float(row[10])]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -433,15 +433,15 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
 
                 if boot_ts_flag:
                     timestamp = sys_ts_converter(float(acc1["sys_time"]), boot_ts)
-                    sensor = "accBodyX_ftPerSec2"
+                    sensor = ["accBodyX_ftPerSec2"]
                     value = [float(acc1["acc_x"]) * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "accBodyY_ftPerSec2"
+                    sensor = ["accBodyY_ftPerSec2"]
                     value = [float(acc1["acc_y"]) * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "accBodyZ_ftPerSec2"
+                    sensor = ["accBodyZ_ftPerSec2"]
                     value = [float(acc1["acc_z"]) * M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -461,15 +461,15 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
 
                     # UAS State values
                     timestamp = sys_ts_converter(int(cmd["sys_time"]), boot_ts)
-                    sensor = "targetWaypointLat_deg"
+                    sensor = ["targetWaypointLat_deg"]
                     value = [cmd["Lat"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "targetWaypointLon_deg"
+                    sensor = ["targetWaypointLon_deg"]
                     value = [cmd["Lon"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
-                    sensor = "targetWaypointAlt_ft"
+                    sensor = ["targetWaypointAlt_ft"]
                     value = [cmd["Alt"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                     uas_state.append(state_value)
@@ -490,7 +490,7 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
                 if boot_ts_flag:
                     mode = row[2]
                     timestamp = sys_ts_converter(float(row[1]), boot_ts)
-                    sensor = "aircraftControlMode"
+                    sensor = ["aircraftControlMode"]
                     try:
                         value = ac_cntrl_mode[mode]
                         state_value = {"ts": timestamp, "sensor": sensor, "value": value}

@@ -5,6 +5,8 @@
   "test_dji.py::test_auxiliary": true,
   "test_dji.py::test_flight_plan": true,
   "test_dji.py::test_state": true,
+  "test_flight_data.py": true,
+  "test_saa2.py": true,
   "tests/test_arducopter.py": true,
   "tests/test_dji.py": true
 }
