@@ -1,8 +1,9 @@
 """Provides tests for cns1.py values."""
 import json
 import sys
-sys.path.append("/home/samuel/SpiderOak Hive/ACUASI/Code_Repos/nasa-tcl3-data-generator/tcl3parsers")
 from tcl3parsers import cns1
+PATH = "/home/samuel/SpiderOak Hive/ACUASI/Code_Repos/nasa-tcl3-data-generator/tcl3parsers"
+sys.path.append(PATH)
 
 MI_FILE_NAME = "./example_files/cns1/mission_insight.csv"
 DF_FILE_NAME = "./example_files/cns1/flight.log"
