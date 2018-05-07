@@ -1,6 +1,9 @@
 {
   "test_arducopter.py": true,
   "test_arducopter.py::test_waypoints": true,
+  "test_cns1.py::test_contin_loiter_alt": true,
+  "test_cns1.py::test_contin_loiter_rad": true,
+  "test_cns1.py::test_contin_loiter_type": true,
   "test_dji.py": true,
   "test_dji.py::test_auxiliary": true,
   "test_dji.py::test_flight_plan": true,
