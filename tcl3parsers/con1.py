@@ -63,16 +63,17 @@ def generate(mi_file_name, df_file_name, weather_file_name, field_vars_file_name
     basic["ussName"] = mi_dict["USS_NAME"]
 
     with open(weather_file_name, "r") as weather_file:
-        headers = weather_file.readline()
+        headers = weather_file.readline().split(",")
 
         for line in weather_file:
             # Split by commas and strip leading and trailing whitespaces
             row = [item.strip() for item in line.split(",")]
-            ts = row[headers.index("Time of Report")]
-            temp = float(row[headers.index("Outside Temp (degrees F)")])
-            pressure = float(row[headers.index("Barometer (in)")])
-            wind_speed = int(row[headers.index("Wind Speed (kts)")]) * KTS_TO_FT
-            wind_dir = int(row[headers.index("Wind Direction (degrees)")])
+            dt_string = row[headers.index("Time of Intercept")]
+            ts = datetime.strptime(dt_string, "%d %B %Y %H:%M:%S").isoformat() + "Z"
+            temp = float(row[headers.index("Label")].strip().split(" ")[3])
+            pressure = float(row[headers.index("Barometer")])
+            wind_speed = float(row[headers.index("Wind Speed")].strip().split(" ")[0]) * KTS_TO_FT
+            wind_dir = int(row[headers.index("Wind Direction")])
             wx = {"temp": temp, "pressure": pressure, "windSpeed": wind_speed, "windDir": wind_dir}
             wx_zones = {"ts": ts, "wxBvlosLandingZone1Data": wx, "wxBvlosLandingZone2Data": wx}
             wx_bvlos_landing_zone.append(wx_zones)
