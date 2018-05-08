@@ -39,8 +39,8 @@ def generate(mi_file_name, df_file_name, weather_file_name, field_vars_file_name
     along_track_distance = 0
     distance_from_launch_site = 0
     bvlos_landing_zone_size = []
-    bvlos_landing_zone_structure = [None]
-    bvlos_ladnding_zone_people = [None]
+    bvlos_landing_zone_structure = None
+    bvlos_ladnding_zone_people = None
     wx_bvlos_landing_zone = []
     c2 = []
     c2_packet_loss = []

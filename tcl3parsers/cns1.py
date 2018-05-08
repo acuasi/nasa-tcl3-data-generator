@@ -57,9 +57,9 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_na
     cns1_test_type = []
     contingency_cause = []
     contingency_response = []
-    contingency_loiter_alt = [None]
-    contingency_loiter_type = [None]
-    contingency_loiter_radius = [None]
+    contingency_loiter_alt = None
+    contingency_loiter_type = None
+    contingency_loiter_radius = None
     contingency_landing = []
     maneuver_command = []
     time_maneuver_command_sent = []
@@ -198,8 +198,8 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_na
                 # cl_point_alt = "[{}]".format(float(gps["alt"]) * M_TO_FT)
                 planned_contingency["plannedContingencyLandingPoint_deg"] = cl_point
                 planned_contingency["plannedContingencyLandingPointAlt_ft"] = cl_point_alt
-                planned_contingency["plannedContingencyLoiterAlt_ft"] = [None]
-                planned_contingency["plannedContingencyLoiterRadius_ft"] = [None]
+                planned_contingency["plannedContingencyLoiterAlt_ft"] = None
+                planned_contingency["plannedContingencyLoiterRadius_ft"] = None
 
             # 1 Hz
             if row[0] == "RAD":

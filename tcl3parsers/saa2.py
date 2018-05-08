@@ -12,7 +12,7 @@ def generate(mi_file_name, saa2_ti_name, saa2_td_name, outfile_name):
     basic = {}
     geo_fence = {}
     geo_fence_enable = []
-    geo_fence_dyn_poly = [None]
+    geo_fence_dyn_poly = None
 
     ftype = "SAA2"
 
