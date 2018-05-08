@@ -1,4 +1,11 @@
 {
+  "test_cns1_values.py::test_json_obj_lists": true,
+  "test_cns1_values.py::test_list_values": true,
+  "test_cns1_values.py::test_nonlist_values": true,
+  "test_cns1_values.py::test_planned_contin": true,
+  "test_cns1_values.py::test_timestamps": true,
+  "test_con1.py::test_json_obj_lists": true,
   "test_con2.py::test_nonlist_values": true,
-  "test_con2.py::test_str_values": true
+  "test_con2.py::test_str_values": true,
+  "test_saa2.py::test_geofence_polygon_point": true
 }

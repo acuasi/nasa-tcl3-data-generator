@@ -27,8 +27,6 @@
                 "geoFenceEnable_nonDim": 0
             }
         ],
-        "geoFenceDynamicPolygonPoint": [
-            null
-        ]
+        "geoFenceDynamicPolygonPoint": null
     }
 }

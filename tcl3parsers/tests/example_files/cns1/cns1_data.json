@@ -18,12 +18,8 @@
         "plannedContingencyLandingPointAlt_ft": [
             184.51
         ],
-        "plannedContingencyLoiterAlt_ft": [
-            null
-        ],
-        "plannedContingencyLoiterRadius_ft": [
-            null
-        ]
+        "plannedContingencyLoiterAlt_ft": null,
+        "plannedContingencyLoiterRadius_ft": null
     },
     "cns1TestType": [
         {
@@ -139,15 +135,9 @@
             "contingencyResponse_nonDim": 0
         }
     ],
-    "contingencyLoiterAlt": [
-        null
-    ],
-    "contingencyLoiterType": [
-        null
-    ],
-    "contingencyLoiterRadius": [
-        null
-    ],
+    "contingencyLoiterAlt": null,
+    "contingencyLoiterType": null,
+    "contingencyLoiterRadius": null,
     "contingencyLanding": [
         {
             "ts": "2018-04-27T20:36:00.208Z",
