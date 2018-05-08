@@ -1,1 +1,4 @@
-{}
+{
+  "test_con2.py::test_nonlist_values": true,
+  "test_con2.py::test_str_values": true
+}
