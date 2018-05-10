@@ -17,8 +17,7 @@ JSON_OBJ_STR = set(["fType", "UTM-TCL3-DMP-RevF-CNSPDF"])
 JSON_OBJ_DICT = set(["basic", "plannedContingency"])
 
 JSON_OBJ_LISTS = set(["cns1TestType", "contingencyCause", "contingencyResponse",
-                      "contingencyLoiterAlt", "contingencyLoiterType",
-                      "contingencyLoiterRadius", "contingencyLanding", "maneuverCommand",
+                      "contingencyLanding", "maneuverCommand",
                       "timeManeuverCommandSent", "estimatedTimeToVerifyManeuver",
                       "timeManeuverVerification", "primaryLinkDescription",
                       "redundantLinkDescription", "timePrimaryLinkDisconnect",
@@ -86,44 +85,36 @@ def test_timestamps():
             except AttributeError:
                 assert isinstance(item, type(None))
 
-def test_planned_contin():
-    """Check values of "plannedContingency" keys."""
-    for key, value in cns1_data["plannedContingency"].items():
-        if key == "plannedContingencyLandingPoint_deg":
-            for k, v in value[0].items():
-                assert isinstance(k, str)
-                assert isinstance(v, float)
-        else:
-            assert isinstance(value[0], (float, type(None)))
-
 def test_nonlist_values():
     """Check non-list value types."""
     keys = ["cns1TestType", "contingencyResponse", "contingencyLoiterType",
             "estimatedTimeToVerifyManeuver"]
     for key in keys:
-        for item in cns1_data[key]:
-            try:
-                for k, v in item.items():
-                    if k != "ts":
-                        assert isinstance(v, (int, float))
+        if cns1_data[key]:
+            for item in cns1_data[key]:
+                try:
+                    for k, v in item.items():
+                        if k != "ts":
+                            assert isinstance(v, (int, float, type(None)))
 
-            # Catch 'loiter' lists that are of type None
-            except AttributeError:
-                assert isinstance(item, type(None))
+                # Catch 'loiter' lists that are of type None
+                except AttributeError:
+                    assert isinstance(item, type(None))
 
 def test_list_values():
     """Check non-list value types."""
     keys = ["contingencyCause", "contingencyLoiterAlt", "contingencyLoiterRadius"]
     for key in keys:
-        for item in cns1_data[key]:
-            try:
-                for k, v in item.items():
-                    if k != "ts":
-                        assert isinstance(v[0], (int, float))
+        if cns1_data[key]:
+            for item in cns1_data[key]:
+                try:
+                    for k, v in item.items():
+                        if k != "ts":
+                            assert isinstance(v[0], (int, float))
 
-            # Catch 'loiter' lists that are of type None
-            except AttributeError:
-                assert isinstance(item, type(None))
+                # Catch 'loiter' lists that are of type None
+                except AttributeError:
+                    assert isinstance(item, type(None))
 
 def test_str_values():
     """Check non-list value types."""

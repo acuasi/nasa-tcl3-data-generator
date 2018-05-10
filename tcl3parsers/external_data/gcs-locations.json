@@ -23,5 +23,15 @@
 		"latitude": "64.8529",
 		"longitude": "-147.8605",
 		"altitude": "455"
+	},
+	"Alumni":{
+		"latitude": "64.85462",
+		"longitude": "-147.83424",
+		"altitude": "449"
+	},
+	"Field":{
+		"latitude": "64.854771",
+		"longitude": "-147.858914",
+		"altitude": "462"
 	}
 }

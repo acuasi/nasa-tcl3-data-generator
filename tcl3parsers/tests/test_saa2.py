@@ -88,18 +88,20 @@ def test_geofence_enable():
 def test_geofence_polygon_point():
     """Test geoFenceDynamicPolygonPoint values."""
     p = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z")
-    for item in geo_fence["geoFenceDynamicPolygonPoint"]:
-        if item:
-            for key, value in item.items():
-                if key == "ts":
-                    m = p.match(value)
-                    assert m
-                elif key == "geoFenceDynamicPolygonPoint_deg":
-                    for i in value:
-                        for k, v in i.items():
-                            if k == "lat" or k == "lon":
-                                assert isinstance(v, float)
-                            else:
-                                assert False
-        else:
-            assert isinstance(item, type(None))
+    variables = geo_fence["geoFenceDynamicPolygonPoint"]
+    if variables:
+        for item in variables.items():
+            if item:
+                for key, value in item.items():
+                    if key == "ts":
+                        m = p.match(value)
+                        assert m
+                    elif key == "geoFenceDynamicPolygonPoint_deg":
+                        for i in value:
+                            for k, v in i.items():
+                                if k == "lat" or k == "lon":
+                                    assert isinstance(v, (float, type(None)))
+                                else:
+                                    assert False
+            else:
+                assert isinstance(item, type(None))

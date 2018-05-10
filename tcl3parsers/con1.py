@@ -40,7 +40,7 @@ def generate(mi_file_name, df_file_name, weather_file_name, field_vars_file_name
     distance_from_launch_site = 0
     bvlos_landing_zone_size = []
     bvlos_landing_zone_structure = None
-    bvlos_ladnding_zone_people = None
+    bvlos_landing_zone_people = None
     wx_bvlos_landing_zone = []
     c2 = []
     c2_packet_loss = []
@@ -69,38 +69,52 @@ def generate(mi_file_name, df_file_name, weather_file_name, field_vars_file_name
             # Split by commas and strip leading and trailing whitespaces
             row = [item.strip() for item in line.split(",")]
             dt_string = row[headers.index("Time of Intercept")]
-            ts = datetime.strptime(dt_string, "%d %B %Y %H:%M:%S").isoformat() + "Z"
-            temp = float(row[headers.index("Label")].strip().split(" ")[3])
+            ts = datetime.strptime(dt_string, "%d %B %Y %H:%M:%S").isoformat(timespec="milliseconds") + "Z"
+            temp = float(row[headers.index("Outside Temp")].strip().split(" ")[0])
             pressure = float(row[headers.index("Barometer")])
             wind_speed = float(row[headers.index("Wind Speed")].strip().split(" ")[0]) * KTS_TO_FT
-            wind_dir = int(row[headers.index("Wind Direction")])
+            wind_dir = float(row[headers.index("Wind Direction")])
             wx = {"temp": temp, "pressure": pressure, "windSpeed": wind_speed, "windDir": wind_dir}
             wx_zones = {"ts": ts, "wxBvlosLandingZone1Data": wx, "wxBvlosLandingZone2Data": wx}
             wx_bvlos_landing_zone.append(wx_zones)
 
     with open(field_vars_file_name, "r") as field_vars_file:
-        headers = field_vars_file.readline()
+        _ = field_vars_file.readline()
         for line in field_vars_file:
-            row = line.split(",")
+            row = line.strip().split(",")
 
-        if row[0] == "plannedBvlosLandingPoint":
-            loc = row[1].split(" ")
-            planned_bvlos_landing_point.append({"lat": float(loc[0]), "lon": float(loc[1])})
+            if row[0] == "plannedBvlosLandingPoint_deg":
+                loc = row[1].split(" ")
+                planned_bvlos_landing_point.append({"lat": float(loc[0]), "lon": float(loc[1])})
 
-        if row[0] == "plannedContingencyLandingPointAlt":
-            planned_bvlos_landing_point_alt.append(float(row[1]))
+            if row[0] == "plannedBvlosLandingPointAlt_ft":
+                planned_bvlos_landing_point_alt.append(float(row[1]))
 
-        if row[0] == "landingOffset":
-            landing_offset.append(float(row[1]))
+            if row[0] == "landingOffset_ft":
+                landing_offset.append(float(row[1]))
 
-        if row[0] == "alongTrackDistanceFlown":
-            along_track_distance = float(row[1])
+            if row[0] == "alongTrackDistanceFlown_ft":
+                along_track_distance = float(row[1])
 
-        if row[0] == "distanceFromLaunchSite":
-            distance_from_launch_site = float(row[1])
+            if row[0] == "distanceFromLaunchSite_ft":
+                distance_from_launch_site = float(row[1])
 
-        if row[0] == "bvlosLandingZoneSize":
-            bvlos_landing_zone_size.append(float(row[1]))
+            if row[0] == "bvlosLandingZoneSize_ft":
+                bvlos_landing_zone_size.append(float(row[1]))
+
+            if row[0] == "bvlosLandingZoneStructure_deg":
+                # We expect this to be zero; fail if not
+                if row[1] == "0":
+                    bvlos_landing_zone_structure = None
+                else:
+                    sys.exit(1)
+
+            if row[0] == "bvlosLandingZonePeople_deg":
+                # We expect this to be zero; fail if not
+                if row[1] == "0":
+                    bvlos_landing_zone_people = None
+                else:
+                    sys.exit(1)
 
 
     with open(df_file_name, "r") as dataflash_file:
@@ -169,7 +183,7 @@ def generate(mi_file_name, df_file_name, weather_file_name, field_vars_file_name
     con1_data["distanceFromLaunchSite_ft"] = distance_from_launch_site
     con1_data["bvlosLandingZoneSize_ft"] = bvlos_landing_zone_size
     con1_data["bvlosLandingZoneStructure_deg"] = bvlos_landing_zone_structure
-    con1_data["bvlosLandingZonePeople_deg"] = bvlos_ladnding_zone_people
+    con1_data["bvlosLandingZonePeople_deg"] = bvlos_landing_zone_people
     con1_data["wxBvlosLandingZone"] = wx_bvlos_landing_zone
     con1_data["c2"] = c2
     con1_data["c2PacketLoss"] = c2_packet_loss

@@ -1,11 +1,29 @@
-Variable,Value,Timestamp
-declaredEmergency,2018-05-12T21:31:43.000Z,Flying polar bear breached airspace.
-emergencyInitiationTime,2018-05-12T21:31:47.000Z,
-emergencyCompletionTime,2018-05-12T21:32:17.000Z,
-contingencyCause,2018-05-12T21:37:43.000Z,1 2
-contingencyResponse,2018-05-12T21:37:48.000Z,3
-declaredEmergency,2018-05-12T21:38:19.000Z,Dick Cheney is in the field with a shotgun.
-emergencyIniationTime,2018-05-12T21:38:47.000Z,
-emergencyCompletionTime,2018-05-12T21:38:55.000Z,
-contingencyLoiterAlt_ft,2018-05-12T21:41:37.000Z,[31]
-contingencyLoiterRadius_ft,2018-05-12T21:41:37.000Z,[1000]
+Variable,Value,Timestamp,
+plannedBvlosLandingPoint_deg,64.85501 -147.83923,2018-05-04T19:41:20.000Z,
+plannedBvlosLandingPointAlt_ft,465,,
+landingOffset_ft,2.687,2018-05-04T19:43:06.000Z,
+alongTrackDistanceFlown_ft,767,,
+distanceFromLaunchSite_ft,767,,
+bvlosLandingZoneSize_ft,30,,
+bvlosLandingZoneStructure_deg,0,,
+bvlosLandingZonePeople_deg,0,,
+,,,
+,,,
+plannedBvlosLandingPoint_deg,64.85364 -147.83391,2018-05-04T19:43:45.000Z,
+plannedBvlosLandingPointAlt_ft,450,,
+landingOffset_ft,3.416,2018-05-04T19:47:12.000Z,
+alongTrackDistanceFlown_ft,1731.29,,
+distanceFromLaunchSite_ft,964.23,,
+bvlosLandingZoneSize_ft,15,,
+bvlosLandingZoneStructure_deg,0,,
+bvlosLandingZonePeople_deg,0,,
+,,,
+,,,
+plannedBvlosLandingPoint_deg,64.85470 -147.83431,2018-05-04T19:47:56.000Z,
+plannedBvlosLandingPointAlt_ft,461,,
+landingOffset_ft,1.833,2018-05-04T19:51:45.000Z,
+alongTrackDistanceFlown_ft,2119.75,,
+distanceFromLaunchSite_ft,388.45,,
+bvlosLandingZoneSize_ft,20,,
+bvlosLandingZoneStructure_deg,0,,
+bvlosLandingZonePeople_deg,0,,

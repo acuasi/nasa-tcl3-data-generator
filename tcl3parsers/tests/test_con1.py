@@ -39,11 +39,6 @@ def test_json_objs_dict():
     for key in JSON_OBJ_DICT:
         assert isinstance(CON1_DATA[key], dict)
 
-# def test_json_obj_lists():
-#     """Check json objects with values of type list."""
-#     for key in JSON_OBJ_LISTS:
-#         assert isinstance(CON1_DATA[key], list)
-
 def test_basic_values():
     """Check that 'basic' object values are of type str."""
     for _, value in CON1_DATA["basic"].items():
@@ -132,6 +127,6 @@ def test_c2_packet_loss():
                 assert PATTERN.match(value)
             elif (key == "c2PacketLossRateAircraftPrct_nonDim" or
                   key == "c2PacketLossRateGcsPrct_nonDim"):
-                assert isinstance(value, float)
+                assert isinstance(value, type(None))
             else:
                 assert False
