@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 
 M_TO_FT = 3.28
+KTS_TO_FT_PER_SEC = 1.68781
 
 def lat_lon_converter(lat, lon):
     """Convert lat and lon from radar degrees minutes decimal seconds string to a decimal degrees
@@ -32,6 +33,7 @@ def generate(mi_file_name, saa4_ti_name, saa4_td_name, radar_file_name, outfile_
     """Generate saa4 json file for NASA TCL3 TO6 flights."""
     #pylint: disable=too-many-statements
     #pylint: disable=too-many-locals
+    #pylint: disable=too-many-branches
     saa4_data = {}
     basic = {}
     geo_fence = {}
@@ -106,7 +108,7 @@ def generate(mi_file_name, saa4_ti_name, saa4_td_name, radar_file_name, outfile_
                 lon_string = row[headers.index("Longitude")]
                 lat, lon = lat_lon_converter(lat_string, lon_string)
                 alt = float(row[headers.index("Altitude")])
-                speed = float(row[headers.index("Speed")])
+                speed = float(row[headers.index("Speed")]) * KTS_TO_FT_PER_SEC
                 intruder = {"ts": ts, "intruderPositionLat_deg": lat,
                             "intruderPositionLon_deg": lon, "intruderPositionAlt_ft": alt,
                             "intruderGroundSpeed_ftPerSec": speed,
