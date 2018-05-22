@@ -14,6 +14,11 @@ PA_TO_PSI = 0.000145038
 
 EXT_DATA_PATH = "/home/samuel/SpiderOak Hive/ACUASI/Code_Repos/nasa-tcl3-data-generator/tcl3parsers"
 
+## TO-DO:
+## aux_op:
+##   takeoff and landing, location and time
+## determine correct units for velocities
+
 def sys_boot_time(sys_time, gps_ms, gps_wks):
     """Use GPS time and system us time to calculate boot start time as a UTC timestamp."""
     gps_ts = round(gps_ms / 1000 + gps_wks * 86400 * 7)
