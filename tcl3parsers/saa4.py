@@ -100,8 +100,10 @@ def generate(mi_file_name, saa4_ti_name, saa4_td_name, radar_file_name, outfile_
         for line in radar_file:
             # Split by commas and strip leading and trailing whitespaces
             row = ([item.strip() for item in line.split(",")])
-            if (row[headers.index("Label")] == "T-126" and
+            if (row[headers.index("Label")] == "T-362" or
+                    row[headers.index("Label")] == "T-189" and
                     float(row[headers.index("Confidence Level")]) > 60.0):
+
                 dt_string = row[headers.index("Time of Intercept")]
                 ts = datetime.strptime(dt_string, "%d %B %Y %H:%M:%S").isoformat() + "Z"
                 lat_string = row[headers.index("Latitude")]
@@ -133,23 +135,23 @@ def generate(mi_file_name, saa4_ti_name, saa4_td_name, radar_file_name, outfile_
     saa4_data["elevationSensorMax_deg"] = 40
     saa4_data["saaSensorMinSlantRange_ft"] = 10 * M_TO_FT
     saa4_data["saaSensorMaxSlantRange_ft"] = 3400 * M_TO_FT
-    saa4_data["minRcsOfSensor_ft2"] = 10^(-20/10) * M_TO_FT
-    saa4_data["maxRcsOfSensor_ft2"] = 10^(30/10) * M_TO_FT
-    saa4_data["updateRateSensor_hz"] = 5 # Tracks is 5 Hz, FOV update is 1 Hz
+    saa4_data["minRcsOfSensor_ft2"] = 10**(-20/10) * M_TO_FT
+    saa4_data["maxRcsOfSensor_ft2"] = 10**(30/10) * M_TO_FT
+    saa4_data["updateRateSensor_hz"] = 5
     saa4_data["saaSensorAzimuthAccuracy_deg"] = 1
-    saa4_data["saaSensorAltitudeAccuracy_ft"] = None # Varies on distance, can be supplied as an angle
+    saa4_data["saaSensorAltitudeAccuracy_ft"] = None
     saa4_data["horRangeAccuracy_ft"] = None
     saa4_data["verRangeAccuracy_ft"] = None
     saa4_data["slantRangeAccuracy_ft"] = 3.25 * M_TO_FT
     saa4_data["timeToTrack_sec"] = 1.000
-    saa4_data["probabilityFalseAlarmPrct_nonDim"] = None # # Review Kevin and Joseph's notes to determine this for each file
-    saa4_data["probabilityIntruderDetectionPrct_nonDim"] = None # # Review Kevin and Joseph's notes to determine this for each file
+    saa4_data["probabilityFalseAlarmPrct_nonDim"] = None
+    saa4_data["probabilityIntruderDetectionPrct_nonDim"] = None
     saa4_data["targetTrackCapacity_nonDim"] = 20
     saa4_data["dataPacketRatio_nonDim"] = None # V2V so N/A
     saa4_data["transmissionDelay_sec"] = None # V2V so N/A
     saa4_data["numberOfLostTracks_nonDim"] = None
-    saa4_data["intruderRadarCrossSection_ft2"] = None # Detectibility of actual aircraft flown; estimate
-    saa4_data["txRadioFrequencyPower_w"] = 3.4 # This should be EIRP. Clarify this is the value Mo gave us
+    saa4_data["intruderRadarCrossSection_ft2"] = 0.158
+    saa4_data["txRadioFrequencyPower_w"] = 538.9
 
     outfile = open(outfile_name, "w")
     json.dump(saa4_data, outfile, indent=4)

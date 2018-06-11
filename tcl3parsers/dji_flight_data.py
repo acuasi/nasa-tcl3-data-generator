@@ -190,8 +190,6 @@ def generate(mi_file_name, dji_file_name, litchi_file_name, waypoints_file_name,
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
 
-
-
     with open(waypoints_file_name, "r") as waypoints_file:
         headers = waypoints_file.readline().strip().split(",")
 
