@@ -9,9 +9,11 @@ KTS_TO_FT_PER_SEC = 1.68781
 def lat_lon_converter(lat, lon):
     """Convert lat and lon from radar degrees minutes decimal seconds string to a decimal degrees
     float value.
+
     Args:
         lat (string): The latitude in the format '1475131.986W'
         lon (string): The longitude in the format '645117.514N'
+    
     Returns:
         location (tuple, float): The converted values in the format (64.8412343, -147.7432143)
     """
@@ -30,7 +32,19 @@ def lat_lon_converter(lat, lon):
     return lat_dd, lon_dd
 
 def generate(mi_file_name, saa4_ti_name, saa4_td_name, radar_file_name, outfile_name):
-    """Generate saa4 json file for NASA TCL3 TO6 flights."""
+    """Generate saa4 json file.
+    
+    Args:
+        mi_file_name            (str): Name of the mission insight file.                    [.csv]
+        saa4_ti_name            (str): Name of the time independent field variables file    [.log]
+        saa4_td_name            (str): Name of the time dependent field variables file      [.log]
+        radar_file_name         (str): Name of the radar file.                              [.csv]
+        outfile_name            (str): Name of the output file to be created.               [e.g. 'SAA4.json'] 
+
+    Returns:
+        None
+    """
+
     #pylint: disable=too-many-statements
     #pylint: disable=too-many-locals
     #pylint: disable=too-many-branches

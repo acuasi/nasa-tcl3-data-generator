@@ -12,19 +12,46 @@ M_TO_FT = 3.28
 KTS_TO_FT = 1.68781
 
 def sys_boot_time(sys_time, gps_ms, gps_wks):
-    """Use GPS time and system us time to calculate boot start time as a UTC timestamp."""
-    gps_ts = round(gps_ms / 1000 + gps_wks * 86400 * 7)
+    """Use GPS time and system us time to calculate boot start time as a UTC timestamp.
+
+    Args:
+        sys_time    (int): System time of Arducopter autopilot in ms.
+        gps_ms      (int): GPS time since last week in ms. 
+        gps_wks     (int): Number of GPS weeks since epoch.
+
+    Returns:
+        boot_ts     (int): Timestamp of system since boot in seconds.
+        """    gps_ts = round(gps_ms / 1000 + gps_wks * 86400 * 7)
     utc_ts = gps_ts + GPS_EPOCH_OFFSET + GPS_LEAP_OFFSET
     sys_ts = sys_time / 1.0E6
     boot_ts = utc_ts - sys_ts
     return boot_ts
 
 def sys_ts_converter(sys_time, boot_ts):
-    """Convert system time to UTC ISO8601 timestamp."""
-    unix_ts = (sys_time / 1.0E6) + boot_ts
+    """Convert system time to UTC ISO8601 timestamp.
+    
+    Args:
+        sys_time        (int): System time of Arducopter autopilot in ms.
+        boot_ts         (int): Timestamp of system since boot in seconds.
+
+    Returns:
+        sys_ts          (str): ISO8601 formatted timestamp of current system time.
+    """    unix_ts = (sys_time / 1.0E6) + boot_ts
     return datetime.utcfromtimestamp(unix_ts).isoformat(timespec="milliseconds")+"Z"
 
 def generate(mi_file_name, df_file_name, weather_file_name, field_vars_file_name, outfile_name):
+    """Generate con1 json file.
+    
+    Args:
+        mi_file_name            (str): Name of the mission insight file.    [.csv]
+        df_file_name            (str): Name of the dataflash log file       [.log]
+        weather_file_name       (str): Name of the weather data file.       [.csv]
+        field_vars_file_name    (str): Name of the field variables file.    [.csv]
+        outfile_name            (str): Name of the output file to be created. [e.g. 'CON1.json'] 
+
+    Returns:
+        None
+    """
 
     # Set up json objects
     ftype = "CON1"
