@@ -28,7 +28,7 @@ def sys_ts_converter(sys_time, boot_ts):
     return datetime.utcfromtimestamp(unix_ts).isoformat(timespec="milliseconds")+"Z"
 
 def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_name):
-    """Generate cns1 json file for NASA TCL3 TO6 flights."""
+    """Generate cns1 json file."""
     #pylint: disable=too-many-statements
     #pylint: disable=too-many-locals
     #pylint: disable=too-many-branches
@@ -63,6 +63,7 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_na
     ftype = "CNS2"
     pdf = "UTM-ACUASI-CNS-2.pdf"
 
+    # Generate dictionary with mission insight headers and values
     with open(mi_file_name, "r") as mi_file:
         mi_reader = csv.DictReader(mi_file)
         for row in mi_reader:
@@ -76,6 +77,7 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_na
     basic["ussInstanceID"] = mi_dict["USS_INSTANCE_ID"]
     basic["ussName"] = mi_dict["USS_NAME"]
 
+    # Parse field variables file
     with open(field_vars_file_name, "r") as field_vars_file:
         _ = field_vars_file.readline()
         for line in field_vars_file:
@@ -141,6 +143,7 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_na
                 print("ERROR: Invalid variable.")
                 sys.exit(0)
 
+    # Parse arducopter dataflash log file (.log format)
     with open(dataflash_file_name, "r") as dataflash_file:
         for line in dataflash_file:
             # Split by commas and strip leading and trailing whitespaces
@@ -208,6 +211,7 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_na
                         time_manuever_verification.append({"ts": ts})
                 ac_mode = row[2]
 
+    # Build cns2 json data structure
     cns2_data["fType"] = ftype
     cns2_data["UTM-TCL3-DMP-RevF-CNSPDF"] = pdf
     cns2_data["basic"] = basic
