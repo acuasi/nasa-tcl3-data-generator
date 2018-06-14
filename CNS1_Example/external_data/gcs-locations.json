@@ -1,0 +1,43 @@
+{
+	"Butrovich":{ 
+		"latitude": "64.8574",
+		"longitude": "-147.8511",
+		"altitude": "568"
+	},
+	"Hillside":{ 
+		"latitude": "64.8571",
+		"longitude": "-174.8541",
+		"altitude": "592"
+	},
+	"Tracks":{
+		"latitude": "64.8555",
+		"longitude": "-147.8585",
+		"altitude": "470"
+	},
+	"Low Field":{
+		"latitude": "64.8531",
+		"longitude": "-147.8604",
+		"altitude": "455"
+	},
+	"High Field":{
+		"latitude": "64.8529",
+		"longitude": "-147.8605",
+		"altitude": "455"
+	},
+	"Alumni":{
+		"latitude": "64.85462",
+		"longitude": "-147.83424",
+		"altitude": "449"
+	},
+	"Field":{
+		"latitude": "64.854771",
+		"longitude": "-147.858914",
+		"altitude": "462"
+	},
+	"OVERLOOK":{
+	"latitude": "64.85768",
+	"longitude": "-147.85409",
+	"altitude": "621"
+	}
+
+}
