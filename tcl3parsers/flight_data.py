@@ -12,8 +12,6 @@ CM_TO_FT = 0.328
 MM_TO_FT = 0.00328
 PA_TO_PSI = 0.000145038
 
-EXT_DATA_PATH = "/home/samuel/SpiderOak Hive/ACUASI/Code_Repos/nasa-tcl3-data-generator/tcl3parsers"
-
 ## TO-DO:
 ## aux_op:
 ##   takeoff and landing, location and time
@@ -107,10 +105,10 @@ def generate(mi_file_name, dataflash_file_name, outfile_name):
         for row in mi_reader:
             mi_dict = row
 
-    with open(EXT_DATA_PATH + "/external_data/aircraft-specs.json", "r") as ac_specs:
+    with open("external_data/aircraft-specs.json", "r") as ac_specs:
         ac_specs_dict = json.load(ac_specs)
 
-    with open(EXT_DATA_PATH + "/external_data/gcs-locations.json", "r") as gcs_locs:
+    with open("external_data/gcs-locations.json", "r") as gcs_locs:
         gcs_locs_dict = json.load(gcs_locs)
 
     # Get aircraft N number from mi_dict and use that to get take-off weight from
