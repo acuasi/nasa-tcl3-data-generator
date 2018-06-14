@@ -78,6 +78,7 @@ def generate(mi_file_name, field_vars_file_name, outfile_name):
     basic["ussInstanceID"] = mi_dict["USS_INSTANCE_ID"]
     basic["ussName"] = mi_dict["USS_NAME"]
 
+
     with open(field_vars_file_name, "r") as field_vars_file:
         field_vars = json.load(field_vars_file)
 

@@ -18,7 +18,16 @@ PA_TO_PSI = 0.000145038
 EXT_DATA_PATH = "/home/samuel/SpiderOak Hive/ACUASI/Code_Repos/nasa-tcl3-data-generator/tcl3parsers"
 
 def generate(mi_file_name, dji_file_name, litchi_file_name, waypoints_file_name, outfile_name):
-    """Generate flight data json file for NASA TCL3 TO6 flights."""
+    """Generate flight data json file.
+
+    Args:
+        mi_file_name            (str): Name of the mission insight file.        [.csv]
+        df_file_name            (str): Name of the dataflash log file           [.log]
+        outfile_name            (str): Name of the output file to be created.   ['FLIGHT_DATA.json']
+
+    Returns:
+        None
+    """
     # Set up data structures
     flight_data = {}
     basic = {}
@@ -27,6 +36,8 @@ def generate(mi_file_name, dji_file_name, litchi_file_name, waypoints_file_name,
     waypoint = {}
     uas_state = []
     state_value = {}
+
+    wp_count = 1
 
     # Open files and parse data
     with open(mi_file_name, "r") as mi_file:
@@ -43,7 +54,6 @@ def generate(mi_file_name, dji_file_name, litchi_file_name, waypoints_file_name,
     # Get aircraft N number from mi_dict and use that to get take-off weight from
     # aircraft specs file
     takeoff_weight = float(ac_specs_dict[mi_dict["VEHICLE_DESIGNATION"]]["weight_lbs"])
-    num_motors = ac_specs_dict[mi_dict["VEHICLE_DESIGNATION"]]["num_motors"]
     type_of_operation = "Live"
 
     basic["uvin"] = mi_dict["UVIN"]
@@ -175,18 +185,19 @@ def generate(mi_file_name, dji_file_name, litchi_file_name, waypoints_file_name,
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
             # DETERMINE UNITS FOR THESE VALUES
-            print("Error: need to determine correct units for velocities.")
-            sys.exit(1)
             sensor = ["velNorth_ftPerSec"]
-            value = row[headers["GPS(0):velN"]]
+            # value = row[headers["GPS(0):velN"]]
+            value = None
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
             sensor = ["velEast_ftPerSec"]
-            value = row[headers["GPS(0):velE"]]
+            # value = row[headers["GPS(0):velE"]]
+            value = None
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
             sensor = ["velDown_ftPerSec"]
-            value = row[headers["GPS(0):velD"]]
+            # value = row[headers["GPS(0):velD"]]
+            value = None
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
 
@@ -198,15 +209,15 @@ def generate(mi_file_name, dji_file_name, litchi_file_name, waypoints_file_name,
             row = [item.strip() for item in line.split(",")]
 
             sensor = ["targetWaypointLat_deg"]
-            value = None
+            value = float(row[headers.index('latitude')])
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
             sensor = ["targetWaypointLon_deg"]
-            value = None
+            value = float(row[headers.index('longitude')])
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
             sensor = ["targetWaypointAlt_ft"]
-            value = None
+            value = float(row[headers.index('altitude(m)')]) * M_TO_FT
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
             sensor = ["targetGroundSpeed_ftPerSec"]
@@ -225,3 +236,22 @@ def generate(mi_file_name, dji_file_name, litchi_file_name, waypoints_file_name,
             value = None
             state_value = {"ts": timestamp, "sensor": sensor, "value": value}
             uas_state.append(state_value)
+
+            wp_speed = float(row[headers.index('speed(m/s)')]) * M_TO_FT
+            waypoint = {"wpTime": None, "wpAlt_ft": float(row[headers.index('altitude')]) * M_TO_FT,
+                        "hoverTime_sec": 0, "wpLon_deg": float(row[headers.index('longitude')]),
+                        "wpLat_deg": float(row[headers.index('latitude')]),
+                        "wpSequenceNum_nonDim": wp_count, "wpType_nonDim": 1,
+                        "wpTargetAirSpeed_ftPerSec": wp_speed, "wpTargetGroundSpeed_ftPerSec": None}
+            ac_flight_plan.append(waypoint)
+            wp_count += 1
+
+    flight_data["fType"] = "FLIGHT_DATA"
+    flight_data["basic"] = basic
+    flight_data["auxiliaryUASOperation"] = aux_op
+    flight_data["aircraftFlightPlan"] = ac_flight_plan
+    flight_data["uasState"] = uas_state
+
+    outfile = open(outfile_name, "w")
+    json.dump(flight_data, outfile, indent=4)
+    outfile.close()
