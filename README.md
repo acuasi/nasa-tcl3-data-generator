@@ -23,24 +23,26 @@ Parsers and Jupyter Notebooks are found in the `tcl3parsers` directory. All the 
 Parsers require various log files to be passed to them as well as an output file name.
 
 Example usage:
-Use `cns1.py` to generate `CNS1.json` file.
+Use `cns1.py` and `flight_data.py` to generate `CNS1.json` and `FLIGHT_DATA.json` files for arducopter flights.
 
 Files:
-* 2018-05-18 10-31.log  								(Arducopter dataflash file)
+* 2018-05-18 10-31.log  								(Arducopter dataflash file converted from binary)
 * 2018-05-18 10-31_mission_insight.csv  				(Mission Insight information file)
 * 2018-05-18 10-31_field_variables.csv  				(Field variable file, captured manually Operators)
 
-* CNS1.json												(Output file name; the file we will generate)
+* CNS1.json												(Output file name)
+* FLIGHT_DATA.json 										(Output file name)
 
 Short Python program to process files:
 ```
-import cns1
+import cns1, flight_data
+
 mi_file_name = "2018-04-27 11-16-16_mission_insight.csv"
 dataflash_file_name = "2018-04-27 11-16-16.log"
 field_vars_file_name = "2018-04-27 11-16-16_field_variables.csv"
-outfile_name = "CNS1.json"
 
-cns1.generate(mi_file_name, dataflash_file_name, field_vars_file_name, outfile_name)
+cns1.generate(mi_file_name, dataflash_file_name, field_vars_file_name, "CNS1.json")
+flight_data.generate(mi_file_name, dataflash_file_name, "FLIGHT_DATA.json")
 ```
 ### Who do I talk to? ###
 
