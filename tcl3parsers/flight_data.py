@@ -12,11 +12,6 @@ CM_TO_FT = 0.328
 MM_TO_FT = 0.00328
 PA_TO_PSI = 0.000145038
 
-## TO-DO:
-## aux_op:
-##   takeoff and landing, location and time
-## determine correct units for velocities
-
 def sys_boot_time(sys_time, gps_ms, gps_wks):
     """Use GPS time and system us time to calculate boot start time as a UTC timestamp.
 

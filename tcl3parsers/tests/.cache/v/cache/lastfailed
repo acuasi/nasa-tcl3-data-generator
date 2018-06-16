@@ -2,5 +2,7 @@
   "test_cns1_values.py::test_planned_contin": true,
   "test_con1.py::test_json_obj_lists": true,
   "test_con2.py::test_nonlist_values": true,
-  "test_con2.py::test_str_values": true
+  "test_con2.py::test_str_values": true,
+  "test_flight_data_ptar.py::test_aux_vars": true,
+  "test_flight_data_ptar.py::test_uas_state_vars": true
 }
