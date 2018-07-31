@@ -1,0 +1,9 @@
+Variable,Value,Timestamp
+contingencyCause_nonDim,5,
+contingencyResponse_nonDim,3,2018-04-27T20:06:06.000Z
+cns1TestType_nonDim,1,
+timeManeuverCommandSent,,2018-04-27T20:04:44.000Z
+timePrimaryLinkDisconnect,,2018-04-27T20:05:17.000Z
+timeRedundantLinkSwitch,,2018-04-27T20:05:17.000Z
+cns1TestType_nonDim,2,
+timeManeuverCommandSent,,2018-04-27T20:06:08.000Z
