@@ -14,34 +14,45 @@ class TestValueTypes(unittest.TestCase):
         cls.cns2_data = json.load(generatedFile)
 
     def __checkType(self, key, value, actualData):
-        if 'type' in value['match']:
-            self.assertIsInstance(actualData, value['type'])
+        expectedType = value['type']
+        actualType = type(actualData).__name__
+        self.assertTrue(actualType == expectedType, "Expected type for "
+                        + str(key) + ": " + str(expectedType) + ", actual type: "
+                        + str(actualType))
 
     def __checkPattern(self, key, value, actualData):
-        if 'pattern' in value['match']:
-            self.assertRegex(actualData, value['pattern'])
+        self.assertRegex(actualData, value['pattern'], "Expected pattern for "
+                         + str(key) + ": " + str(value['pattern'])
+                         + ", doesn't match: " + str(actualData))
 
     def __checkMinLength(self, key, value, actualData):
-        if 'minLength' in value['match']:
-            self.assertTrue(len(actualData) is value['minLength'])
+        self.assertTrue(len(actualData) >= value['minLength'], "Min length mismatch for: "
+                        + str(key) + ". expected: " + str(value['minLength'])
+                        + ", actual: " + str(actualData))
 
     def __checkMaxLength(self, key, value, actualData):
-        if 'maxLength' in value['match']:
-            self.assertTrue(len(actualData) is value['maxLength'])
+        self.assertTrue(len(actualData) <= value['maxLength'], "Max length mismatch for: "
+                        + str(key) + ". expected: " + str(value['minLength'])
+                        + ", actual: " + str(actualData))
 
     # start with constants.CNS2_MOP and self.cns2_data, recurse
-    def __testStructure(self, arr, actualData):
-        for key, value in arr:
-            if isinstance(value, 'dict') and 'match' in value.keys:
-                self.__checkType(key, value, actualData[key])
-                self.__checkPattern(key, value, actualData[key])
-                self.__checkMinLength(key, value, actualData[key])
-                self.__checkMaxLength(key, value, actualData[key])
+    def __testStructure(self, expectedData, actualData):
+        if not isinstance(expectedData, dict) or not isinstance(actualData, dict) or not expectedData or not actualData:
+            return
+        for key, value in expectedData.items():
+            if isinstance(value, dict) and 'match' in value.keys():
+                matchParams = value['match']
+                self.assertIn(key, actualData)
+                if 'type' in matchParams:
+                    self.__checkType(key, matchParams, actualData[key])
+                if 'pattern' in matchParams:
+                    self.__checkPattern(key, matchParams, actualData[key])
+                if 'minLength' in matchParams:
+                    self.__checkMinLength(key, matchParams, actualData[key])
+                if 'maxLength' in matchParams:
+                    self.__checkMaxLength(key, matchParams, actualData[key])
             else:
                 self.__testStructure(value, actualData[key])
 
     def test_structure(self):
         self.__testStructure(constants.CNS2_MOP, self.cns2_data)
-
-    def test_fail(self):
-        self.assertTrue(False)

@@ -9,6 +9,7 @@ TCL3PARSERS_PATH = os.path.dirname(os.path.realpath("../"))
 sys.path.append(TCL3PARSERS_PATH)
 
 SAMPLEDATAPATH = TCL3PARSERS_PATH + "/tests/example_files/cns2/SampleData"
+OUTFILENAME = "cns2_data.json"
 
 import cns2
 
@@ -49,7 +50,7 @@ class Runner():
             elif "Radar Flight" in fileName:
                 self.RADAR_FILE_NAME = sampleFlightPath + "/" + fileName
 
-        self.OUTFILE_NAME = self.sampleDataPath + "/" + self.sampleFlightName + "/cns1_data.json"
+        self.OUTFILE_NAME = self.sampleDataPath + "/" + self.sampleFlightName + "/" + OUTFILENAME
         constants.OUTFILE_NAME = self.OUTFILE_NAME
 
     def __runParser(self):

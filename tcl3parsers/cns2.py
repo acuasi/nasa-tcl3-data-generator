@@ -19,7 +19,7 @@ def sys_boot_time(sys_time, gps_ms, gps_wks):
 
     Args:
         sys_time    (int): System time of Arducopter autopilot in ms.
-        gps_ms      (int): GPS time since last week in ms. 
+        gps_ms      (int): GPS time since last week in ms.
         gps_wks     (int): Number of GPS weeks since epoch.
 
     Returns:
@@ -33,7 +33,7 @@ def sys_boot_time(sys_time, gps_ms, gps_wks):
 
 def sys_ts_converter(sys_time, boot_ts):
     """Convert system time to UTC ISO8601 timestamp.
-    
+
     Args:
         sys_time        (int): System time of Arducopter autopilot in ms.
         boot_ts         (int): Timestamp of system since boot in seconds.
@@ -46,13 +46,13 @@ def sys_ts_converter(sys_time, boot_ts):
 
 def generate(mi_file_name, dataflash_file_name, field_vars_file_name, radar_file_name, outfile_name):
     """Generate cns2 json file.
-    
+
     Args:
         mi_file_name            (str): Name of the mission insight file.        [.csv]
         dataflash_file_name     (str): Name of the dataflash log file           [.log]
         field_vars_file_name    (str): Name of the field variables file.        [.csv]
         radar_file_name         (str): Name of the radar file.                  [.csv]
-        outfile_name            (str): Name of the output file to be created.   [e.g. 'CNS1.json'] 
+        outfile_name            (str): Name of the output file to be created.   [e.g. 'CNS2.json']
 
     Returns:
         None
@@ -90,6 +90,28 @@ def generate(mi_file_name, dataflash_file_name, field_vars_file_name, radar_file
 
     ftype = "CNS2"
     pdf = "UTM-ACUASI-CNS-2.pdf"
+
+    # Description Variables
+    RFD900 = """
+    The two RFD900 Radio Modems are a high powered 900Mhz, ISM band radio modems
+    designed for long range communication operating between 902 to 928Mhz at a 57600
+    baud rate.
+    """
+
+    UAVCAST = """
+    The UAVCast is a system designed to provide HD video as well as telemetry over a 4G/LTE
+    cellular network. The UAVCast Client software will expose the MAVLink channel as a local
+    TTP server.
+    """
+
+    PRIMARY = ""
+    REDUN = ""
+
+    PRIM_CMD = """Takeoff in Auto mode and begin flight plan."""
+
+    REDUN_CMD = """Fly to POI in Guided mode."""
+
+    LINK = {"RFD900": RFD900, "UAVCast": UAVCAST}
 
     # Generate dictionary with mission insight headers and values
     with open(mi_file_name, "r") as mi_file:

@@ -4,6 +4,16 @@
 OUTFILE_NAME = ""
 
 CNS2_MOP = {
+    'fType': {
+        'match': {
+            'exact': 'CNS2'
+        }
+    },
+    'UTM-TCL3-DMP-RevF-CNSPDF': {
+        'match': {
+            'exact': 'UTM-SAMPLE-CNS-4.pdf'
+        }
+    },
     'basic': {
         'uvin': {
             'match': {
@@ -29,10 +39,10 @@ CNS2_MOP = {
         },
         'ussName': {
             'match': {
-                type: 'str'
+                'type': 'str'
             }
         },
-        'ussInstanceId': {
+        'ussInstanceID': {
             'match': {
                 'type': 'str',
                 'pattern': """^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$""",
@@ -40,5 +50,63 @@ CNS2_MOP = {
                 'minLength': 36
             }
         }
-    }
+    },
+    'plannedContingency': {
+        'plannedContingencyLandingPoint_deg': {
+            'match': {
+                'type': 'list',
+                'minLength': 1,
+                'children': {
+                    'lat': {
+                        'match': {
+                            'type': 'int',
+                            'minimum': -90,
+                            'maximum': 90
+                        }
+                    },
+                    'lon': {
+                        'match': {
+                            'type': 'int',
+                            'minimum': -180,
+                            'maximum': 180
+                        }
+                    }
+                }
+            }
+        },
+        'plannedContingencyLandingPointAlt_ft': {
+            'match': {
+                'type': 'list',
+                'minLength': 1,
+                'children': {
+                    'match': {
+                        'type': 'int'
+                    }
+                }
+            }
+        },
+        'plannedContingencyLoiterAlt_ft': {
+            'match': {
+                'type': 'list',
+                'minLength': 1,
+                'children': {
+                    'match': {
+                        'type': 'int'
+                    }
+                }
+            }
+        },
+        'plannedContingencyLoiterRadius_ft': {
+            'match': {
+                'type': 'list',
+                'minLength': 0,
+                'children': {
+                    'match': {
+                        'type': 'int'
+                    }
+                }
+            }
+        }
+    },
 }
+# TODO: Add JSON structure for uasTruth and below
