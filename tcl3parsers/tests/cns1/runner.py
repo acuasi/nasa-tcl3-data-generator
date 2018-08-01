@@ -32,6 +32,24 @@ class Runner():
         self.FIELD_VARS_NAME = ""
         self.OUTFILE_NAME = ""
 
+    def setFlightName(self, flightName):
+        """Sets the name of the flight folder to use under Sample Data"""
+        self.sampleFlightName = flightName
+        sampleFlightPath = self.sampleDataPath +  "/" + self.sampleFlightName
+        sampleFlightFiles = [name for name in os.listdir(sampleFlightPath)]
+        for fileName in sampleFlightFiles:
+            if "mission_insight.csv" in fileName:
+                self.MI_FILE_NAME = sampleFlightPath + "/" + fileName
+
+            elif ".log" in fileName:
+                self.DF_FILE_NAME = sampleFlightPath + "/" + fileName
+
+            elif "field_vars.csv" in fileName:
+                self.FIELD_VARS_NAME = sampleFlightPath + "/" + fileName
+
+        self.OUTFILE_NAME = self.sampleDataPath + "/" + self.sampleFlightName + "/cns1_data.json"
+        constants.OUTFILE_NAME = self.OUTFILE_NAME
+
     def __runParser(self):
         """Runs parser"""
         cns1.generate(self.MI_FILE_NAME,
@@ -45,21 +63,8 @@ class Runner():
         runner = unittest.TextTestRunner(verbosity=3)
         return runner.run(self.suite)
 
-    def setFlightName(self, flightName):
-        self.sampleFlightName = flightName
-        sampleFlightPath = self.sampleDataPath +  "/" + self.sampleFlightName
-        sampleFlightFiles = [name for name in os.listdir(sampleFlightPath)]
-        for fileName in sampleFlightFiles:
-            if "mission_insight.csv" in fileName:
-                self.MI_FILE_NAME = sampleFlightPath + "/" + fileName
-            elif ".log" in fileName:
-                self.DF_FILE_NAME = sampleFlightPath + "/" + fileName
-            elif "field_vars.csv" in fileName:
-                self.FIELD_VARS_NAME = sampleFlightPath + "/" + fileName
-        self.OUTFILE_NAME = self.sampleDataPath + "/" + self.sampleFlightName + "/cns1_data.json"
-        constants.OUTFILE_NAME = self.OUTFILE_NAME
-
-if __name__ == '__main__':
+def runAgainstAllSampleData():
+    """Run tests against all data in the example_files/cns1/SampleData folder"""
     sampleFlightData = [name for name in os.listdir(SAMPLEDATAPATH) if os.path.isdir(SAMPLEDATAPATH + "/" + name)]
     for sampleFlightName in sampleFlightData:
         testRunner = Runner()
@@ -70,3 +75,6 @@ if __name__ == '__main__':
         failure = len(testset.failures)
         if failure:
             break
+
+if __name__ == '__main__':
+    runAgainstAllSampleData()

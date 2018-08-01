@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Large Sample Data
+**/example_files/*/SampleData/Flight*

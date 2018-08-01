@@ -1,10 +1,7 @@
-"""Declares constants used in CNS2 testing"""
+"""Declares constants used in CNS1 testing"""
 
-import sys
-import os
-
-TCL3PARSERS_PATH = os.path.dirname(os.path.realpath("../"))
-OUTFILE_NAME = TCL3PARSERS_PATH + "/tests/example_files/cns1/cns1_data.json"
+# This is set in runner.py
+OUTFILE_NAME = ""
 
 # Constants used in value_tests
 JSON_OBJ_STR = set([
