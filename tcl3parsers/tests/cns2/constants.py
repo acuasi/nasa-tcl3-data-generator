@@ -11,7 +11,7 @@ CNS2_MOP = {
     },
     'UTM-TCL3-DMP-RevF-CNSPDF': {
         'match': {
-            'exact': 'UTM-SAMPLE-CNS-4.pdf'
+            'exact': 'UTM-ACUASI-CNS-2.pdf'
         }
     },
     'basic': {
@@ -76,6 +76,7 @@ CNS2_MOP = {
         },
         'plannedContingencyLandingPointAlt_ft': {
             'match': {
+                'exception': None,
                 'type': 'list',
                 'minLength': 1,
                 'children': {
@@ -87,6 +88,7 @@ CNS2_MOP = {
         },
         'plannedContingencyLoiterAlt_ft': {
             'match': {
+                'exception': None,
                 'type': 'list',
                 'minLength': 1,
                 'children': {
@@ -98,6 +100,7 @@ CNS2_MOP = {
         },
         'plannedContingencyLoiterRadius_ft': {
             'match': {
+                'exception': None,
                 'type': 'list',
                 'minLength': 0,
                 'children': {

@@ -105,3 +105,4 @@ venv.bak/
 
 # Large Sample Data
 **/example_files/*/SampleData/Flight*
+.DS_Store
