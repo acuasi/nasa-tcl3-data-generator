@@ -2,6 +2,7 @@
 import unittest
 import os
 import sys
+import re
 
 import constants
 
@@ -38,7 +39,7 @@ class Runner():
         sampleFlightPath = self.sampleDataPath +  "/" + self.sampleFlightName
         sampleFlightFiles = [name for name in os.listdir(sampleFlightPath)]
         for fileName in sampleFlightFiles:
-            if "mission_insight.csv" in fileName:
+            if "mission_insight.csv" in fileName or re.match(r'^CNS2_.+Flight.+\.csv', fileName):
                 self.MI_FILE_NAME = sampleFlightPath + "/" + fileName
 
             elif ".log" in fileName:
@@ -78,6 +79,7 @@ class Runner():
 def runAgainstAllSampleData():
     """Run tests against all data in the example_files/cns2/SampleData folder"""
     sampleFlightData = [name for name in os.listdir(SAMPLEDATAPATH) if os.path.isdir(SAMPLEDATAPATH + "/" + name)]
+    sampleFlightData.sort()
     for sampleFlightName in sampleFlightData:
         testRunner = Runner()
         testset = testRunner.setFlightName(sampleFlightName)
