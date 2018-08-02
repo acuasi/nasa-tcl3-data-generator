@@ -15,17 +15,11 @@ data = {
         "plannedContingencyLoiterAlt_ft": [0],
         "plannedContingencyLoiterRadius_ft": [0]
     },
-    "prnGPSSat": [
-        {
-            "ts": None,
-            "prnGpsSat_nonDim": None
-        }
+    "prnGpsSat": [
+        None
     ],
     "uere": [
-        {
-            "ts": None,
-            "uere_in": None
-        }
+        None
     ],
     "contingencyCause": [
         None
@@ -37,16 +31,10 @@ data = {
         None
     ],
     "contingencyLoiterAlt": [
-        {
-            "ts": None,
-            "contingencyLoiterAlt_ft": [0]
-        }
+        None
     ],
     "contingencyLoiterRadius": [
-        {
-            "ts": None,
-            "contingencyLoiterRadius_ft": [0]
-        }
+        None
     ],
     "contingencyLanding": [
         None

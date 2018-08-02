@@ -20,23 +20,32 @@ class TestValueTypes(unittest.TestCase):
         self.assertEqual(actualData, expectedData)
 
     def __checkType(self, key, expectedType, actualData):
+        expectedType = expectedType.split("|")
         actualType = type(actualData).__name__
-        self.assertTrue(actualType == expectedType, "Expected type for "
-                        + str(key) + ": " + str(expectedType) + ", actual type: "
-                        + str(actualType))
+        self.assertIn(actualType, expectedType, str(key) + " from : " + self.parentKey)
 
     def __checkPattern(self, key, pattern, actualData):
         self.assertRegex(actualData, pattern)
 
     def __checkMinLength(self, key, minLength, actualData):
-        self.assertTrue(len(actualData) >= minLength, "Min length mismatch for: "
-                        + str(key) + ". expected: " + str(minLength)
-                        + ", actual: " + str(actualData))
+        self.assertLessEqual(minLength, len(actualData), "Minimum Length requirement not met for: " + str(key))
 
     def __checkMaxLength(self, key, maxLength, actualData):
-        self.assertTrue(len(actualData) <= maxLength, "Max length mismatch for: "
-                        + str(key) + ". expected: " + str(maxLength)
-                        + ", actual: " + str(actualData))
+        self.assertGreaterEqual(maxLength, len(actualData), "Maximum Length requirement not met for: " + str(key))
+
+    def __checkMinimum(self, key, minimum, actualData):
+        self.assertLessEqual(minimum, actualData)
+
+    def __checkMaximum(self, key, maximum, actualData):
+        self.assertGreaterEqual(maximum, actualData)
+
+    def __testChildren(self, key, expectedChildren, actualData):
+        # If there is a match immediately under the children, then this is an iterated match
+        if 'match' in expectedChildren:
+            for individualItem in actualData:
+                self.__matchParameters(key, expectedChildren['match'], individualItem)
+        else:
+            self.__testStructure(expectedChildren, actualData, key)
 
     def __matchParameters(self, key, expectedParams, actualData):
         # If the exception case matches, then ignore testing the field
@@ -53,12 +62,16 @@ class TestValueTypes(unittest.TestCase):
             self.__checkMinLength(key, expectedParams['minLength'], actualData)
         if 'maxLength' in expectedParams:
             self.__checkMaxLength(key, expectedParams['maxLength'], actualData)
+        if 'maximum' in expectedParams:
+            self.__checkMaximum(key, expectedParams['maximum'], actualData)
+        if 'minimum' in expectedParams:
+            self.__checkMinimum(key, expectedParams['minimum'], actualData)
         if 'children' in expectedParams:
-            # Checked that the parent structure matched spec, now recurse through children
-            self.__testStructure(expectedParams['children'], actualData)
+            self.__testChildren(key, expectedParams['children'], actualData)
 
     # start with constants.CNS2_MOP and self.cns2_data, recurse
-    def __testStructure(self, expectedData, actualData):
+    def __testStructure(self, expectedData, actualData, parentKey=""):
+        self.parentKey = parentKey
         # Base case - if the structure is empty or not the right type, return
         if not isinstance(expectedData, dict) or not isinstance(actualData, dict) or not expectedData or not actualData:
             return
@@ -66,12 +79,12 @@ class TestValueTypes(unittest.TestCase):
         for key, value in expectedData.items():
             if isinstance(value, dict) and 'match' in value.keys():
                 expectedParams = value['match']
-                self.assertIn(key, actualData)
+                self.assertTrue(key in actualData, "Key not found in JSON: " + key)
                 self.__matchParameters(key, expectedParams, actualData[key])
 
             else:
-                self.__testStructure(value, actualData[key])
-
+                self.assertTrue(key in actualData, "Key not found in JSON: " + key)
+                self.__testStructure(value, actualData[key], "--TOP LEVEL JSON VAR--")
     def test_structure(self):
         """Run all test cases comparing the outputted JSON file against the expected structure found in constants.py"""
         self.__testStructure(constants.CNS2_MOP, self.cns2_data)

@@ -189,6 +189,8 @@ def formRadarRecord(radarRecord):
 
 def parseRadarFile(radar_file_name):
     """Parses the radar file and adds uasTruth fields to cns2 data JSON"""
+
+    cns2.data['uasTruth'] = []
     with open(radar_file_name, "r") as radarFile:
         radarRecords = csv.DictReader(radarFile)
         for radarRecord in radarRecords:
