@@ -80,36 +80,33 @@ CNS2_MOP = {
         },
         'plannedContingencyLandingPointAlt_ft': {
             'match': {
-                'exception': None,
                 'type': 'list',
                 'minLength': 1,
                 'children': {
                     'match': {
-                        'type': 'int|float'
+                        'type': 'int|float|NoneType'
                     }
                 }
             }
         },
         'plannedContingencyLoiterAlt_ft': {
             'match': {
-                'exception': None,
                 'type': 'list',
                 'minLength': 1,
                 'children': {
                     'match': {
-                        'type': 'int'
+                        'type': 'int|float|NoneType'
                     }
                 }
             }
         },
         'plannedContingencyLoiterRadius_ft': {
             'match': {
-                'exception': None,
                 'type': 'list',
                 'minLength': 0,
                 'children': {
                     'match': {
-                        'type': 'int'
+                        'type': 'int|float|NoneType'
                     }
                 }
             }
@@ -153,101 +150,158 @@ CNS2_MOP = {
         }
     },
     'prnGpsSat': {
-        'ts': {
-            'match': {
-                'type': 'str',
-                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-            }
-        },
-        'prnGpsSat_nonDim': {
-            'match': {
-                'type': 'list',
-                'minLength': 1,
-                'children': {
-                    'match': {
-                        'type': 'int',
-                        'minimum': 0,
-                        'maximum': 32
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'type': 'dict|NoneType',
+                    'children': {
+                        'ts': {
+                            'match': {
+                                'type': 'str',
+                                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
+                            }
+                        },
+                        'prnGpsSat_nonDim': {
+                            'match': {
+                                'type': 'list',
+                                'minLength': 1,
+                                'children': {
+                                    'match': {
+                                        'type': 'int',
+                                        'minimum': 0,
+                                        'maximum': 32
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     },
     'uere': {
-        'ts': {
-            'match': {
-                'type': 'str',
-                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-            }
-        },
-        'uere_in': {
-            'match': {
-                'type': 'float|int'
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'children': {
+                        'ts': {
+                            'match': {
+                                'type': 'str',
+                                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
+                            }
+                        },
+                        'uere_in': {
+                            'match': {
+                                'type': 'float|int'
+                            }
+                        }
+                    }
+                }
             }
         }
     },
     'contingencyCause': {
-        'ts': {
-            'match': {
-                'type': 'str',
-                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-            }
-        },
-        'contingencyCause_nonDim': {
-            'match': {
-                'type': 'list',
-                'minLength': 1,
-                'children': {
-                    'match': {
-                        'minimum': 0,
-                        'maximum': 13
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'children': {
+                        'ts': {
+                            'match': {
+                                'type': 'str',
+                                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
+                            }
+                        },
+                        'contingencyCause_nonDim': {
+                            'match': {
+                                'type': 'list',
+                                'minLength': 1,
+                                'children': {
+                                    'match': {
+                                        'minimum': 0,
+                                        'maximum': 13
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     },
     'contingencyResponse': {
-        'ts': {
-            'match': {
-                'type': 'str',
-                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-            }
-        },
-        'contingencyResponse_nonDim': {
-            'match': {
-                'type': 'int',
-                'minimum': 0,
-                'maximum': 3
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'children': {
+                        'ts': {
+                            'match': {
+                                'type': 'str',
+                                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
+                            }
+                        },
+                        'contingencyResponse_nonDim': {
+                            'match': {
+                                'type': 'int',
+                                'minimum': 0,
+                                'maximum': 3
+                            }
+                        }
+                    }
+                }
             }
         }
     },
     'contingencyLanding': {
-        'ts': {
-            'match': {
-                'type': 'str',
-                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-            }
-        },
-        'contingencyLandingPoint_deg': {
-            'match': {
-                'type': 'list',
-                'minLength': 1,
-                'children': {
-                    'match': {
-                        'type': 'dict',
-                        'children': {
-                            'lat': {
-                                'match': {
-                                    'type': 'int|float',
-                                    'minimum': -90,
-                                    'maximum': 90
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'children': {
+                        'ts': {
+                            'match': {
+                                'type': 'str',
+                                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
+                            }
+                        },
+                        'contingencyLandingPoint_deg': {
+                            'match': {
+                                'type': 'list',
+                                'minLength': 1,
+                                'children': {
+                                    'match': {
+                                        'type': 'dict',
+                                        'children': {
+                                            'lat': {
+                                                'match': {
+                                                    'type': 'int|float',
+                                                    'minimum': -90,
+                                                    'maximum': 90
+                                                }
+                                            },
+                                            'lon': {
+                                                'match': {
+                                                    'type': 'int|float',
+                                                    'minimum': -180,
+                                                    'maximum': 180
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                            },
-                            'lon': {
-                                'match': {
-                                    'type': 'int|float',
-                                    'minimum': -180,
-                                    'maximum': 180
+                            }
+                        },
+                        'contingencyLandingPointAlt_ft': {
+                            'match': {
+                                'type': 'list',
+                                'minLength': 1,
+                                'children': {
+                                    'match': {
+                                        'type': 'float|int'
+                                    }
                                 }
                             }
                         }
@@ -255,30 +309,28 @@ CNS2_MOP = {
                 }
             }
         },
-        'contingencyLandingPointAlt_ft': {
-            'match': {
-                'type': 'list',
-                'minLength': 1,
-                'children': {
-                    'match': {
-                        'type': 'float|int'
-                    }
-                }
-            }
-        }
     },
     'contingencyLoiterType': {
-        'ts': {
-            'match': {
-                'type': 'str',
-                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-            }
-        },
-        'contingencyLoiterType_nonDim': {
-            'match': {
-                'type': 'int',
-                'minimum': 0,
-                'maximum': 3
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'children': {
+                        'ts': {
+                            'match': {
+                                'type': 'str',
+                                'pattern': """^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
+                            }
+                        },
+                        'contingencyLoiterType_nonDim': {
+                            'match': {
+                                'type': 'int',
+                                'minimum': 0,
+                                'maximum': 3
+                            }
+                        }
+                    }
+                }
             }
         }
     },

@@ -43,7 +43,7 @@ def sys_ts_converter(sys_time, boot_ts):
         sys_ts          (str): ISO8601 formatted timestamp of current system time.
     """
     unix_ts = (sys_time / 1.0E6) + boot_ts
-    return datetime.utcfromtimestamp(unix_ts).isoformat(timespec="milliseconds")+".000Z"
+    return datetime.utcfromtimestamp(unix_ts).isoformat(timespec="milliseconds")+"Z"
 
 def parseMissionInsightFile(mi_file_name):
     """Parses the Mission Insight file adds to the cns2 data JSON"""
@@ -190,10 +190,16 @@ def formRadarRecord(radarRecord):
     gpsAltitude = float(radarRecord['Altitude'].replace('(ft)', '').strip())
     uasTruthEcefXCoordinate_ft, uasTruthEcefYCoordinate_ft, uasTruthEcefZCoordinate_ft = gps_to_ecef(gpsLatitude, gpsLongitude, gpsAltitude)
 
-    # TODO: Is this the estimatedTruthPositionError95Prct_in?
-    confidenceLevel = radarRecord['Confidence Level']
+    # TODO: Is confidenceLevel the estimatedTruthPositionError95Prct_in?
+    # confidenceLevel = radarRecord['Confidence Level'].strip()
+    # if confidenceLevel:
+    #     confidenceLevel = float(confidenceLevel)
+    # else:
+    #     confidenceLevel = 0
 
-    return formRadarRecordJSON(ts, uasTruthEcefXCoordinate_ft, uasTruthEcefYCoordinate_ft, uasTruthEcefZCoordinate_ft, confidenceLevel)
+    estimatedTruthPositionError95Prct_in = None
+
+    return formRadarRecordJSON(ts, uasTruthEcefXCoordinate_ft, uasTruthEcefYCoordinate_ft, uasTruthEcefZCoordinate_ft, estimatedTruthPositionError95Prct_in)
 
 def parseRadarFile(radar_file_name):
     """Parses the radar file and adds uasTruth fields to cns2 data JSON"""

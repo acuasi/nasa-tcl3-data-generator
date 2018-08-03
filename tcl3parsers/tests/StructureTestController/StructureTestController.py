@@ -66,11 +66,11 @@ class StructureTestController(unittest.TestCase):
             elif expectedParam == 'children':
                 self.__testChildren(key, expectedParams[expectedParam], actualData)
             else:
-                print(expectedParam)
                 self.assertTrue(False, "No expected parameters for " + key + " were tested. Malformed testing JSON.")
 
     # start with constants.CNS2_MOP and self.cns2_data, recurse
     def runStructureTest(self, expectedData, actualData, parentKey=""):
+        """Iterates through every key in outputted JSON and compares it to parameters set in a testing JSON"""
         self.parentKey = parentKey
         # Base case - if the structure is empty or not the right type, return
         if not isinstance(expectedData, dict) or not hasattr(actualData, '__iter__') or not expectedData or not actualData:
@@ -83,7 +83,5 @@ class StructureTestController(unittest.TestCase):
                 self.__matchParameters(key, expectedParams, actualData[key])
 
             else:
-                if key not in actualData:
-                    print(key, value)
                 self.assertTrue(key in actualData, "Key not found in JSON: " + key + " (parentKey: " + str(self.parentKey) + ")")
-                self.runStructureTest(value, actualData[key], "--TOP LEVEL JSON VAR--")
+                self.runStructureTest(value, actualData[key], "Last Key: " + key)
