@@ -33,13 +33,13 @@ class Runner():
         self.RADAR_FILE_NAME = ""
         self.OUTFILE_NAME = ""
 
-    def setFlightName(self, flightName):
+    def setFlightInfo(self, flightName):
         """Sets the name of the flight folder to use under Sample Data"""
         self.sampleFlightName = flightName
         sampleFlightPath = self.sampleDataPath +  "/" + self.sampleFlightName
         sampleFlightFiles = [name for name in os.listdir(sampleFlightPath)]
         for fileName in sampleFlightFiles:
-            if "mission_insight.csv" in fileName or re.match(r'^CNS2_.+Flight.+\.csv', fileName):
+            if "mission_insight.csv" in fileName or re.match(r'^CNS1_.+Flight.+\.csv', fileName):
                 self.MI_FILE_NAME = sampleFlightPath + "/" + fileName
 
             elif ".log" in fileName:
@@ -70,16 +70,16 @@ class Runner():
         return runner.run(self.suite)
 
 def runAgainstAllSampleData():
-    """Run tests against all data in the example_files/cns2/SampleData folder"""
+    """Run tests against all data in the example_files/cns1/SampleData folder"""
     sampleFlightData = [name for name in os.listdir(SAMPLEDATAPATH) if os.path.isdir(SAMPLEDATAPATH + "/" + name)]
     sampleFlightData.sort()
     for sampleFlightName in sampleFlightData:
         testRunner = Runner()
-        testset = testRunner.setFlightName(sampleFlightName)
+        testSet = testRunner.setFlightInfo(sampleFlightName)
         print("Testing against: " + sampleFlightName)
-        testset = testRunner.run()
+        testSet = testRunner.run()
         print("Tested against: " + sampleFlightName + "\n\n")
-        failure = len(testset.failures)
+        failure = len(testSet.failures)
         if failure:
             break
 

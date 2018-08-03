@@ -16,9 +16,10 @@ class TestValueTypes(StructureTestController.StructureTestController):
 
     @classmethod
     def setUpClass(cls):
+        """Opens generated output file for parser testing"""
         generatedFile = open(constants.OUTFILE_NAME, "r")
-        cls.cns2_data = json.load(generatedFile)
+        cls.cns1_data = json.load(generatedFile)
 
     def test_structure(self):
         """Run all test cases comparing the outputted JSON file against the expected structure found in constants.py"""
-        self.runStructureTest(constants.CNS2_MOP, self.cns2_data)
+        self.runStructureTest(constants.CNS1_MOP, self.cns1_data)

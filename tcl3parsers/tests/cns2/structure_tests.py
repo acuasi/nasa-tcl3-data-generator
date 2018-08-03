@@ -16,6 +16,7 @@ class TestValueTypes(StructureTestController.StructureTestController):
 
     @classmethod
     def setUpClass(cls):
+        """Opens generated output file for parser testing"""
         generatedFile = open(constants.OUTFILE_NAME, "r")
         cls.cns2_data = json.load(generatedFile)
 

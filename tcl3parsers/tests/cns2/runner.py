@@ -33,7 +33,7 @@ class Runner():
         self.RADAR_FILE_NAME = ""
         self.OUTFILE_NAME = ""
 
-    def setFlightName(self, flightName):
+    def setFlightInfo(self, flightName):
         """Sets the name of the flight folder to use under Sample Data"""
         self.sampleFlightName = flightName
         sampleFlightPath = self.sampleDataPath +  "/" + self.sampleFlightName
@@ -82,11 +82,11 @@ def runAgainstAllSampleData():
     sampleFlightData.sort()
     for sampleFlightName in sampleFlightData:
         testRunner = Runner()
-        testset = testRunner.setFlightName(sampleFlightName)
+        testSet = testRunner.setFlightInfo(sampleFlightName)
         print("Testing against: " + sampleFlightName)
-        testset = testRunner.run()
+        testSet = testRunner.run()
         print("Tested against: " + sampleFlightName + "\n\n")
-        failure = len(testset.failures)
+        failure = len(testSet.failures)
         if failure:
             break
 
