@@ -11,9 +11,8 @@ from StructureTestController import StructureTestController
 # Include local testing constants, adds tcl3parsers to path
 import constants
 
-class TestValueTypes(StructureTestController.StructureTestController):
-    """Adds test cases for value type"""
-
+class StructureTests(StructureTestController.StructureTestController):
+    """Adds test cases to examine entire structure of JSON"""
     @classmethod
     def setUpClass(cls):
         """Opens generated output file for parser testing"""

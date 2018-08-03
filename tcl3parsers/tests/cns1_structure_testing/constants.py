@@ -103,12 +103,11 @@ CNS1_MOP = {
         },
         'plannedContingencyLandingPointAlt_ft': {
             'match': {
-                'exception': None,
                 'type': 'list',
                 'minLength': 1,
                 'children': {
                     'match': {
-                        'type': 'int|float|NoneType'
+                        'type': 'int|float'
                     }
                 }
             }
@@ -120,7 +119,7 @@ CNS1_MOP = {
                 'minLength': 1,
                 'children': {
                     'match': {
-                        'type': 'int|float|NoneType'
+                        'type': 'int|float'
                     }
                 }
             }
@@ -132,7 +131,7 @@ CNS1_MOP = {
                 'minLength': 0,
                 'children': {
                     'match': {
-                        'type': 'int|float|NoneType'
+                        'type': 'int|float'
                     }
                 }
             }
@@ -143,7 +142,8 @@ CNS1_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'type': 'dict|NoneType',
+                    'exception': None,
+                    'type': 'dict',
                     'children': {
                         'ts': ts_match_case,
                         'primaryLinkDescription': {
@@ -162,7 +162,8 @@ CNS1_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'type': 'dict|NoneType',
+                    'exception': None,
+                    'type': 'dict',
                     'children': {
                         'ts': ts_match_case,
                         'redundantLinkDescription': {
@@ -295,7 +296,7 @@ CNS1_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'type': 'dict|NoneType',
+                    'type': 'dict',
                     'children': {
                         'ts': ts_match_case,
                         'contingencyLoiterAlt_ft': {
@@ -320,7 +321,7 @@ CNS1_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'type': 'dict|NoneType',
+                    'type': 'dict',
                     'children': {
                         'ts': ts_match_case,
                         'contingencyLoiterRadius_ft': {

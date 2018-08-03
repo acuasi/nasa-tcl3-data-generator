@@ -85,7 +85,8 @@ CNS2_MOP = {
                 'minLength': 1,
                 'children': {
                     'match': {
-                        'type': 'int|float|NoneType'
+                        'exception': None,
+                        'type': 'int|float'
                     }
                 }
             }
@@ -96,7 +97,8 @@ CNS2_MOP = {
                 'minLength': 1,
                 'children': {
                     'match': {
-                        'type': 'int|float|NoneType'
+                        'exception': None,
+                        'type': 'int|float'
                     }
                 }
             }
@@ -107,7 +109,8 @@ CNS2_MOP = {
                 'minLength': 0,
                 'children': {
                     'match': {
-                        'type': 'int|float|NoneType'
+                        'exception': None,
+                        'type': 'int|float'
                     }
                 }
             }
@@ -142,6 +145,7 @@ CNS2_MOP = {
                         },
                         'estimatedTruthPositionError95Prct_in': {
                             'match': {
+                                'exception': None,
                                 'type': 'float|int'
                             }
                         }
@@ -155,7 +159,8 @@ CNS2_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'type': 'dict|NoneType',
+                    'exception': None,
+                    'type': 'dict',
                     'children': {
                         'ts': {
                             'match': {
@@ -340,7 +345,8 @@ CNS2_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'type': 'dict|NoneType',
+                    'exception': None,
+                    'type': 'dict',
                     'children': {
                         'ts': {
                             'match': {
@@ -369,7 +375,8 @@ CNS2_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'type': 'dict|NoneType',
+                    'exception': None,
+                    'type': 'dict',
                     'children': {
                         'ts': {
                             'match': {

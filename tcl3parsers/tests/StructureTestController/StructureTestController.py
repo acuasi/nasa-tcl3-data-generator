@@ -45,11 +45,11 @@ class StructureTestController(unittest.TestCase):
             self.runStructureTest(expectedChildren, actualData, key)
 
     def __matchParameters(self, key, expectedParams, actualData):
-        # If the exception case matches, then ignore testing the field
+        # If the exception case matches, then ignore checking any other parameters
         for expectedParam in expectedParams:
             if expectedParam == 'exception':
                 if self.__matchException(key, expectedParams[expectedParam], actualData):
-                    print("Exception matched for:", key, " with value:", actualData)
+                    print("\nException matched for:", str(key), "with value:", str(actualData))
                     return
             elif expectedParam == 'exact':
                 self.__checkExact(key, expectedParams[expectedParam], actualData)
@@ -77,12 +77,10 @@ class StructureTestController(unittest.TestCase):
         # Base case - if the structure is empty or not the right type, return
         if not isinstance(expectedData, dict) or not hasattr(actualData, '__iter__') or not expectedData or not actualData:
             return
-
         for key, value in expectedData.items():
             self.assertTrue(key in actualData, "Key not found in JSON: " + key + " (parentKey: " + str(self.parentKey) + ")")
             if isinstance(value, dict) and 'match' in value.keys():
                 expectedParams = value['match']
                 self.__matchParameters(key, expectedParams, actualData[key])
-
             else:
                 self.runStructureTest(value, actualData[key], "Last Key: " + key)
