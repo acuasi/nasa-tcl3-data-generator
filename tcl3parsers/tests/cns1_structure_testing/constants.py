@@ -3,6 +3,28 @@
 # This is set in runner.py
 OUTFILE_NAME = ""
 
+# reusable match cases
+ts_match_case = {
+    'match': {
+        'type': 'str',
+        'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
+    }
+}
+ts_object_only_match_case = {
+    'match': {
+        'type': 'list',
+        'children': {
+            'match': {
+                'type': 'dict',
+                'children': {
+                    'ts': ts_match_case
+                }
+            }
+        }
+    }
+}
+
+# JSON testing structure, matching what's on swaggerhub
 CNS1_MOP = {
     'fType': {
         'match': {
@@ -11,7 +33,8 @@ CNS1_MOP = {
     },
     'UTM-TCL3-DMP-RevF-CNSPDF': {
         'match': {
-            'exact': 'UTM-ACUASI-CNS-1.pdf'
+            'type': 'str',
+            'pattern': r"""^UTM-[^-]+-CNS-[0-9]+.pdf$"""
         }
     },
     'basic': {
@@ -80,6 +103,7 @@ CNS1_MOP = {
         },
         'plannedContingencyLandingPointAlt_ft': {
             'match': {
+                'exception': None,
                 'type': 'list',
                 'minLength': 1,
                 'children': {
@@ -91,6 +115,7 @@ CNS1_MOP = {
         },
         'plannedContingencyLoiterAlt_ft': {
             'match': {
+                'exception': None,
                 'type': 'list',
                 'minLength': 1,
                 'children': {
@@ -102,6 +127,7 @@ CNS1_MOP = {
         },
         'plannedContingencyLoiterRadius_ft': {
             'match': {
+                'exception': None,
                 'type': 'list',
                 'minLength': 0,
                 'children': {
@@ -112,67 +138,18 @@ CNS1_MOP = {
             }
         }
     },
-    'uasTruth': {
-        'match': {
-            'type': 'list',
-            'children': {
-                'match': {
-                    'children': {
-                        'ts': {
-                            'match': {
-                                'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
-                        'uasTruthEcefXCoordinate_ft': {
-                            'match': {
-                                'type': 'float'
-                            }
-                        },
-                        'uasTruthEcefYCoordinate_ft': {
-                            'match': {
-                                'type': 'float'
-                            }
-                        },
-                        'uasTruthEcefZCoordinate_ft': {
-                            'match': {
-                                'type': 'float'
-                            }
-                        },
-                        'estimatedTruthPositionError95Prct_in': {
-                            'match': {
-                                'type': 'float|int'
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    'prnGpsSat': {
+    'primaryLinkDescription': {
         'match': {
             'type': 'list',
             'children': {
                 'match': {
                     'type': 'dict|NoneType',
                     'children': {
-                        'ts': {
+                        'ts': ts_match_case,
+                        'primaryLinkDescription': {
                             'match': {
                                 'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
-                        'prnGpsSat_nonDim': {
-                            'match': {
-                                'type': 'list',
-                                'minLength': 1,
-                                'children': {
-                                    'match': {
-                                        'type': 'int',
-                                        'minimum': 0,
-                                        'maximum': 32
-                                    }
-                                }
+                                'maxLength': 280
                             }
                         }
                     }
@@ -180,21 +157,18 @@ CNS1_MOP = {
             }
         }
     },
-    'uere': {
+    'redundantLinkDescription': {
         'match': {
             'type': 'list',
             'children': {
                 'match': {
+                    'type': 'dict|NoneType',
                     'children': {
-                        'ts': {
+                        'ts': ts_match_case,
+                        'redundantLinkDescription': {
                             'match': {
                                 'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
-                        'uere_in': {
-                            'match': {
-                                'type': 'float|int'
+                                'maxLength': 280
                             }
                         }
                     }
@@ -208,12 +182,7 @@ CNS1_MOP = {
             'children': {
                 'match': {
                     'children': {
-                        'ts': {
-                            'match': {
-                                'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
+                        'ts': ts_match_case,
                         'contingencyCause_nonDim': {
                             'match': {
                                 'type': 'list',
@@ -237,12 +206,7 @@ CNS1_MOP = {
             'children': {
                 'match': {
                     'children': {
-                        'ts': {
-                            'match': {
-                                'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
+                        'ts': ts_match_case,
                         'contingencyResponse_nonDim': {
                             'match': {
                                 'type': 'int',
@@ -261,12 +225,7 @@ CNS1_MOP = {
             'children': {
                 'match': {
                     'children': {
-                        'ts': {
-                            'match': {
-                                'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
+                        'ts': ts_match_case,
                         'contingencyLandingPoint_deg': {
                             'match': {
                                 'type': 'list',
@@ -312,16 +271,12 @@ CNS1_MOP = {
     },
     'contingencyLoiterType': {
         'match': {
+            'exception': None,
             'type': 'list',
             'children': {
                 'match': {
                     'children': {
-                        'ts': {
-                            'match': {
-                                'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
+                        'ts': ts_match_case,
                         'contingencyLoiterType_nonDim': {
                             'match': {
                                 'type': 'int',
@@ -336,17 +291,13 @@ CNS1_MOP = {
     },
     'contingencyLoiterAlt': {
         'match': {
+            'exception': None,
             'type': 'list',
             'children': {
                 'match': {
                     'type': 'dict|NoneType',
                     'children': {
-                        'ts': {
-                            'match': {
-                                'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
+                        'ts': ts_match_case,
                         'contingencyLoiterAlt_ft': {
                             'match': {
                                 'type': 'list',
@@ -365,17 +316,13 @@ CNS1_MOP = {
     },
     'contingencyLoiterRadius': {
         'match': {
+            'exception': None,
             'type': 'list',
             'children': {
                 'match': {
                     'type': 'dict|NoneType',
                     'children': {
-                        'ts': {
-                            'match': {
-                                'type': 'str',
-                                'pattern': r"""^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\.[0-9][0-9][0-9][0-9]*Z{0,1}$"""
-                            }
-                        },
+                        'ts': ts_match_case,
                         'contingencyLoiterRadius_ft': {
                             'match': {
                                 'type': 'list',
@@ -392,5 +339,66 @@ CNS1_MOP = {
                 }
             }
         }
-    }
+    },
+    'maneuverCommand': {
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'type': 'dict',
+                    'children': {
+                        'ts': ts_match_case,
+                        'maneuverCommand': {
+                            'match': {
+                                'type': 'str',
+                                'maxLength': 280
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'estimatedTimeToVerifyManeuver': {
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'type': 'dict',
+                    'children': {
+                        'ts': ts_match_case,
+                        'estimatedTimeToVerifyManeuver_sec': {
+                            'match': {
+                                'type': 'int|float'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'cns1TestType': {
+        'match': {
+            'type': 'list',
+            'children': {
+                'match': {
+                    'type': 'dict',
+                    'children': {
+                        'ts': ts_match_case,
+                        'cns1TestType_nonDim': {
+                            'match': {
+                                'type': 'int',
+                                'minimum': 0,
+                                'maximum': 2
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    'timeManeuverCommandSent': ts_object_only_match_case,
+    'timeManeuverVerification': ts_object_only_match_case,
+    'timePrimaryLinkDisconnect': ts_object_only_match_case,
+    'timeRedundantLinkSwitch': ts_object_only_match_case
 }

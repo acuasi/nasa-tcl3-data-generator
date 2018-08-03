@@ -11,7 +11,8 @@ CNS2_MOP = {
     },
     'UTM-TCL3-DMP-RevF-CNSPDF': {
         'match': {
-            'exact': 'UTM-ACUASI-CNS-2.pdf'
+            'type': 'str',
+            'pattern': r"""^UTM-[^-]+-CNS-[0-9]+.pdf$"""
         }
     },
     'basic': {

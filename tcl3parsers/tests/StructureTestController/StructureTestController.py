@@ -19,9 +19,11 @@ class StructureTestController(unittest.TestCase):
         self.assertRegex(actualData, pattern)
 
     def __checkMinLength(self, key, minLength, actualData):
+        self.assertTrue(hasattr(actualData, '__len__'), str(key) + " does not have a length field. Cannot check minLength")
         self.assertLessEqual(minLength, len(actualData), "Minimum Length requirement not met for: " + str(key))
 
     def __checkMaxLength(self, key, maxLength, actualData):
+        self.assertTrue(hasattr(actualData, '__len__'), str(key) + " does not have a length field. Cannot check maxLength")
         self.assertGreaterEqual(maxLength, len(actualData), "Maximum Length requirement not met for: " + str(key))
 
     def __checkMinimum(self, key, minimum, actualData):
@@ -77,11 +79,10 @@ class StructureTestController(unittest.TestCase):
             return
 
         for key, value in expectedData.items():
+            self.assertTrue(key in actualData, "Key not found in JSON: " + key + " (parentKey: " + str(self.parentKey) + ")")
             if isinstance(value, dict) and 'match' in value.keys():
                 expectedParams = value['match']
-                self.assertTrue(key in actualData, "Key not found in JSON: " + key + " (parentKey: " + str(self.parentKey) + ")")
                 self.__matchParameters(key, expectedParams, actualData[key])
 
             else:
-                self.assertTrue(key in actualData, "Key not found in JSON: " + key + " (parentKey: " + str(self.parentKey) + ")")
                 self.runStructureTest(value, actualData[key], "Last Key: " + key)
