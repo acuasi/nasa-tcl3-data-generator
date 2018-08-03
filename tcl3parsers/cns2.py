@@ -59,6 +59,10 @@ def parseMissionInsightFile(mi_file_name):
         cns2.data["basic"]["ussInstanceID"] = mi_dict["USS_INSTANCE_ID"]
         cns2.data["basic"]["ussName"] = mi_dict["USS_NAME"]
 
+def emptyFieldIfNull(field):
+    """Get rid of the 'None' default value so that data can be appended"""
+    cns2.data[field] = [] if cns2.data[field] == [None] else cns2.data[field]
+
 def parseDataFlashFile(dataflash_file_name):
     """Parse arducopter dataflash log file (.log format) and add to cns2 data JSON"""
     radio_count = 0
@@ -66,6 +70,10 @@ def parseDataFlashFile(dataflash_file_name):
     boot_ts_flag = 0
     with open(dataflash_file_name, "r") as dataflash_file:
         gps = {"sys_time": 0, "gps_ms": 0, "gps_wk": 0, "lat": 0, "lon": 0, "alt": 0}
+        emptyFieldIfNull('contingencyLanding')
+        emptyFieldIfNull('contingencyCause')
+        emptyFieldIfNull('contingencyResponse')
+
         for line in dataflash_file:
             # Split by commas and strip leading and trailing whitespaces
             row = [item.strip() for item in line.split(",")]
@@ -174,7 +182,7 @@ def formRadarRecord(radarRecord):
     """Parse an individual record of the radar file and return it as a JSON"""
     ts = radarRecord['Time of Intercept']
     ts = datetime.strptime(ts, '%d %B %Y %H:%M:%S')
-    ts = datetime.strftime(ts, '%Y-%m-%dT%H:%M:%S') + "Z"
+    ts = datetime.strftime(ts, '%Y-%m-%dT%H:%M:%S.000Z')
 
     gpsLatitude = dmsToDD(radarRecord['Latitude'])
     gpsLongitude = dmsToDD(radarRecord['Longitude'])

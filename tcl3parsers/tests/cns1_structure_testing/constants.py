@@ -1,4 +1,4 @@
-"""Declares constants used in CNS2 testing"""
+"""Declares constants used in CNS1 testing"""
 
 # This is set in runner.py
 OUTFILE_NAME = ""
@@ -6,12 +6,12 @@ OUTFILE_NAME = ""
 CNS2_MOP = {
     'fType': {
         'match': {
-            'exact': 'CNS2'
+            'exact': 'CNS1'
         }
     },
     'UTM-TCL3-DMP-RevF-CNSPDF': {
         'match': {
-            'exact': 'UTM-ACUASI-CNS-2.pdf'
+            'exact': 'UTM-ACUASI-CNS-1.pdf'
         }
     },
     'basic': {
@@ -57,22 +57,18 @@ CNS2_MOP = {
                 'type': 'list',
                 'minLength': 1,
                 'children': {
-                    'match': {
-                        'children': {
-                            'lat': {
-                                'match': {
-                                    'type': 'float|int',
-                                    'minimum': -90,
-                                    'maximum': 90
-                                }
-                            },
-                            'lon': {
-                                'match': {
-                                    'type': 'float|int',
-                                    'minimum': -180,
-                                    'maximum': 180
-                                }
-                            }
+                    'lat': {
+                        'match': {
+                            'type': 'int',
+                            'minimum': -90,
+                            'maximum': 90
+                        }
+                    },
+                    'lon': {
+                        'match': {
+                            'type': 'int',
+                            'minimum': -180,
+                            'maximum': 180
                         }
                     }
                 }
@@ -120,7 +116,8 @@ CNS2_MOP = {
             'type': 'list',
             'children': {
                 'match': {
-                    'children': {
+                    'type': 'dict',
+                    'match': {
                         'ts': {
                             'match': {
                                 'type': 'str',
