@@ -5,10 +5,16 @@ class StructureTestController(unittest.TestCase):
     """Adds test cases for value type"""
 
     def __matchException(self, key, exceptionMatch, actualData):
-        return exceptionMatch == actualData
+        exceptionMatched = exceptionMatch == actualData
+        if exceptionMatched:
+            print("\nException matched for:", str(key), "with value:", str(actualData))
+        return exceptionMatched
 
     def __checkExact(self, key, expectedData, actualData):
         self.assertEqual(actualData, expectedData)
+
+    def __checkEnum(self, key, enumeratedData, actualData):
+        self.assertIn(actualData, enumeratedData, " from : " + str(self.parentKey))
 
     def __checkType(self, key, expectedType, actualData):
         expectedType = expectedType.split("|")
@@ -49,7 +55,6 @@ class StructureTestController(unittest.TestCase):
         for expectedParam in expectedParams:
             if expectedParam == 'exception':
                 if self.__matchException(key, expectedParams[expectedParam], actualData):
-                    print("\nException matched for:", str(key), "with value:", str(actualData))
                     return
             elif expectedParam == 'exact':
                 self.__checkExact(key, expectedParams[expectedParam], actualData)
@@ -65,6 +70,8 @@ class StructureTestController(unittest.TestCase):
                 self.__checkMaximum(key, expectedParams[expectedParam], actualData)
             elif expectedParam == 'minimum':
                 self.__checkMinimum(key, expectedParams[expectedParam], actualData)
+            elif expectedParam == 'enum':
+                self.__checkEnum(key, expectedParams[expectedParam], actualData)
             elif expectedParam == 'children':
                 self.__testChildren(key, expectedParams[expectedParam], actualData)
             else:
