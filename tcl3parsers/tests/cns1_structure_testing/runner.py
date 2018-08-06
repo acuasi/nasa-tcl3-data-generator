@@ -6,10 +6,13 @@ import re
 
 import constants
 
-TCL3PARSERS_PATH = os.path.dirname(os.path.realpath("../"))
-sys.path.append(TCL3PARSERS_PATH)
+# TCL3PARSERS_PATH = os.path.dirname(os.path.realpath("../"))
+# sys.path.append(TCL3PARSERS_PATH)
 
-SAMPLEDATAPATH = TCL3PARSERS_PATH + "/tests/example_files/cns1/SampleData"
+testing_directory = os.path.abspath(os.path.join(os.path.join(__file__, os.path.pardir), os.path.pardir))
+sys.path.append(testing_directory)
+
+SAMPLEDATAPATH = testing_directory + "/tests/example_files/cns1/SampleData"
 OUTFILENAME = "cns1_data.json"
 
 import cns1

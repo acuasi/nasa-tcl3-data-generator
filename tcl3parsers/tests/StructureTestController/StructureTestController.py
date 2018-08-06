@@ -5,7 +5,10 @@ class StructureTestController(unittest.TestCase):
     """Adds test cases for value type"""
 
     def __matchException(self, key, exceptionMatch, actualData):
-        exceptionMatched = exceptionMatch == actualData
+        if isinstance(exceptionMatch, str):
+            exceptionMatched = type(actualData).__name__ == exceptionMatch
+        else:
+            exceptionMatched = exceptionMatch == actualData
         if exceptionMatched:
             print("\nException matched for:", str(key), "with value:", str(actualData))
         return exceptionMatched
