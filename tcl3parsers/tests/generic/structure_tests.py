@@ -11,14 +11,19 @@ from StructureTestController import StructureTestController
 # Include local testing constants, adds tcl3parsers to path
 import constants
 
+ACTUAL_DATA_FILE = {}
+SPECIFICATION_DATA = {}
+
 class StructureTests(StructureTestController.StructureTestController):
     """Adds test cases to examine entire structure of JSON"""
     @classmethod
     def setUpClass(cls):
         """Opens generated output file for parser testing"""
-        generatedFile = open(constants.OUTFILE_NAME, "r")
-        cls.cns1_data = json.load(generatedFile)
+        generatedFile = open(ACTUAL_DATA_FILE, "r")
+        cls.data = json.load(generatedFile)
+        cls.specData = SPECIFICATION_DATA
 
     def test_structure(self):
         """Run all test cases comparing the outputted JSON file against the expected structure found in constants.py"""
-        self.runStructureTest(constants.CNS1_MOP, self.cns1_data)
+        self.runStructureTest(self.specData, self.data)
+        print(self.data)
