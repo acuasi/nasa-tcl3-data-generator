@@ -1,4 +1,4 @@
-"""Provides tests for cns1.py values."""
+"""Generic structure testing for any parser specified in the config.yaml"""
 import json
 import sys
 import os
@@ -7,9 +7,6 @@ testing_directory = os.path.abspath(os.path.join(os.path.join(__file__, os.path.
 sys.path.append(testing_directory)
 
 from StructureTestController import StructureTestController
-
-# Include local testing constants, adds tcl3parsers to path
-import constants
 
 ACTUAL_DATA_FILE = {}
 SPECIFICATION_DATA = {}

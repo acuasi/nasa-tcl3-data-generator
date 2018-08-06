@@ -1,0 +1,322 @@
+{
+    "basic": {
+        "uvin": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "gufi": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "submitTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "ussName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "ussInstanceID": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        }
+    },
+    "fType": {
+        "match": {
+            "type": "str",
+            "pattern": "CNS2"
+        }
+    },
+    "UTM-TCL3-DMP-RevF-CNSPDF": {
+        "match": {
+            "type": "str",
+            "pattern": "UTM-[^-]+-CNS-[0-9]+.pdf"
+        }
+    },
+    "plannedContingency": {
+        "plannedContingencyLandingPoint_deg": {
+            "match": {
+                "type": "str",
+                "pattern": "^(\\[[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,},[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,}\\])(,\\[[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,},[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,}\\])*$"
+            }
+        },
+        "plannedContingencyLandingPointAlt_ft": {
+            "match": {
+                "type": "str",
+                "pattern": "^\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\](,\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\])*$"
+            }
+        },
+        "plannedContingencyLoiterAlt_ft": {
+            "match": {
+                "type": "str",
+                "pattern": "^\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\](,\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\])*$"
+            }
+        },
+        "plannedContingencyLoiterRadius_ft": {
+            "match": {
+                "type": "str",
+                "pattern": "^\\[[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\](,\\[[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\])*$"
+            }
+        }
+    },
+    "uasTruth": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "uasTruthEcefXCoordinate_ft": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "uasTruthEcefYCoordinate_ft": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "uasTruthEcefZCoordinate_ft": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "estimatedTruthPositionError95Prct_in": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "prnGpsSat": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "prnGpsSat_nonDim": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^\\[(([1-9])|([12][0-9])|(3[012]))\\](,\\[(([1-9])|([12][0-9])|(3[012]))\\])*$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "uere": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "uere_in": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyCause": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyCause_nonDim": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^(\\[(([0-9])|(10)|(11)|(12)|(13))\\])(,(\\[(([0-9])|(10)|(11)|(12)|(13))\\]))*$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyResponse": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyResponse_nonDim": {
+                            "match": {
+                                "type": "int",
+                                "enum": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLanding": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLandingPoint_deg": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^(\\[[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,},[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,}\\])(,\\[[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,},[\\+\\-]{0,1}[0-9]{1,3}\\.[0-9]{7,}\\])*$"
+                            }
+                        },
+                        "contingencyLandingPointAlt_ft": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\](,\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\])*$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLoiterType": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLoiterType_nonDim": {
+                            "match": {
+                                "type": "int",
+                                "enum": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLoiterAlt": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLoiterAlt_ft": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\](,\\[[\\+\\-]{0,1}[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\])*$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLoiterRadius": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLoiterRadius_ft": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^\\[[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\](,\\[[0-9]*((\\.[0-9]+)|([0-9]+\\.)|([0-9]))[0-9]*\\])*$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

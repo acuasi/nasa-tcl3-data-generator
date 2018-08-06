@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns2
+    - cns1
 
 # Specify all new parsers below and the required regex matches for each file name required
 # Note, the order they are specified below is the order they will be added as parameters when
@@ -13,7 +13,6 @@ parsers:
         required_files:
             MI_FILE_NAME:
                 - mission_insight.csv
-                - ^CNS1_.+Flight.+\.csv
             DF_FILE_NAME:
                 - .log
             FIELD_VARS_NAME:
@@ -35,6 +34,12 @@ parsers:
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then
 # the JSON files will be placed in whatever directory the runner file is run from.
-output_directory: ""
+output_directory: "output"
+
+# If this is set, then the a local copy of the specification from swaggerhub will be checked for first before it is scraped from swaggerhub
 cache_specifications: true
+
+# This is directory where specifications will be checked for before scraping.
+specification_cache_directory: "specifications"
+
 ...

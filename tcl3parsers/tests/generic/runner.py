@@ -7,8 +7,6 @@ import yaml
 import importlib
 import json
 
-import constants
-
 testing_directory = os.path.abspath(os.path.join(os.path.join(__file__, os.path.pardir), os.path.pardir))
 sys.path.append(testing_directory)
 
@@ -16,8 +14,6 @@ from SwaggerHubParser import parser as SwaggerHubParser
 
 parser_directory = os.path.abspath(os.path.join(os.path.join(os.path.join(__file__, os.path.pardir), os.path.pardir), os.path.pardir))
 sys.path.append(parser_directory)
-
-# import cns1
 
 # Test Modules
 import structure_tests
@@ -44,7 +40,7 @@ class Runner():
         print("Data malformed, " + requiredFile + " not found for " + self.flightName + " in " + flightPath)
         exit()
 
-    def setFlightInfo(self, flightName, requiredFiles, specLink, cache_specs):
+    def setFlightInfo(self, flightName, requiredFiles, specLink, cache_specs, outputFolder, specCacheDir):
         """Adds all information and checks files for the specified flight"""
         self.flightName = flightName
         flightPath = self.dataDirectory +  "/" + self.flightName
@@ -53,11 +49,21 @@ class Runner():
         for requiredFileName, requiredFileRequirements in requiredFiles.items():
             self.parserParameters.append(self.getRequiredFlightFile(flightFiles, requiredFileName, requiredFileRequirements))
 
-        outfile = "{0}/{1}/{2}_data_{3}.json".format(self.dataDirectory, self.flightName, self.parserName, flightName.lower().replace(" ", "_"))
+        if not os.path.isdir(outputFolder):
+            os.mkdir(outputFolder)
+
+        parserOutputFolder = "{0}/{1}".format(outputFolder, self.parserName)
+        if not os.path.isdir(parserOutputFolder):
+            os.mkdir(parserOutputFolder)
+
+        outfile = "{0}/{1}/{1}_data_{2}.json".format(outputFolder, self.parserName, flightName.lower().replace(" ", "_"))
         self.parserParameters.append(outfile)
         structure_tests.ACTUAL_DATA_FILE = outfile
 
-        spec_output_name = "{0}_specification.json".format(self.parserName)
+        if not os.path.isdir(specCacheDir):
+            os.mkdir(specCacheDir)
+
+        spec_output_name = "{0}/{1}_specification.json".format(specCacheDir, self.parserName)
         if cache_specs and os.path.isfile(spec_output_name):
             specification = json.load(open(spec_output_name, "r"))
         else:
@@ -84,13 +90,13 @@ class Runner():
         runner = unittest.TextTestRunner(verbosity=3)
         return runner.run(self.suite)
 
-def runAgainstAllSampleData(dataDirectory, parserName, parserParameters, specLink, cache_specs):
+def runAgainstAllSampleData(dataDirectory, parserName, parserParameters, specLink, cache_specs, outputFolder, specCacheDir):
     """Runs test against every flight in the specified dataDirectory folder"""
     flightData = [name for name in os.listdir(dataDirectory) if os.path.isdir(dataDirectory + "/" + name)]
     flightData.sort()
     for flightName in flightData:
         testRunner = Runner(dataDirectory, parserName)
-        testSet = testRunner.setFlightInfo(flightName, parserParameters, specLink, cache_specs)
+        testSet = testRunner.setFlightInfo(flightName, parserParameters, specLink, cache_specs, outputFolder, specCacheDir)
         print("Testing against: " + flightName)
         testSet = testRunner.run()
         print("Tested against: " + flightName + "\n\n")
@@ -98,7 +104,8 @@ def runAgainstAllSampleData(dataDirectory, parserName, parserParameters, specLin
         if failure:
             break
 
-if __name__ == '__main__':
+def loadConfigAndRun():
+    """Loads the config file and runs testing/generation for all parsers specified in the config"""
     with open("config.yaml", "r") as config:
         options = yaml.load(config)
 
@@ -107,6 +114,10 @@ if __name__ == '__main__':
 
     for parser_name in options['run']:
         flightDataDirectory = testing_directory + "/example_files/" + parser_name + "/SampleData"
-        parser_config = options['parsers'][parser_name]['required_files']
+        parser_required_files = options['parsers'][parser_name]['required_files']
         specification_link = options['parsers'][parser_name]['swagger_hub_spec']
-        runAgainstAllSampleData(flightDataDirectory, parser_name, parser_config, specification_link, options['cache_specifications'])
+        runAgainstAllSampleData(flightDataDirectory, parser_name, parser_required_files,
+                                specification_link, options['cache_specifications'], options['output_directory'], options['specification_cache_directory'])
+
+if __name__ == '__main__':
+    loadConfigAndRun()
