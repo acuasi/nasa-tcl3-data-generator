@@ -1,0 +1,24 @@
+---
+# Specify which parsers you want to run. If this is empty, then all parsers will run
+run:
+    - cns1
+
+# Specify all new parsers below and the required regex matches for each file name required
+# Note, the order they are specified below is the order they will be added as parameters when
+# the parser is run. If no "outfile_name" is specified, then one will automatically passed
+# as the last parameter with the format {parser_name}_data_flight_{number}.json
+parsers:
+    cns1:
+        MI_FILE_NAME:
+            - mission_insight.csv
+            - ^CNS1_.+Flight.+\.csv
+        DF_FILE_NAME:
+            - .log
+        FIELD_VARS_NAME:
+            - field_vars.csv
+
+# This specifies the global output directory where all parsed JSON files will be placed.
+# This can either be a relative or absolute path, if nothing is specified, then
+# the JSON files will be placed in whatever directory the runner file is run from.
+output_directory: "."
+...
