@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns1
+    - cns2
 
 # Specify all new parsers below.
 
@@ -47,7 +47,22 @@ parsers:
                 - field_vars.csv
             RADAR_FILE:
                 - Radar Flight
-
+        file_parsers:
+            MI_FILE_NAME:
+                parser: mission_insight
+            DF_FILE_NAME:
+                parser: data_flash
+        variable_parsers:
+            fType:
+                exact: CNS2
+            UTM-TCL3-DMP-RevF-CNSPDF:
+                exact: UTM-ACUASI-CNS-2.pdf
+            plannedContingency[plannedContingencyLoiterAlt_ft]:
+                exact: '[0]'
+            plannedContingency[plannedContingencyLoiterRadius_ft]:
+                exact: '[0]'
+            uasTruth:
+                parser: uasTruth
 
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then

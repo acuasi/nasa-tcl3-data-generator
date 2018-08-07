@@ -98,15 +98,9 @@ class Runner():
         params = ", ".join("'{0}'".format(param) for param in self.parserParameters)
         parser_module = importlib.import_module(self.parserName)
 
-        # TODO: Call the generic parser, passing in the necessary params
-        # iterate through the file_parsers options and replace the shortname with the actual filename before calling parser
         parsedJSON = GenericParser.generate(self.specification, self.options, self.parserName, self.files)
         with open(self.outFile, "w") as jsonWriter:
             jsonWriter.write(json.dumps(parsedJSON, indent=4, separators=(',', ': ')))
-        # print(json.dumps(parsedJSON, indent=4, separators=(',', ': ')))
-
-        # WARNING: exec is inherently dangerous, so double check config.yaml before executing
-        # exec("parser_module.generate({0})".format(params))
 
     def run(self):
         """Runs testing suite"""

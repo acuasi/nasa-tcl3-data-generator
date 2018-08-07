@@ -21,6 +21,5 @@ class StructureTests(StructureTestController.StructureTestController):
         cls.specData = SPECIFICATION_DATA
 
     def test_structure(self):
-        """Run all test cases comparing the outputted JSON file against the expected structure found in constants.py"""
+        """Run all test cases comparing the outputted JSON file against the expected structure from SwaggerHub"""
         self.runStructureTest(self.specData, self.data)
-        print(self.data)

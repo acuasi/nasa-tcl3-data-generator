@@ -1,15 +1,8 @@
 """This file contains custom helper functions used in files in the parser_pieces folder"""
 
-import datetime
+from datetime import datetime
 
-LEAP_SECS = 37
-GPS_EPOCH_OFFSET = 315964800
-GPS_LEAP_OFFSET = LEAP_SECS - 19
-
-M_TO_FT = 3.28
-CM_TO_FT = 0.328
-MM_TO_FT = 0.00328
-PA_TO_PSI = 0.000145038
+from helpers import constants
 
 def sys_boot_time(sys_time, gps_ms, gps_wks):
     """Use GPS time and system us time to calculate boot start time as a UTC timestamp.
@@ -23,7 +16,7 @@ def sys_boot_time(sys_time, gps_ms, gps_wks):
         boot_ts     (int): Timestamp of system since boot in seconds.
         """
     gps_ts = round(gps_ms / 1000 + gps_wks * 86400 * 7)
-    utc_ts = gps_ts + GPS_EPOCH_OFFSET + GPS_LEAP_OFFSET
+    utc_ts = gps_ts + constants.GPS_EPOCH_OFFSET + constants.GPS_LEAP_OFFSET
     sys_ts = sys_time / 1.0E6
     boot_ts = utc_ts - sys_ts
     return boot_ts

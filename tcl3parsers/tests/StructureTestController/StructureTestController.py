@@ -25,7 +25,7 @@ class StructureTestController(unittest.TestCase):
         self.assertIn(actualType, expectedType, str(key) + " from : " + str(self.parentKey))
 
     def __checkPattern(self, key, pattern, actualData):
-        self.assertRegex(actualData, pattern)
+        self.assertRegex(actualData, pattern, "key: " + str(key) + " from : " + str(self.parentKey))
 
     def __checkMinLength(self, key, minLength, actualData):
         self.assertTrue(hasattr(actualData, '__len__'), str(key) + " does not have a length field. Cannot check minLength")
