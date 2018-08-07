@@ -93,7 +93,6 @@ class SwaggerHubParser():
         spec_json = requests.get(download_url).json()
         return spec_json
 
-
 if __name__ == '__main__':
     jsonFile = open("test.json", "r")
     parser = SwaggerHubParser("CNS1_MOP", json_file=jsonFile, file_path="test.json", link="https://app.swaggerhub.com/apis/utm/tcl3-cns/v2")

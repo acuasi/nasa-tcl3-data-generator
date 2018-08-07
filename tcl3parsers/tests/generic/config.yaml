@@ -3,10 +3,20 @@
 run:
     - cns1
 
-# Specify all new parsers below and the required regex matches for each file name required
-# Note, the order they are specified below is the order they will be added as parameters when
-# the parser is run. If no "outfile_name" is specified, then one will automatically passed
-# as the last parameter with the format {parser_name}_data_flight_{number}.json
+# Specify all new parsers below.
+
+# required_files:
+# The order they are specified below is the order they will be added as parameters when
+# the parser is run.
+# Following each specified file is the regex or part of the name that will be searched for.
+#
+# The output file name is automatically added as the last
+# parameter with the format {parser_name}_data_flight_{number}.json
+#
+# file_parsers:
+# The key of file parsers must correspond with a required_file shortname and the value must be
+# the name of the file parser without .py
+#
 parsers:
     cns1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
@@ -17,6 +27,14 @@ parsers:
                 - .log
             FIELD_VARS_NAME:
                 - field_vars.csv
+        file_parsers:
+            MI_FILE_NAME:
+                parser: mission_insight
+        variable_parsers:
+            fType:
+                exact: "CNS2"
+                parser:
+
     cns2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
         required_files:
