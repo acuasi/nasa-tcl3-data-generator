@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns2
+    - cns1
 
 # Specify all new parsers below.
 
@@ -21,36 +21,45 @@ parsers:
     cns1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
         required_files:
-            MI_FILE_NAME:
+            MI_FILE:
                 - mission_insight.csv
-            DF_FILE_NAME:
+            DF_FILE:
                 - .log
-            FIELD_VARS_NAME:
+            FIELD_VARS:
                 - field_vars.csv
         file_parsers:
-            MI_FILE_NAME:
+            MI_FILE:
                 parser: mission_insight
+            DF_FILE:
+                parser: data_flash
+            FIELD_VARS:
+                parser: field_vars
         variable_parsers:
             fType:
                 exact: "CNS1"
-                parser:
+            UTM-TCL3-DMP-RevF-CNSPDF:
+                exact: UTM-ACUASI-CNS-1.pdf
+            plannedContingency[plannedContingencyLoiterAlt_ft]:
+                exact: '[0]'
+            plannedContingency[plannedContingencyLoiterRadius_ft]:
+                exact: '[0]'
 
     cns2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
         required_files:
-            MI_FILE_NAME:
+            MI_FILE:
                 - mission_insight.csv
                 - ^CNS2_.+Flight.+\.csv
-            DF_FILE_NAME:
+            DF_FILE:
                 - .log
-            FIELD_VARS_NAME:
+            FIELD_VARS:
                 - field_vars.csv
             RADAR_FILE:
                 - Radar Flight
         file_parsers:
-            MI_FILE_NAME:
+            MI_FILE:
                 parser: mission_insight
-            DF_FILE_NAME:
+            DF_FILE:
                 parser: data_flash
         variable_parsers:
             fType:

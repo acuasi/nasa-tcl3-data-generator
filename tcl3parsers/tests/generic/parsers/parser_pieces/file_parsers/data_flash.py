@@ -7,6 +7,7 @@ def data_flash(model, fileName):
     radio_count = 0
     arm_flag = 0
     boot_ts_flag = 0
+    ac_mode = ""
     with open(fileName, "r") as dataflash_file:
         gps = {"sys_time": 0, "gps_ms": 0,
                "gps_wk": 0, "lat": 0, "lon": 0, "alt": 0}
@@ -68,6 +69,19 @@ def data_flash(model, fileName):
                         "contingencyResponse_nonDim": 0
                     })
                 radio_count = (radio_count + 1) % loopTime
+
+            # Only add timeManeuverVerification if it is in the spec
+            if "timeManeuverVerification" in model.keys() and row[0] == "MODE":
+                if ac_mode == "Loiter" or ac_mode == "Stabilize":
+                    if row[2] == "Auto":
+                        ts = helpers.system_helpers.sys_ts_converter(int(row[1]), boot_ts)
+                        model["timeManeuverVerification"].append({"ts": ts})
+
+                if ac_mode == "RTL" or ac_mode == "Auto":
+                    if row[2] == "Guided":
+                        ts = helpers.system_helpers.sys_ts_converter(int(row[1]), boot_ts)
+                        model["timeManeuverVerification"].append({"ts": ts})
+                ac_mode = row[2]
 
         return model
 

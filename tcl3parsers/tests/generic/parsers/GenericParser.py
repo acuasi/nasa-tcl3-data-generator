@@ -45,7 +45,8 @@ class GenericParser():
             file_parser_module = importlib.import_module(source['parser'])
             filePath = source['path']
             jsonModel = eval("file_parser_module.{0}(jsonModel, filePath)".format(source['parser']))
-
+            if not jsonModel:
+                raise Exception("Error executing: " + source['parser'] + ", parser did not return the model.")
         self.jsonModel = jsonModel
 
     def executeVariableParsers(self):
