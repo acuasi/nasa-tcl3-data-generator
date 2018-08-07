@@ -15,12 +15,17 @@ from SwaggerHubParser import parser as SwaggerHubParser
 parser_directory = os.path.abspath(os.path.join(os.path.join(os.path.join(__file__, os.path.pardir), os.path.pardir), os.path.pardir))
 sys.path.append(parser_directory)
 
+generic_parser_directory = os.path.abspath(os.path.join(os.path.join(__file__, os.path.pardir), "parsers"))
+sys.path.append(generic_parser_directory)
+
+import GenericParser
+
 # Test Modules
 import structure_tests
 
 class Runner():
     """Executes parser and runs the testing suite"""
-    def __init__(self, dataDirectory, parserName):
+    def __init__(self, dataDirectory, options, parserName):
         """Loads all tests"""
         tests = unittest.TestSuite()
         loader = unittest.TestLoader()
@@ -30,6 +35,10 @@ class Runner():
         self.parserName = parserName
         self.flightName = ""
         self.parserParameters = []
+        self.specification = {}
+        self.options = options
+        self.files = {}
+        self.outFile = ""
 
     def getRequiredFlightFile(self, flightFiles, requiredFile, requirements):
         flightPath = self.dataDirectory +  "/" + self.flightName
@@ -47,7 +56,13 @@ class Runner():
         flightFiles = [name for name in os.listdir(flightPath)]
 
         for requiredFileName, requiredFileRequirements in requiredFiles.items():
-            self.parserParameters.append(self.getRequiredFlightFile(flightFiles, requiredFileName, requiredFileRequirements))
+            file_path = self.getRequiredFlightFile(flightFiles, requiredFileName, requiredFileRequirements)
+            self.parserParameters.append(file_path)
+
+            file_parsers = self.options['parsers'][self.parserName]['file_parsers']
+            if requiredFileName in file_parsers.keys():
+                self.options['parsers'][self.parserName]['file_parsers'][requiredFileName]['path'] = file_path
+            self.files[requiredFileName] = file_path
 
         if not os.path.isdir(outputFolder):
             os.mkdir(outputFolder)
@@ -57,6 +72,7 @@ class Runner():
             os.mkdir(parserOutputFolder)
 
         outfile = "{0}/{1}/{1}_data_{2}.json".format(outputFolder, self.parserName, flightName.lower().replace(" ", "_"))
+        self.outFile = outfile
         self.parserParameters.append(outfile)
         structure_tests.ACTUAL_DATA_FILE = outfile
 
@@ -75,6 +91,7 @@ class Runner():
                     jsonWriter.write(json.dumps(specification, indent=4, separators=(',', ': ')))
 
         structure_tests.SPECIFICATION_DATA = specification
+        self.specification = specification
 
     def __runParser(self):
         """Imports the parser module and executes it dynamically using the parameters specified in the config.yaml file"""
@@ -83,9 +100,13 @@ class Runner():
 
         # TODO: Call the generic parser, passing in the necessary params
         # iterate through the file_parsers options and replace the shortname with the actual filename before calling parser
+        parsedJSON = GenericParser.generate(self.specification, self.options, self.parserName, self.files)
+        with open(self.outFile, "w") as jsonWriter:
+            jsonWriter.write(json.dumps(parsedJSON, indent=4, separators=(',', ': ')))
+        # print(json.dumps(parsedJSON, indent=4, separators=(',', ': ')))
 
         # WARNING: exec is inherently dangerous, so double check config.yaml before executing
-        exec("parser_module.generate({0})".format(params))
+        # exec("parser_module.generate({0})".format(params))
 
     def run(self):
         """Runs testing suite"""
@@ -93,12 +114,12 @@ class Runner():
         runner = unittest.TextTestRunner(verbosity=3)
         return runner.run(self.suite)
 
-def runAgainstAllSampleData(dataDirectory, parserName, parserParameters, specLink, cache_specs, outputFolder, specCacheDir):
+def runAgainstAllSampleData(dataDirectory, options, parserName, parserParameters, specLink, cache_specs, outputFolder, specCacheDir):
     """Runs test against every flight in the specified dataDirectory folder"""
     flightData = [name for name in os.listdir(dataDirectory) if os.path.isdir(dataDirectory + "/" + name)]
     flightData.sort()
     for flightName in flightData:
-        testRunner = Runner(dataDirectory, parserName)
+        testRunner = Runner(dataDirectory, options, parserName)
         testSet = testRunner.setFlightInfo(flightName, parserParameters, specLink, cache_specs, outputFolder, specCacheDir)
         print("Testing against: " + flightName)
         testSet = testRunner.run()
@@ -119,7 +140,7 @@ def loadConfigAndRun():
         flightDataDirectory = testing_directory + "/example_files/" + parser_name + "/SampleData"
         parser_required_files = options['parsers'][parser_name]['required_files']
         specification_link = options['parsers'][parser_name]['swagger_hub_spec']
-        runAgainstAllSampleData(flightDataDirectory, parser_name, parser_required_files,
+        runAgainstAllSampleData(flightDataDirectory, options, parser_name, parser_required_files,
                                 specification_link, options['cache_specifications'], options['output_directory'], options['specification_cache_directory'])
 
 if __name__ == '__main__':

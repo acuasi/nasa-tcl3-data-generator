@@ -32,7 +32,7 @@ parsers:
                 parser: mission_insight
         variable_parsers:
             fType:
-                exact: "CNS2"
+                exact: "CNS1"
                 parser:
 
     cns2:

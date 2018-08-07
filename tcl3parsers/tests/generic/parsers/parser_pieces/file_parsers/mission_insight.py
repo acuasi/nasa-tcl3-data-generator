@@ -1,9 +1,9 @@
 """Creates the "basic" variable from the mission insight's file"""
 import csv
 
-def mission_insight(defaultModel, mi_file_name):
+def mission_insight(defaultModel, fileName):
     """Parses the Mission Insight file and returns a new model """
-    with open(mi_file_name, "r") as mission_insight_file:
+    with open(fileName, "r") as mission_insight_file:
         mi_reader = csv.DictReader(mission_insight_file)
         mi_dict = next(mi_reader)
 
