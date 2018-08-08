@@ -120,7 +120,7 @@ sub_parsers:
             aircraftFlightPlan[wpTargetAirSpeed_ftPerSec]:
                 exception: None
             uasState[value]:
-                exception: None
+                exception: [None, int]
 
 
 # This specifies the global output directory where all parsed JSON files will be placed.

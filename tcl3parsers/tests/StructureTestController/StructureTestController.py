@@ -14,14 +14,19 @@ class StructureTestController(unittest.TestCase):
             print("EXCEPTION MATCHED:", exceptionMatched, "was matched", exceptionInfo["exceptionCount"], "times with the values:", exceptionInfo["exceptionValues"])
         print("\n")
 
-    def __matchException(self, key, exceptionMatch, actualData):
-        if isinstance(exceptionMatch, str):
+    def __matchException(self, key, exceptionMatchList, actualData):
+        if not isinstance(exceptionMatchList, list):
+            exceptionMatchList = [exceptionMatchList]
+
+        exceptionMatched = False
+        for exceptionMatch in exceptionMatchList:
             try:
                 exceptionMatched = str(actualData) == exceptionMatch or actualData == exceptionMatch or type(actualData).__name__ == exceptionMatch
             except ValueError:
                 exceptionMatched = actualData == exceptionMatch
-        else:
-            exceptionMatched = exceptionMatch == actualData
+            if exceptionMatched:
+                break
+
         if exceptionMatched:
             if key not in self.exceptionsMatched.keys():
                 self.exceptionsMatched[key] = {
