@@ -25,7 +25,7 @@ import structure_tests
 
 class Runner():
     """Executes parser and runs the testing suite"""
-    def __init__(self, dataDirectory, options, parserName, outFile=""):
+    def __init__(self, dataDirectory, options, parserName, outFile="", parentParserName=""):
         """Loads all tests"""
         tests = unittest.TestSuite()
         loader = unittest.TestLoader()
@@ -33,6 +33,7 @@ class Runner():
         self.suite = tests
         self.dataDirectory = dataDirectory
         self.parserName = parserName
+        self.parentParserName = parentParserName
         self.flightName = ""
         self.parserParameters = []
         self.specification = {}
@@ -74,13 +75,15 @@ class Runner():
         if not os.path.isdir(outputFolder):
             os.mkdir(outputFolder)
 
-        parserOutputFolder = "{0}/{1}".format(outputFolder, self.parserName)
+        parserName = self.parserName if self.parentParserName == "" else self.parentParserName
+        parserOutputFolder = "{0}/{1}".format(outputFolder, parserName)
         if not os.path.isdir(parserOutputFolder):
             os.mkdir(parserOutputFolder)
 
         escapedFlightName = flightName.lower().replace(" ", "_")
 
         parserFlightOutputFolder = "{0}/{1}".format(parserOutputFolder, escapedFlightName)
+
         if not os.path.isdir(parserFlightOutputFolder):
             os.mkdir(parserFlightOutputFolder)
 
@@ -116,11 +119,6 @@ class Runner():
 
     def __runParser(self):
         """Imports the parser module and executes it dynamically using the parameters specified in the config.yaml file"""
-        # params = ", ".join("'{0}'".format(param) for param in self.parserParameters)
-        # parser_module = importlib.import_module(self.parserName)
-
-        # parsedJSON = GenericParser.generate(self.specification, self.options, self.parserName, self.files)
-
         genericParser = GenericParser.GenericParser(self.specification, self.options, self.parserName, self.files)
         parsedJSON = genericParser.generate()
 
@@ -137,8 +135,8 @@ class Runner():
         runner = unittest.TextTestRunner(verbosity=3)
         return runner.run(self.suite)
 
-def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outFile=""):
-    testRunner = Runner(dataDirectory, options, parserName, outFile)
+def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outFile="", parentParserName=""):
+    testRunner = Runner(dataDirectory, options, parserName, outFile, parentParserName)
     testSet = testRunner.setFlightInfo(flightName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir)
     print("Testing against: " + flightName)
     testSet = testRunner.run()
@@ -160,10 +158,10 @@ def runAgainstAllData(dataDirectory, options, parserName, parserRequiredFiles, s
             subParserSpecLink = options['sub_parsers'][subParserName]['swagger_hub_spec']
             subParserOutputFile = subParserName + ".json"
 
-            print("Starting Sub-parser: " + subParserName)
+            print("Starting " + parserName + "'s sub-parser: " + subParserName)
 
             failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName,
-                                             subParserRequiredFiles, subParserSpecLink, cache_specs, outputFolder, specCacheDir, subParserOutputFile)
+                                             subParserRequiredFiles, subParserSpecLink, cache_specs, outputFolder, specCacheDir, subParserOutputFile, parserName)
             if failure:
                 break
 

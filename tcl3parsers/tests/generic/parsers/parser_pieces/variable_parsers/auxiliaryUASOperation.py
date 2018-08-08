@@ -28,6 +28,9 @@ def auxiliaryUASOperation(files):
     aux_op["testIdentifiers"] = [mi_dict["test_identifiers"]]
     aux_op["typeOfOperation"] = type_of_operation
     aux_op["takeoffWeight_lb"] = float(takeoff_weight)
-    aux_op["gcsPosLat_deg"] = float(gcs_locs_dict[mi_dict["gcs_location"]]["latitude"])
-    aux_op["gcsPosLon_deg"] = float(gcs_locs_dict[mi_dict["gcs_location"]]["longitude"])
-    aux_op["gcsPosAlt_ft"] = float(gcs_locs_dict[mi_dict["gcs_location"]]["altitude"])
+
+    if "gcs_location" in mi_dict and mi_dict["gcs_location"] in gcs_locs_dict:
+        gcs_location = mi_dict["gcs_location"]
+        aux_op["gcsPosLat_deg"] = float(gcs_locs_dict[gcs_location]["latitude"])
+        aux_op["gcsPosLon_deg"] = float(gcs_locs_dict[gcs_location]["longitude"])
+        aux_op["gcsPosAlt_ft"] = float(gcs_locs_dict[gcs_location]["altitude"])

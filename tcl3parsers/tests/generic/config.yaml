@@ -88,7 +88,7 @@ parsers:
             uasTruth:
                 parser: uasTruth
             uasTruth[estimatedTruthPositionError95Prct_in]:
-                exception: NoneType
+                exception: None
 
     con1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
@@ -115,6 +115,12 @@ sub_parsers:
                 exact: FLIGHT_DATA
             auxiliaryUASOperation:
                 parser: auxiliaryUASOperation
+            aircraftFlightPlan[wpTargetGroundSpeed_ftPerSec]:
+                exception: None
+            aircraftFlightPlan[wpTargetAirSpeed_ftPerSec]:
+                exception: None
+            uasState[value]:
+                exception: None
 
 
 # This specifies the global output directory where all parsed JSON files will be placed.

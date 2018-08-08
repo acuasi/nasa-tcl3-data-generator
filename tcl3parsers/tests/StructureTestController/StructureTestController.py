@@ -16,7 +16,10 @@ class StructureTestController(unittest.TestCase):
 
     def __matchException(self, key, exceptionMatch, actualData):
         if isinstance(exceptionMatch, str):
-            exceptionMatched = type(actualData).__name__ == exceptionMatch
+            try:
+                exceptionMatched = str(actualData) == exceptionMatch or actualData == exceptionMatch or type(actualData).__name__ == exceptionMatch
+            except ValueError:
+                exceptionMatched = actualData == exceptionMatch
         else:
             exceptionMatched = exceptionMatch == actualData
         if exceptionMatched:
@@ -29,8 +32,6 @@ class StructureTestController(unittest.TestCase):
                 self.exceptionsMatched[key]["exceptionCount"] += 1
                 if str(actualData) not in self.exceptionsMatched[key]["exceptionValues"]:
                     self.exceptionsMatched[key]["exceptionValues"].append(str(actualData))
-
-            # print("\nException matched for:", str(key), "with value:", str(actualData))
         return exceptionMatched
 
     def __checkExact(self, key, expectedData, actualData):
