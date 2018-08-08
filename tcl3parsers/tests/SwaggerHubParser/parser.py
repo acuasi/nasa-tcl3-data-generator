@@ -18,7 +18,7 @@ class SwaggerHubParser():
             exit()
         self.mopName = MOP_NAME
         self.swaggerHubJSON = swaggerHubJSON
-        self.ignoreList = ["required", "description", "example", "format"]
+        self.ignoreList = ["description", "example", "format"]
         self.keySwapList = {
             "items": "match",
             "properties": "children",
@@ -59,9 +59,19 @@ class SwaggerHubParser():
 
         return replaceReferences(propertiesJSON)
 
-    def recursivelyFormStructure(self, fullSpec):
+    def recursivelyFormStructure(self, fullSpec, requiredVars=[]):
         tempJSON = {}
         for key, value in fullSpec.items():
+            if requiredVars and key not in requiredVars:
+                if "match" in value.keys():
+                    value["match"]["exception"] = "None"
+                else:
+                    value = {
+                        "match": {
+                            "exception": "None",
+                            "children": value
+                        }
+                    }
             if isinstance(value, dict):
                 noMatchedParams = True
                 if key != "match" and "children" in value:
@@ -71,11 +81,21 @@ class SwaggerHubParser():
                     for validKeyword in self.validKeywords:
                         if validKeyword in value.keys():
                             if "match" in value:
+                                if requiredVars and key not in requiredVars:
+                                    value["match"]["exception"] = "None"
                                 value["children"] = {"match": value["match"]}
                                 value.pop("match", None)
                             tempJSON[key] = {"match": self.recursivelyFormStructure(value)}
                             noMatchedParams = False
                             break
+                elif key == "match":
+                    requiredVars = []
+                    if "required" in value.keys() and "children" in value.keys():
+                        requiredVars = value["required"]
+                        for requiredChild in value["children"]:
+                            if requiredChild not in requiredVars:
+                                value["children"][requiredChild]["exception"] = "None"
+                        value.pop('required', None)
                 if noMatchedParams:
                     tempJSON[key] = self.recursivelyFormStructure(value)
             else:
@@ -85,10 +105,19 @@ class SwaggerHubParser():
 
     def parse(self):
         fullSpec = self.replaceAllReferences()
-        fullSpec = self.recursivelyFormStructure(fullSpec)
+        required = self.swaggerHubJSON['definitions'][self.mopName]["required"]
+        fullSpec = self.recursivelyFormStructure(fullSpec, required)
         return fullSpec
 
     def scrapeSwaggerHubSpec(self, link):
         download_url = link.replace("apis", "apiproxy/schema/file") + "/swagger.json"
         spec_json = requests.get(download_url).json()
         return spec_json
+
+if __name__ == '__main__':
+    jsonFile = open("test.json", "r")
+    parser = SwaggerHubParser("CNS2_MOP", json_file=jsonFile, file_path="test.json", link="https://app.swaggerhub.com/apis/utm/tcl3-cns/v2")
+    spec = parser.parse()
+
+    with open("test_out.json", "w") as jsonWriter:
+        jsonWriter.write(json.dumps(spec, indent=4, separators=(',', ': ')))

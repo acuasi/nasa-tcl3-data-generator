@@ -28,6 +28,7 @@ class GenericParser():
         else:
             raise Exception("Could not find parser: " + self.parserName + "!")
         self.files = files
+        self.exceptionList = {}
 
     def generateDefaultModel(self, specModel=None):
         """Uses the specification to generate a JSON model with default type values filled in"""
@@ -82,11 +83,21 @@ class GenericParser():
                     exec("self.jsonModel{0} = {1}".format(masterVariable, source["exact"]))
                 else:
                     self.jsonModel[masterVariable] = source["exact"]
+            elif "exception" in source and source["exception"]:
+                if "[" in masterVariable and "]" in masterVariable:
+                    masterVariable = masterVariable.replace("[", "['").replace("]", "']")
+                    topLevelMasterVariable = masterVariable[:masterVariable.find("[")]
+                    masterVariable = "['" + topLevelMasterVariable + "']" + masterVariable[masterVariable.find("["):]
+
+                    exceptionKeyMatchChain = [exceptionMatch for exceptionMatch in masterVariable.replace("['", "").split("']") if exceptionMatch]
+                    self.exceptionList[masterVariable] = {
+                        "type": source["exception"],
+                        "chain": exceptionKeyMatchChain
+                    }
+
             else:
                 variable_parser_module = importlib.import_module(source['parser'])
                 self.jsonModel[masterVariable] = eval("variable_parser_module.{0}(self.files)".format(source['parser']))
-
-
 
     def generate(self):
         # Iterate through global and file parsers and execute them by passing them the jsonModel and setting it equal to whatever they return
@@ -97,22 +108,9 @@ class GenericParser():
 
         return self.jsonModel
 
+    def getAllowedExceptions(self):
+        return self.exceptionList
 
 def generate(specJSON, options, parserName, files):
     parser = GenericParser(specJSON, options, parserName, files)
     return parser.generate()
-    # print(json.dumps(parser, indent=4, separators=(',', ': ')))
-
-# if __name__ == "__main__":
-#     # options file will be passed in
-#     with open("../config.yaml", "r") as configReader:
-#         opts = yaml.load(configReader)
-#
-#     opts['parsers']['cns1']['file_parsers']['MI_FILE_NAME']['file_path'] = "../../example_files/cns1/SampleData/Flight 1/2018-04-27 11-16-16_mission_insight.csv"
-#     # this will be passed in
-#     parser_name = "cns1"
-#
-#     # spec file will be passed in
-#     with open("../specifications/cns1_specification.json", "r") as specReader:
-#         spec_json = json.load(specReader)
-#         generate(spec_json, opts, parser_name)

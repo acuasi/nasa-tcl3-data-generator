@@ -39,6 +39,7 @@ class Runner():
         self.options = options
         self.files = {}
         self.outFile = outFile
+        self.parserFlightOutputFolder = ""
 
     def getRequiredFlightFile(self, flightFiles, requiredFile, requirements):
         flightPath = self.dataDirectory +  "/" + self.flightName
@@ -83,6 +84,8 @@ class Runner():
         if not os.path.isdir(parserFlightOutputFolder):
             os.mkdir(parserFlightOutputFolder)
 
+        self.parserFlightOutputFolder = parserFlightOutputFolder
+
         if self.outFile == "":
             outfile = "{0}/{1}_data_{2}.json".format(parserFlightOutputFolder, self.parserName, escapedFlightName)
         else:
@@ -98,7 +101,7 @@ class Runner():
         if cache_specs and os.path.isfile(spec_output_name):
             specification = json.load(open(spec_output_name, "r"))
         else:
-            if re.match(r".+[0-9].+", self.parserName):
+            if re.match(r".+[0-9]", self.parserName):
                 mopName = "{0}_MOP".format(self.parserName.upper())
             else:
                 mopName = self.parserName.upper()
@@ -113,12 +116,20 @@ class Runner():
 
     def __runParser(self):
         """Imports the parser module and executes it dynamically using the parameters specified in the config.yaml file"""
-        params = ", ".join("'{0}'".format(param) for param in self.parserParameters)
-        parser_module = importlib.import_module(self.parserName)
+        # params = ", ".join("'{0}'".format(param) for param in self.parserParameters)
+        # parser_module = importlib.import_module(self.parserName)
 
-        parsedJSON = GenericParser.generate(self.specification, self.options, self.parserName, self.files)
+        # parsedJSON = GenericParser.generate(self.specification, self.options, self.parserName, self.files)
+
+        genericParser = GenericParser.GenericParser(self.specification, self.options, self.parserName, self.files)
+        parsedJSON = genericParser.generate()
+
+        allowedExceptions = genericParser.getAllowedExceptions()
+        structure_tests.ALLOWED_EXCEPTIONS = allowedExceptions
+
         with open(self.outFile, "w") as jsonWriter:
             jsonWriter.write(json.dumps(parsedJSON, indent=4, separators=(',', ': ')))
+
 
     def run(self):
         """Runs testing suite"""

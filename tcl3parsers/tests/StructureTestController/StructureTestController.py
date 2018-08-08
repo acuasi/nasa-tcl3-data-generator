@@ -2,7 +2,17 @@ import json
 import unittest
 
 class StructureTestController(unittest.TestCase):
-    """Adds test cases for value type"""
+    """Adds test cases for matching the SwaggerHub spec"""
+    def __init__(self, *args, **kwargs):
+        super(StructureTestController, self).__init__(*args, **kwargs)
+        self.exceptionsMatched = {}
+
+    def printExceptionsMatched(self):
+        """prints all allowed exceptions that were matched"""
+        print("\n\n")
+        for exceptionMatched, exceptionInfo in self.exceptionsMatched.items():
+            print("EXCEPTION MATCHED:", exceptionMatched, "was matched", exceptionInfo["exceptionCount"], "times with the values:", exceptionInfo["exceptionValues"])
+        print("\n")
 
     def __matchException(self, key, exceptionMatch, actualData):
         if isinstance(exceptionMatch, str):
@@ -10,7 +20,17 @@ class StructureTestController(unittest.TestCase):
         else:
             exceptionMatched = exceptionMatch == actualData
         if exceptionMatched:
-            print("\nException matched for:", str(key), "with value:", str(actualData))
+            if key not in self.exceptionsMatched.keys():
+                self.exceptionsMatched[key] = {
+                    "exceptionCount": 1,
+                    "exceptionValues": [str(actualData)]
+                }
+            else:
+                self.exceptionsMatched[key]["exceptionCount"] += 1
+                if str(actualData) not in self.exceptionsMatched[key]["exceptionValues"]:
+                    self.exceptionsMatched[key]["exceptionValues"].append(str(actualData))
+
+            # print("\nException matched for:", str(key), "with value:", str(actualData))
         return exceptionMatched
 
     def __checkExact(self, key, expectedData, actualData):
@@ -51,14 +71,18 @@ class StructureTestController(unittest.TestCase):
         # If 'match' is not found, then this must mean that actualData is another JSON/dict that are "children" values
         # This is the case when there is a list of dictionaries. This else case would run for an individual dictionary and recurse through runStructureTest
         else:
-            self.runStructureTest(expectedChildren, actualData, key)
+            self.runStructureTest(expectedChildren, actualData, key, self.allowedExceptions)
 
     def __matchParameters(self, key, expectedParams, actualData):
         # If the exception case matches, then ignore checking any other parameters
+        # This check is done first so that "exception" can be included in any order
+        if "exception" in expectedParams:
+            if self.__matchException(key, expectedParams["exception"], actualData):
+                return
         for expectedParam in expectedParams:
-            if expectedParam == 'exception':
-                if self.__matchException(key, expectedParams[expectedParam], actualData):
-                    return
+            # This case is handled above, so should be skipped
+            if expectedParam == "exception":
+                continue
             elif expectedParam == 'exact':
                 self.__checkExact(key, expectedParams[expectedParam], actualData)
             elif expectedParam == 'type':
@@ -80,17 +104,29 @@ class StructureTestController(unittest.TestCase):
             else:
                 self.assertTrue(False, "No expected parameters for " + key + " were tested. Malformed testing JSON.")
 
+    def __addInAllowedExceptions(self, key, expectedParams):
+        if self.allowedExceptions:
+            for exceptionMatch, allowedException in self.allowedExceptions.copy().items():
+                if allowedException["chain"] and key == allowedException["chain"][0]:
+                    self.allowedExceptions[exceptionMatch]["chain"] = allowedException["chain"][1:]
+                    if not self.allowedExceptions[exceptionMatch]["chain"]:
+                        expectedParams["exception"] = allowedException["type"]
+                        del self.allowedExceptions[exceptionMatch]
+        return expectedParams
+
     # start with constants.CNS2_MOP and self.cns2_data, recurse
-    def runStructureTest(self, expectedData, actualData, parentKey=""):
+    def runStructureTest(self, expectedData, actualData, parentKey="", allowedExceptions=[]):
         """Iterates through every key in outputted JSON and compares it to parameters set in a testing JSON"""
         self.parentKey = parentKey
+        self.allowedExceptions = allowedExceptions
         # Base case - if the structure is empty or not the right type, return
         if not isinstance(expectedData, dict) or not hasattr(actualData, '__iter__') or not expectedData or not actualData:
             return
         for key, value in expectedData.items():
             self.assertTrue(key in actualData, "Key not found in JSON: " + key + " (parentKey: " + str(self.parentKey) + ")")
             if isinstance(value, dict) and 'match' in value.keys():
-                expectedParams = value['match']
+                expectedParams = self.__addInAllowedExceptions(key, value["match"])
+
                 self.__matchParameters(key, expectedParams, actualData[key])
             else:
-                self.runStructureTest(value, actualData[key], "Last Key: " + key)
+                self.runStructureTest(value, actualData[key], "Last Key: " + key, self.allowedExceptions)

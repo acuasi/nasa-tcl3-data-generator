@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns1
+    - cns2
 
 # Specify all new parsers below.
 
@@ -87,6 +87,8 @@ parsers:
                 exact: '[0]'
             uasTruth:
                 parser: uasTruth
+            uasTruth[estimatedTruthPositionError95Prct_in]:
+                exception: NoneType
 
     con1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2

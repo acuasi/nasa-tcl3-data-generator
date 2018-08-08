@@ -10,6 +10,7 @@ from StructureTestController import StructureTestController
 
 ACTUAL_DATA_FILE = {}
 SPECIFICATION_DATA = {}
+ALLOWED_EXCEPTIONS = []
 
 class StructureTests(StructureTestController.StructureTestController):
     """Adds test cases to examine entire structure of JSON"""
@@ -19,7 +20,9 @@ class StructureTests(StructureTestController.StructureTestController):
         generatedFile = open(ACTUAL_DATA_FILE, "r")
         cls.data = json.load(generatedFile)
         cls.specData = SPECIFICATION_DATA
+        cls.allowedExceptions = ALLOWED_EXCEPTIONS
 
     def test_structure(self):
         """Run all test cases comparing the outputted JSON file against the expected structure from SwaggerHub"""
-        self.runStructureTest(self.specData, self.data)
+        self.runStructureTest(self.specData, self.data, "Top Level", self.allowedExceptions)
+        self.printExceptionsMatched()

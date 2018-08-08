@@ -40,7 +40,7 @@
         "match": {
             "type": "str",
             "enum": [
-                "CNS1"
+                "CNS2"
             ]
         }
     },
@@ -113,7 +113,7 @@
             }
         }
     },
-    "primaryLinkDescription": {
+    "uasTruth": {
         "match": {
             "type": "list",
             "children": {
@@ -126,10 +126,24 @@
                                 "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
                             }
                         },
-                        "primaryLinkDescription": {
+                        "uasTruthEcefXCoordinate_ft": {
                             "match": {
-                                "type": "str",
-                                "maxLength": 280
+                                "type": "float|int"
+                            }
+                        },
+                        "uasTruthEcefYCoordinate_ft": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "uasTruthEcefZCoordinate_ft": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "estimatedTruthPositionError95Prct_in": {
+                            "match": {
+                                "type": "float|int"
                             }
                         }
                     }
@@ -137,7 +151,7 @@
             }
         }
     },
-    "redundantLinkDescription": {
+    "prnGpsSat": {
         "match": {
             "type": "list",
             "children": {
@@ -150,10 +164,41 @@
                                 "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
                             }
                         },
-                        "redundantLinkDescription": {
+                        "prnGpsSat_nonDim": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "int",
+                                        "minimum": 0,
+                                        "maximum": 32
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "exception": "None"
+                }
+            }
+        }
+    },
+    "uere": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
                             "match": {
                                 "type": "str",
-                                "maxLength": 280
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "uere_in": {
+                            "match": {
+                                "type": "float|int"
                             }
                         }
                     }
@@ -358,153 +403,6 @@
                                         "minimum": 0
                                     }
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "maneuverCommand": {
-        "match": {
-            "type": "list",
-            "children": {
-                "match": {
-                    "type": "dict",
-                    "children": {
-                        "ts": {
-                            "match": {
-                                "type": "str",
-                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
-                            }
-                        },
-                        "maneuverCommand": {
-                            "match": {
-                                "type": "str",
-                                "maxLength": 280
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "estimatedTimeToVerifyManeuver": {
-        "match": {
-            "type": "list",
-            "children": {
-                "match": {
-                    "type": "dict",
-                    "children": {
-                        "ts": {
-                            "match": {
-                                "type": "str",
-                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
-                            }
-                        },
-                        "estimatedTimeToVerifyManeuver_sec": {
-                            "match": {
-                                "type": "float|int"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "cns1TestType": {
-        "match": {
-            "type": "list",
-            "children": {
-                "match": {
-                    "type": "dict",
-                    "children": {
-                        "ts": {
-                            "match": {
-                                "type": "str",
-                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
-                            }
-                        },
-                        "cns1TestType_nonDim": {
-                            "match": {
-                                "type": "int",
-                                "enum": [
-                                    0,
-                                    1,
-                                    2
-                                ]
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "timeManeuverCommandSent": {
-        "match": {
-            "type": "list",
-            "children": {
-                "match": {
-                    "type": "dict",
-                    "children": {
-                        "ts": {
-                            "match": {
-                                "type": "str",
-                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "timeManeuverVerification": {
-        "match": {
-            "type": "list",
-            "children": {
-                "match": {
-                    "type": "dict",
-                    "children": {
-                        "ts": {
-                            "match": {
-                                "type": "str",
-                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "timePrimaryLinkDisconnect": {
-        "match": {
-            "type": "list",
-            "children": {
-                "match": {
-                    "type": "dict",
-                    "children": {
-                        "ts": {
-                            "match": {
-                                "type": "str",
-                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "timeRedundantLinkSwitch": {
-        "match": {
-            "type": "list",
-            "children": {
-                "match": {
-                    "type": "dict",
-                    "children": {
-                        "ts": {
-                            "match": {
-                                "type": "str",
-                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
                             }
                         }
                     }
