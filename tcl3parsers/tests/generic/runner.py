@@ -132,6 +132,7 @@ class Runner():
     def run(self):
         """Runs testing suite"""
         self.__runParser()
+        structure_tests.OUTFILE = self.outFile
         runner = unittest.TextTestRunner(verbosity=3)
         return runner.run(self.suite)
 

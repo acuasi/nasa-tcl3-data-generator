@@ -94,9 +94,10 @@ class GenericParser():
                         "type": source["exception"],
                         "chain": exceptionKeyMatchChain
                     }
+                    if "fix" in source:
+                        self.exceptionList[masterVariable]["fix"] = source["fix"]
 
             else:
-                print(masterVariable, source)
                 variable_parser_module = importlib.import_module(source['parser'])
                 self.jsonModel[masterVariable] = eval("variable_parser_module.{0}(self.files)".format(source['parser']))
 

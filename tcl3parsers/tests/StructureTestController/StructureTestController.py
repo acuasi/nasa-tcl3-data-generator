@@ -6,15 +6,18 @@ class StructureTestController(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(StructureTestController, self).__init__(*args, **kwargs)
         self.exceptionsMatched = {}
+        self.fixedData = False
 
     def printExceptionsMatched(self):
         """prints all allowed exceptions that were matched"""
         print("\n\n")
         for exceptionMatched, exceptionInfo in self.exceptionsMatched.items():
             print("EXCEPTION MATCHED:", exceptionMatched, "was matched", exceptionInfo["exceptionCount"], "times with the values:", exceptionInfo["exceptionValues"])
+            if exceptionInfo["fix"]:
+                print("\tEXCEPTION FIXED TO:", exceptionInfo["fix"])
         print("\n")
 
-    def __matchException(self, key, exceptionMatchList, actualData):
+    def __matchException(self, key, exceptionMatchList, actualData, fix=""):
         if not isinstance(exceptionMatchList, list):
             exceptionMatchList = [exceptionMatchList]
 
@@ -31,13 +34,18 @@ class StructureTestController(unittest.TestCase):
             if key not in self.exceptionsMatched.keys():
                 self.exceptionsMatched[key] = {
                     "exceptionCount": 1,
-                    "exceptionValues": [str(actualData)]
+                    "exceptionValues": [str(actualData)],
+                    "fix": fix
                 }
             else:
                 self.exceptionsMatched[key]["exceptionCount"] += 1
                 if str(actualData) not in self.exceptionsMatched[key]["exceptionValues"]:
                     self.exceptionsMatched[key]["exceptionValues"].append(str(actualData))
         return exceptionMatched
+
+    def __fixException(self, fix):
+        self.fixedData = True
+        return eval(fix)
 
     def __checkExact(self, key, expectedData, actualData):
         self.assertEqual(actualData, expectedData)
@@ -83,11 +91,15 @@ class StructureTestController(unittest.TestCase):
         # If the exception case matches, then ignore checking any other parameters
         # This check is done first so that "exception" can be included in any order
         if "exception" in expectedParams:
-            if self.__matchException(key, expectedParams["exception"], actualData):
+            fix = expectedParams["fix"] if "fix" in expectedParams else ""
+            if self.__matchException(key, expectedParams["exception"], actualData, fix):
                 return
         for expectedParam in expectedParams:
             # This case is handled above, so should be skipped
             if expectedParam == "exception":
+                continue
+            elif expectedParam == "fix":
+                actualData = self.__fixException(expectedParams["fix"]);
                 continue
             elif expectedParam == 'exact':
                 self.__checkExact(key, expectedParams[expectedParam], actualData)
@@ -110,6 +122,8 @@ class StructureTestController(unittest.TestCase):
             else:
                 self.assertTrue(False, "No expected parameters for " + key + " were tested. Malformed testing JSON.")
 
+        return actualData
+
     def __addInAllowedExceptions(self, key, expectedParams):
         if self.allowedExceptions:
             for exceptionMatch, allowedException in self.allowedExceptions.copy().items():
@@ -117,6 +131,8 @@ class StructureTestController(unittest.TestCase):
                     self.allowedExceptions[exceptionMatch]["chain"] = allowedException["chain"][1:]
                     if not self.allowedExceptions[exceptionMatch]["chain"]:
                         expectedParams["exception"] = allowedException["type"]
+                        if "fix" in allowedException:
+                            expectedParams["fix"] = allowedException["fix"]
                         del self.allowedExceptions[exceptionMatch]
         return expectedParams
 
@@ -127,12 +143,14 @@ class StructureTestController(unittest.TestCase):
         self.allowedExceptions = allowedExceptions
         # Base case - if the structure is empty or not the right type, return
         if not isinstance(expectedData, dict) or not hasattr(actualData, '__iter__') or not expectedData or not actualData:
-            return
+            return actualData
         for key, value in expectedData.items():
             self.assertTrue(key in actualData, "Key not found in JSON: " + key + " (parentKey: " + str(self.parentKey) + ")")
             if isinstance(value, dict) and 'match' in value.keys():
                 expectedParams = self.__addInAllowedExceptions(key, value["match"])
 
-                self.__matchParameters(key, expectedParams, actualData[key])
+                actualData[key] = self.__matchParameters(key, expectedParams, actualData[key])
             else:
-                self.runStructureTest(value, actualData[key], "Last Key: " + key, self.allowedExceptions)
+                actualData[key] = self.runStructureTest(value, actualData[key], "Last Key: " + key, self.allowedExceptions)
+
+        return actualData

@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns2
+    - cns1
 
 # Specify all new parsers below.
 
@@ -95,7 +95,7 @@ parsers:
         required_files:
 
 
-# These parsers are the same as regular parsers, except they get their files from a parent parser and operate concurrently
+# These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
     flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
@@ -121,6 +121,10 @@ sub_parsers:
                 exception: None
             uasState[value]:
                 exception: [None, int]
+                fix: None
+            aircraftFlightPlan[wpType_nonDim]:
+                exception: str
+                fix: None
 
 
 # This specifies the global output directory where all parsed JSON files will be placed.
