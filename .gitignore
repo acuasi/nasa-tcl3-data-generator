@@ -104,6 +104,6 @@ venv.bak/
 .mypy_cache/
 
 # Large Sample Data
-**/example_files/*/SampleData/Flight*
+**/example_files/*/data/Flight*
 .DS_Store
 **/output/*/*

@@ -1,0 +1,342 @@
+{
+    "basic": {
+        "uvin": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "gufi": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "submitTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "ussName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "ussInstanceID": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        }
+    },
+    "fType": {
+        "match": {
+            "type": "str",
+            "enum": [
+                "FLIGHT_DATA"
+            ]
+        }
+    },
+    "auxiliaryUASOperation": {
+        "typeOfOperation": {
+            "match": {
+                "type": "str",
+                "enum": [
+                    "Live",
+                    "Simulated"
+                ]
+            }
+        },
+        "flightTestCardName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "testIdentifiers": {
+            "match": {
+                "type": "list",
+                "minLength": 1,
+                "children": {
+                    "match": {
+                        "type": "str",
+                        "pattern": "^((CNS)\\.{0,1}[123])|((SAA)\\.{0,1}[1-6])|((DAT)\\.{0,1}([1-6]|(4\\.1)|(4\\.2)|(4\\.3)|(99\\.1)))|((CON)\\.{0,1}[1-5])|(OMEGA1)*$",
+                        "example": {
+                            "cns1": "CNS1",
+                            "cns2": "CNS.2",
+                            "saa3": "SAA3",
+                            "dat1": "DAT1",
+                            "dat2": "DAT.2",
+                            "dat4": "DAT.4",
+                            "dat99": "DAT99.1",
+                            "con3": "CON3",
+                            "omega1": "OMEGA1"
+                        }
+                    }
+                }
+            }
+        },
+        "takeoffWeight_lb": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "takeOffTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "takeoffPosLat_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -90,
+                "maximum": 90
+            }
+        },
+        "takeoffPosLon_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -180,
+                "maximum": 180
+            }
+        },
+        "takeoffPosAlt_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "landingTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "landingPosLat_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -90,
+                "maximum": 90
+            }
+        },
+        "landingPosLon_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -180,
+                "maximum": 180
+            }
+        },
+        "landingPosAlt_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "gcsPosLat_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -90,
+                "maximum": 90
+            }
+        },
+        "gcsPosLon_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -180,
+                "maximum": 180
+            }
+        },
+        "gcsPosAlt_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        }
+    },
+    "aircraftFlightPlan": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "wpSequenceNum_nonDim": {
+                            "match": {
+                                "type": "int"
+                            }
+                        },
+                        "wpType_nonDim": {
+                            "match": {
+                                "type": "int",
+                                "enum": [
+                                    0,
+                                    1
+                                ]
+                            }
+                        },
+                        "wpLat_deg": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -90,
+                                "maximum": 90
+                            }
+                        },
+                        "wpLon_deg": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -180,
+                                "maximum": 180
+                            }
+                        },
+                        "wpAlt_ft": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "wpTargetGroundSpeed_ftPerSec": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "wpTargetAirSpeed_ftPerSec": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "hoverTime_sec": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "wpTime": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "uasState": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "sensor": {
+                            "match": {
+                                "type": "list",
+                                "children": {
+                                    "match": {
+                                        "type": "str",
+                                        "enum": [
+                                            "aboveTerrainAltitude_ft",
+                                            "accBodyX_ftPerSec2",
+                                            "accBodyY_ftPerSec2",
+                                            "accBodyZ_ftPerSec2",
+                                            "acousticSensorAltitude_ft",
+                                            "aileronActuatorCommand_nonDim",
+                                            "aircraftAirborneState_nonDim",
+                                            "aircraftControlMode",
+                                            "altitudeUsedByAutopilot_ft",
+                                            "angleOfAttack_deg",
+                                            "barometricAltitude_ft",
+                                            "barometricPressure_psi",
+                                            "batteryCurrent_a",
+                                            "batteryVoltage_v",
+                                            "c2NoiseAircraft_dBm",
+                                            "c2NoiseGcs_dBm",
+                                            "c2PacketLossRateAircraftPrct_nonDim",
+                                            "c2PacketLossRateGcsPrct_nonDim",
+                                            "c2RssiAircraft_dBm",
+                                            "c2RssiGcs_dBm",
+                                            "elevatorActuatorCommand_nonDim",
+                                            "flapActuatorCommand_nonDim",
+                                            "groundCourse_deg",
+                                            "groundSpeed_ftPerSec",
+                                            "hdop_nonDim",
+                                            "imageSensorAltitude_ft",
+                                            "indicatedAirspeed_ftPerSec",
+                                            "landingGearActuatorCommand_nonDim",
+                                            "laserSensorAltitude_ft",
+                                            "lateralNavPositionError_ft",
+                                            "lateralNavVelocityError_ftPerSec",
+                                            "minDistToDefinedAreaLateralBoundary_ft",
+                                            "minDistToDefinedAreaVerticalBoundary_ft",
+                                            "motor10ControlThrottleCommand_nonDim",
+                                            "motor11ControlThrottleCommand_nonDim",
+                                            "motor12ControlThrottleCommand_nonDim",
+                                            "motor13ControlThrottleCommand_nonDim",
+                                            "motor14ControlThrottleCommand_nonDim",
+                                            "motor15ControlThrottleCommand_nonDim",
+                                            "motor16ControlThrottleCommand_nonDim",
+                                            "motor1ControlThrottleCommand_nonDim",
+                                            "motor2ControlThrottleCommand_nonDim",
+                                            "motor3ControlThrottleCommand_nonDim",
+                                            "motor4ControlThrottleCommand_nonDim",
+                                            "motor5ControlThrottleCommand_nonDim",
+                                            "motor6ControlThrottleCommand_nonDim",
+                                            "motor7ControlThrottleCommand_nonDim",
+                                            "motor8ControlThrottleCommand_nonDim",
+                                            "motor9ControlThrottleCommand_nonDim",
+                                            "numGpsSat_nonDim",
+                                            "numGpsSatellitesInView_nonDim",
+                                            "opticalSensorAltitude_ft",
+                                            "pitchRate_degPerSec",
+                                            "pitch_deg",
+                                            "radarSensorAltitude_ft",
+                                            "rollRate_degPerSec",
+                                            "roll_deg",
+                                            "rudderActuatorCommand_nonDim",
+                                            "sideSlip_deg",
+                                            "targetAirSpeed_ftPerSec",
+                                            "targetGroundSpeed_ftPerSec",
+                                            "targetWaypointAlt_ft",
+                                            "targetWaypointLat_deg",
+                                            "targetWaypointLon_deg",
+                                            "trueAirspeed_ftPerSec",
+                                            "vdop_nonDim",
+                                            "vehiclePositionAlt_ft",
+                                            "vehiclePositionLat_deg",
+                                            "vehiclePositionLon_deg",
+                                            "velDown_ftPerSec",
+                                            "velEast_ftPerSec",
+                                            "velNorth_ftPerSec",
+                                            "verticalNavPositionError_ft",
+                                            "verticalNavVelocityError_ftPerSec",
+                                            "yawRate_degPerSec",
+                                            "yaw_deg"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "value": {
+                            "match": {
+                                "type": "list",
+                                "children": {
+                                    "match": {
+                                        "type": "float|int"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

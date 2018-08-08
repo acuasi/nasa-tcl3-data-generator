@@ -3,19 +3,30 @@ import sys
 import os
 import yaml
 import importlib
+from pathlib import Path
 
-file_parsers = os.path.abspath(os.path.join(os.path.join(__file__, os.path.pardir), "parser_pieces/file_parsers"))
-variable_parsers = os.path.abspath(os.path.join(os.path.join(__file__, os.path.pardir), "parser_pieces/variable_parsers"))
+file_parsers = os.path.abspath(os.path.join(os.path.dirname(__file__), "parser_pieces/file_parsers"))
+variable_parsers = os.path.abspath(os.path.join(os.path.dirname(__file__), "parser_pieces/variable_parsers"))
+global_parsers = os.path.abspath(os.path.join(os.path.dirname(__file__), "parser_pieces/global_parsers"))
 sys.path.append(file_parsers)
 sys.path.append(variable_parsers)
+sys.path.append(global_parsers)
 
 class GenericParser():
     def __init__(self, specification, options, parserName, files):
         self.specification = specification
         self.jsonModel = self.generateDefaultModel(specification)
         self.parserName = parserName
-        self.fileParserList = options["parsers"][self.parserName]["file_parsers"]
-        self.variableParserList = options["parsers"][self.parserName]["variable_parsers"]
+        if self.parserName in options["parsers"]:
+            self.globalParserList = options["parsers"][self.parserName]["global_parsers"] if "global_parsers" in options["parsers"][self.parserName] else []
+            self.fileParserList = options["parsers"][self.parserName]["file_parsers"] if "file_parsers" in options["parsers"][self.parserName] else []
+            self.variableParserList = options["parsers"][self.parserName]["variable_parsers"] if "variable_parsers" in options["parsers"][self.parserName] else []
+        elif self.parserName in options["sub_parsers"]:
+            self.globalParserList = options["sub_parsers"][self.parserName]["global_parsers"] if "global_parsers" in options["sub_parsers"][self.parserName] else []
+            self.fileParserList = options["sub_parsers"][self.parserName]["file_parsers"] if "file_parsers" in options["sub_parsers"][self.parserName] else []
+            self.variableParserList = options["sub_parsers"][self.parserName]["variable_parsers"] if "variable_parsers" in options["sub_parsers"][self.parserName] else []
+        else:
+            raise Exception("Could not find parser: " + self.parserName + "!")
         self.files = files
 
     def generateDefaultModel(self, specModel=None):
@@ -28,7 +39,7 @@ class GenericParser():
             if isinstance(value, dict):
                 if "match" in value:
                     if "type" in value["match"]:
-                        variableType = value['match']['type']
+                        variableType = value['match']['type'].split("|")[0]
                         tempJSON[key] = eval("{0}()".format(variableType))
                     else:
                         tempJSON[key] = None
@@ -43,10 +54,20 @@ class GenericParser():
         jsonModel = self.jsonModel
         for shortname, source in self.fileParserList.items():
             file_parser_module = importlib.import_module(source['parser'])
-            filePath = source['path']
-            jsonModel = eval("file_parser_module.{0}(jsonModel, filePath)".format(source['parser']))
+            file_path = source['path']
+            jsonModel = eval("file_parser_module.{0}(jsonModel, file_path)".format(source['parser']))
             if not jsonModel:
                 raise Exception("Error executing: " + source['parser'] + ", parser did not return the model.")
+        self.jsonModel = jsonModel
+
+    def executeGlobalParsers(self):
+        jsonModel = self.jsonModel
+        for parser_name in self.globalParserList:
+            file_parser_module = importlib.import_module(parser_name)
+            files = self.files
+            jsonModel = eval("file_parser_module.{0}(jsonModel, files)".format(parser_name))
+            if not jsonModel:
+                raise Exception("Error executing: " + parser_name + ", parser did not return the model.")
         self.jsonModel = jsonModel
 
     def executeVariableParsers(self):
@@ -68,8 +89,9 @@ class GenericParser():
 
 
     def generate(self):
-        # Iterate through file parsers and execute them by passing them the jsonModel and setting it equal to whatever they return
+        # Iterate through global and file parsers and execute them by passing them the jsonModel and setting it equal to whatever they return
         # Then iterate through variable parsers and set the specified variable equal to what they return
+        self.executeGlobalParsers()
         self.executeFileParsers()
         self.executeVariableParsers()
 

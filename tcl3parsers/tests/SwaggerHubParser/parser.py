@@ -92,11 +92,3 @@ class SwaggerHubParser():
         download_url = link.replace("apis", "apiproxy/schema/file") + "/swagger.json"
         spec_json = requests.get(download_url).json()
         return spec_json
-
-if __name__ == '__main__':
-    jsonFile = open("test.json", "r")
-    parser = SwaggerHubParser("CNS1_MOP", json_file=jsonFile, file_path="test.json", link="https://app.swaggerhub.com/apis/utm/tcl3-cns/v2")
-    spec = parser.parse()
-
-    with open("test_out.json", "w") as jsonWriter:
-        jsonWriter.write(json.dumps(spec, indent=4, separators=(',', ': ')))

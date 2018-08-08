@@ -13,13 +13,29 @@ run:
 # The output file name is automatically added as the last
 # parameter with the format {parser_name}_data_flight_{number}.json
 #
+# Parser Naming:
+# The entry function called from the outside world for every parser must be named the same as it's file name.
+#
 # file_parsers:
 # The key of file parsers must correspond with a required_file shortname and the value must be
-# the name of the file parser without .py
+# the name of the file parser without .py. File parsers are
+# File Parsers are passed the model and the filename (in that order) and are expected to return the model.
 #
+# variable_parsers:
+# The key of the variable parser must correspond to a master variable. If the master variable it corresponds to is nested,
+# then use brackets, without inner quotes and with quotes surrounding the entire key optional. Ex. topLevel[subLevel] or 'topLevel[subLevel]'
+# Variable Parsers are passed a dictionary containing all of the filenames, with the file's shortname as the key
+#
+# global_parsers:
+# The use of these parsers is discouraged. These parsers are passed the model and a dictionary containing all of the filenames
+# and are expected to return the model. These parsers are the most risky/inefficient to use as they are passed all of the data
+# and control what the entire model is set to.
+#
+
 parsers:
     cns1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
+        sub_parser: flight_data
         required_files:
             MI_FILE:
                 - mission_insight.csv
@@ -46,14 +62,13 @@ parsers:
 
     cns2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
+        sub_parser: flight_data
         required_files:
             MI_FILE:
                 - mission_insight.csv
                 - ^CNS2_.+Flight.+\.csv
             DF_FILE:
                 - .log
-            FIELD_VARS:
-                - field_vars.csv
             RADAR_FILE:
                 - Radar Flight
         file_parsers:
@@ -73,6 +88,33 @@ parsers:
             uasTruth:
                 parser: uasTruth
 
+    con1:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+        required_files:
+
+
+# These parsers are the same as regular parsers, except they get their files from a parent parser and operate concurrently
+sub_parsers:
+    flight_data:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+                - ^[A-Z]{3,3}[1-9]_.+Flight.+\.csv
+            DF_FILE:
+                - .log
+        global_parsers:
+            - flight_data_df
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        variable_parsers:
+            fType:
+                exact: FLIGHT_DATA
+            auxiliaryUASOperation:
+                parser: auxiliaryUASOperation
+
+
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then
 # the JSON files will be placed in whatever directory the runner file is run from.
@@ -83,5 +125,11 @@ cache_specifications: true
 
 # This is directory where specifications will be checked for before scraping.
 specification_cache_directory: "specifications"
+
+# This directory holds all of the flight format folders and their associated data
+parent_data_directory: example_files
+
+# This directory is inside of a format folder and contains all of the flights
+flight_data_directory: data
 
 ...
