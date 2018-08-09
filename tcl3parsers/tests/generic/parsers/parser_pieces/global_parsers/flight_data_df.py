@@ -78,172 +78,95 @@ def flight_data_df(model, files):
 
                 if boot_ts_flag:
                     timestamp = system_helpers.sys_ts_converter(int(gps["sys_time"]), boot_ts)
-                    sensor = ["vehiclePositionLat_deg"]
-                    value = [gps["lat"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["vehiclePositionLon_deg"]
-                    value = [gps["lon"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["vehiclePositionAlt_ft"]
-                    value = [gps["alt"] * constants.M_TO_FT]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["groundSpeed_ftPerSec"]
-                    value = [gps["speed"] * constants.M_TO_FT]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["groundCourse_deg"]
-                    value = [gps["ground_course"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["hdop_nonDim"]
-                    value = [gps["hdop"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["vdop_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["numGpsSatellitesInView_nonDim"]
-                    value = [gps["num_sats"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["numGpsSat_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
+                    sensors = [
+                        "vehiclePositionLat_deg",
+                        "vehiclePositionLon_deg",
+                        "vehiclePositionAlt_ft",
+                        "groundSpeed_ftPerSec",
+                        "groundCourse_deg",
+                        "hdop_nonDim",
+                        "vdop_nonDim",
+                        "numGpsSatellitesInView_nonDim",
+                        "numGpsSat_nonDim"
+                    ]
+
+                    for sensor in sensors:
+                        if sensor == "vehiclePositionLat_deg":
+                            value = [gps["lat"]]
+                        elif sensor == "vehiclePositionLon_deg":
+                            value = [gps["lon"]]
+                        elif sensor == "vehiclePositionAlt_ft":
+                            value = [gps["alt"] * constants.M_TO_FT]
+                        elif sensor == "groundSpeed_ftPerSec":
+                            value = [gps["speed"] * constants.M_TO_FT]
+                        elif sensor == "groundCourse_deg":
+                            value = [gps["ground_course"]]
+                        elif sensor == "hdop_nonDim":
+                            value = [gps["hdop"]]
+                        elif sensor == "numGpsSatellitesInView_nonDim":
+                            value = [gps["num_sats"]]
+                        else:
+                            value = None
+
+                        state_value = {"ts": timestamp, "sensor": [sensor], "value": value}
+                        uas_state.append(state_value)
 
             # 1 Hz
             if row[0] == "RAD":
                 if boot_ts_flag:
                     sys_time = int(row[1])
                     timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
-                    sensor = ["c2RssiGcs_dBm"]
-                    value = [(float(row[2]) / 1.9) - 127]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["c2RssiAircraft_dBm"]
-                    value = [(float(row[3]) / 1.9) - 127]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["c2NoiseGcs_dBm"]
-                    value = [(float(row[5]) / 1.9) - 127]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["c2NoiseAircraft_dBm"]
-                    value = [(float(row[6]) / 1.9) - 127]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["c2PacketLossRateGcsPrct_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["c2PacketLossRateAircraftPrct_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
 
-                    if take_off_flag:
-                        sensor = ["aircraftAirborneState_nonDim"]
-                        value = [1]
-                    else:
-                        sensor = ["aircraftAirborneState_nonDim"]
-                        value = [0]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-
-                    # Write empty strings for parameters we can't provide values for
-                    # Use current timestamp in state_value
-                    sensor = ["indicatedAirspeed_ftPerSec"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["trueAirspeed_ftPerSec"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["groundSpeed_ftPerSec"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
+                    sensors = [
+                        "c2RssiGcs_dBm",
+                        "c2RssiAircraft_dBm",
+                        "c2NoiseGcs_dBm",
+                        "c2NoiseAircraft_dBm",
+                        "c2PacketLossRateGcsPrct_nonDim",
+                        "c2PacketLossRateAircraftPrct_nonDim",
+                        "aircraftAirborneState_nonDim",
+                        "aircraftAirborneState_nonDim",
+                        "indicatedAirspeed_ftPerSec",
+                        "trueAirspeed_ftPerSec",
+                        "groundSpeed_ftPerSec",
+                        "aileronActuatorCommand_nonDim",
+                        "elevatorActuatorCommand_nonDim",
+                        "rudderActuatorCommand_nonDim",
+                        "flapActuatorCommand_nonDim",
+                        "landingGearActuatorCommand_nonDim",
+                        "angleOfAttack_deg",
+                        "sideSlip_deg",
+                        "targetGroundSpeed_ftPerSec",
+                        "targetAirSpeed_ftPerSec",
+                        "minDistToDefinedAreaLateralBoundary_ft",
+                        "minDistToDefinedAreaVerticalBoundary_ft",
+                        "lateralNavPositionError_ft",
+                        "verticalNavPositionError_ft",
+                        "lateralNavVelocityError_ftPerSec",
+                        "verticalNavVelocityError_ftPerSec",
+                        "radarSensorAltitude_ft",
+                        "acousticSensorAltitude_ft"
+                    ]
 
                     for i in range(num_motors, 16):
-                        sensor = ["motor" + str(i + 1) + "ControlThrottleCommand_nonDim"]
-                        value = None
-                        state_value = {"ts": timestamp, "sensor": sensor, "value": value}
+                        sensors.append("motor" + str(i + 1) + "ControlThrottleCommand_nonDim")
+
+                    for sensor in sensors:
+                        if sensor == "c2RssiGcs_dBm":
+                            value = [(float(row[2]) / 1.9) - 127]
+                        elif sensor == "c2RssiAircraft_dBm":
+                            value = [(float(row[3]) / 1.9) - 127]
+                        elif sensor == "c2NoiseGcs_dBm":
+                            value = [(float(row[5]) / 1.9) - 127]
+                        elif sensor == "c2NoiseAircraft_dBm":
+                            value = [(float(row[6]) / 1.9) - 127]
+                        elif sensor == "aircraftAirborneState_nonDim":
+                            value = [1] if take_off_flag else [0]
+                        else:
+                            value = None
+
+                        state_value = {"ts": timestamp, "sensor": [sensor], "value": value}
                         uas_state.append(state_value)
-
-                    sensor = ["aileronActuatorCommand_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["elevatorActuatorCommand_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["rudderActuatorCommand_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["flapActuatorCommand_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["landingGearActuatorCommand_nonDim"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["angleOfAttack_deg"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["sideSlip_deg"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["targetGroundSpeed_ftPerSec"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["targetAirSpeed_ftPerSec"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["minDistToDefinedAreaLateralBoundary_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["minDistToDefinedAreaVerticalBoundary_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["lateralNavPositionError_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["verticalNavPositionError_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["lateralNavVelocityError_ftPerSec"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["verticalNavVelocityError_ftPerSec"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["radarSensorAltitude_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["acousticSensorAltitude_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-
 
             if row[0] == "BARO":
                 baro["sys_time"] = int(row[1])
@@ -258,35 +181,31 @@ def flight_data_df(model, files):
                     baro_flag = 1
 
                 if boot_ts_flag:
-                    state_value["ts"] = system_helpers.sys_ts_converter(int(baro["sys_time"]), boot_ts)
-                    sensor = ["barometricAltitude_ft"]
-                    value = [baro["alt"] * constants.M_TO_FT]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["barometricPressure_psi"]
-                    value = [baro["pressure"] * constants.PA_TO_PSI]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["altitudeUsedByAutopilot_ft"]
-                    value = [baro["alt"] * constants.M_TO_FT]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["aboveTerrainAltitude_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["laserSensorAltitude_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["opticalSensorAltitude_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["imageSensorAltitude_ft"]
-                    value = None
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
+                    sys_time = int(baro["sys_time"])
+                    timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
+
+                    sensors = [
+                        "barometricAltitude_ft",
+                        "barometricPressure_psi",
+                        "altitudeUsedByAutopilot_ft",
+                        "aboveTerrainAltitude_ft",
+                        "laserSensorAltitude_ft",
+                        "opticalSensorAltitude_ft",
+                        "imageSensorAltitude_ft"
+                    ]
+
+                    for sensor in sensors:
+                        if sensor == "barometricAltitude_ft":
+                            value = [baro["alt"] * constants.M_TO_FT]
+                        elif sensor == "barometricPressure_psi":
+                            value = [baro["pressure"] * constants.PA_TO_PSI]
+                        elif sensor == "altitudeUsedByAutopilot_ft":
+                            value = [baro["alt"] * constants.M_TO_FT]
+                        else:
+                            value = None
+
+                        state_value = {"ts": timestamp, "sensor": [sensor], "value": value}
+                        uas_state.append(state_value)
 
             if row[0] == "RCOU":
                 rcout["sys_time"] = row[1]
@@ -294,10 +213,14 @@ def flight_data_df(model, files):
                     rcout["motor" + str(i+1)] = int(row[i+2])
 
                 if boot_ts_flag:
-                    state_value["ts"] = system_helpers.sys_ts_converter(int(rcout["sys_time"]), boot_ts)
+                    sys_time = int(rcout["sys_time"])
+                    timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
+
                     for i in range(num_motors):
-                        sensor = ["motor" + str(i+1) + "ControlThrottleCommand_nonDim"]
-                        value = [rcout["motor" + str(i+1)]]
+                        motorName = "motor" + str(i+1)
+                        sensor = [motorName + "ControlThrottleCommand_nonDim"]
+                        value = [rcout[motorName]]
+
                         state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                         uas_state.append(state_value)
 
@@ -308,19 +231,19 @@ def flight_data_df(model, files):
                 att["yaw"] = float(row[7])
 
                 if boot_ts_flag:
-                    state_value["ts"] = system_helpers.sys_ts_converter(float(att["sys_time"]), boot_ts)
-                    sensor = ["roll_deg"]
-                    value = [att["roll"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["pitch_deg"]
-                    value = [att["pitch"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["yaw_deg"]
-                    value = [att["yaw"]]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
+                    sys_time = float(att["sys_time"])
+                    timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
+
+                    sensors = [
+                        "roll_deg",
+                        "pitch_deg",
+                        "yaw_deg"
+                    ]
+
+                    for sensor in sensors:
+                        value = [att[sensor[:-4]]]
+                        state_value = {"ts": timestamp, "sensor": [sensor], "value": value}
+                        uas_state.append(state_value)
 
             if row[0] == "NKF1":
                 nkf1["sys_time"] = int(row[1])
@@ -329,19 +252,21 @@ def flight_data_df(model, files):
                 nkf1["vel_down"] = float(row[7])
 
                 if boot_ts_flag:
-                    state_value["ts"] = system_helpers.sys_ts_converter(float(nkf1["sys_time"]), boot_ts)
-                    sensor = ["velNorth_ftPerSec"]
-                    value = [float(nkf1["vel_north"]) * constants.M_TO_FT]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["velEast_ftPerSec"]
-                    value = [float(nkf1["vel_east"]) * constants.M_TO_FT]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
-                    sensor = ["velDown_ftPerSec"]
-                    value = [float(nkf1["vel_down"]) * constants.M_TO_FT]
-                    state_value = {"ts": timestamp, "sensor": sensor, "value": value}
-                    uas_state.append(state_value)
+                    sys_time = float(nkf1["sys_time"])
+                    timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
+
+                    sensors = [
+                        "velNorth_ftPerSec",
+                        "velEast_ftPerSec",
+                        "velDown_ftPerSec"
+                    ]
+
+                    for sensor in sensors:
+                        # Format: vel_[north|east|down]
+                        nkf1_key = sensor[:sensor.find("_")].lower().replace("vel", "vel_")
+                        value = [float(nkf1[nkf1_key]) * constants.M_TO_FT]
+                        state_value = {"ts": timestamp, "sensor": [sensor], "value": value}
+                        uas_state.append(state_value)
 
             if row[0] == "CURR":
                 curr["sys_time"] = int(row[1])
@@ -349,7 +274,9 @@ def flight_data_df(model, files):
                 curr["current"] = float(row[3])
 
                 if boot_ts_flag:
-                    state_value["ts"] = system_helpers.sys_ts_converter(float(curr["sys_time"]), boot_ts)
+                    sys_time = float(curr["sys_time"])
+                    timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
+
                     sensor = ["batteryVoltage_v"]
                     value = [curr["voltage"]]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
@@ -361,7 +288,9 @@ def flight_data_df(model, files):
 
             if row[0] == "RATE":
                 if boot_ts_flag:
-                    state_value["ts"] = system_helpers.sys_ts_converter(float(row[1]), boot_ts)
+                    sys_time = float(row[1])
+                    timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
+
                     sensor = ["rollRate_degPerSec"]
                     value = [float(row[4])]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
@@ -382,7 +311,8 @@ def flight_data_df(model, files):
                 nkf1["acc_z"] = row[7]
 
                 if boot_ts_flag:
-                    timestamp = system_helpers.sys_ts_converter(float(acc1["sys_time"]), boot_ts)
+                    sys_time = float(acc1["sys_time"])
+                    timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
                     sensor = ["accBodyX_ftPerSec2"]
                     value = [float(acc1["acc_x"]) * constants.M_TO_FT]
                     state_value = {"ts": timestamp, "sensor": sensor, "value": value}
@@ -451,9 +381,7 @@ def flight_data_df(model, files):
             # Check for significant increase in barometer alt value
             # and motors spinning up
             if len(baro_avg_values) > 10 and baro_flag:
-                if (baro["alt"] - baro_avg) > 1.5 \
-                and rcout["motor1"] > pwm_thresh \
-                and take_off_flag == 0:
+                if (baro["alt"] - baro_avg) > 1.5 and rcout["motor1"] > pwm_thresh and take_off_flag == 0:
                     take_off_flag = 1
                     aux_op["takeoffPosLat_deg"] = float(gps["lat"])
                     aux_op["takeoffPosLon_deg"] = float(gps["lon"])

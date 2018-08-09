@@ -21,7 +21,6 @@ def auxiliaryUASOperation(files):
     # Get aircraft N number from mi_dict and use that to get take-off weight from
     # aircraft specs file
     takeoff_weight = float(ac_specs_dict[mi_dict["VEHICLE_DESIGNATION"]]["weight_lbs"])
-    num_motors = ac_specs_dict[mi_dict["VEHICLE_DESIGNATION"]]["num_motors"]
     type_of_operation = "Live"
 
     aux_op["flightTestCardName"] = mi_dict["test_card"]
