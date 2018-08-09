@@ -1,0 +1,321 @@
+{
+    "fType": "CNS1",
+    "UTM-TCL3-DMP-RevF-CNSPDF": "UTM-ACUASI-CNS-1.pdf",
+    "basic": {
+        "uvin": "9a5bd71b-ba9b-4bcd-a073-ebbfad8d1a79",
+        "gufi": "5e51cb4e-e156-4860-8295-a64d975be15b",
+        "submitTime": "2018-04-27T20:34:09.009Z",
+        "ussInstanceID": "c9705268-74e1-45ee-b16b-58d567a2cc3e",
+        "ussName": "ussSimulyze"
+    },
+    "plannedContingency": {
+        "plannedContingencyLandingPoint_deg": [
+            {
+                "lat": 64.8575303,
+                "lon": -147.8454761
+            }
+        ],
+        "plannedContingencyLandingPointAlt_ft": [
+            184.51
+        ],
+        "plannedContingencyLoiterAlt_ft": null,
+        "plannedContingencyLoiterRadius_ft": null
+    },
+    "cns1TestType": [
+        {
+            "ts": "2018-04-27T20:35:30.000Z",
+            "cns1TestType_nonDim": 1
+        },
+        {
+            "ts": "2018-04-27T20:36:56.000Z",
+            "cns1TestType_nonDim": 2
+        }
+    ],
+    "contingencyCause": [
+        {
+            "ts": "2018-04-27T20:36:00.208Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:36:15.448Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:36:30.643Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:36:45.881Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:01.073Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:16.184Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:31.423Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:46.619Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:38:01.863Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:38:16.974Z",
+            "contingencyCause_nonDim": [
+                0
+            ]
+        }
+    ],
+    "contingencyResponse": [
+        {
+            "ts": "2018-04-27T20:36:00.208Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:36:15.448Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:36:30.643Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:36:45.881Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:37:01.073Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:37:16.184Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:37:31.423Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:37:46.619Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:38:01.863Z",
+            "contingencyResponse_nonDim": 0
+        },
+        {
+            "ts": "2018-04-27T20:38:16.974Z",
+            "contingencyResponse_nonDim": 0
+        }
+    ],
+    "contingencyLoiterAlt": null,
+    "contingencyLoiterType": null,
+    "contingencyLoiterRadius": null,
+    "contingencyLanding": [
+        {
+            "ts": "2018-04-27T20:36:00.208Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8574607,
+                    "lon": -147.8454486
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                187.75
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:36:15.448Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8573052,
+                    "lon": -147.8455832
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                201.98
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:36:30.643Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.857187,
+                    "lon": -147.8447122
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                210.56
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:36:45.881Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8569924,
+                    "lon": -147.8436221
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                211.33
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:01.073Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8569371,
+                    "lon": -147.8442662
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                214.03
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:16.184Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8569923,
+                    "lon": -147.8454365
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                214.61
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:31.423Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8569859,
+                    "lon": -147.8454369
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                213.69
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:37:46.619Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8572259,
+                    "lon": -147.8459831
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                212.41
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:38:01.863Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8572791,
+                    "lon": -147.8455366
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                202.27
+            ]
+        },
+        {
+            "ts": "2018-04-27T20:38:16.974Z",
+            "contingencyLandingPoint_deg": [
+                {
+                    "lat": 64.8575272,
+                    "lon": -147.8454577
+                }
+            ],
+            "contingencyLandingPointAlt_ft": [
+                186.1
+            ]
+        }
+    ],
+    "maneuverCommand": [
+        {
+            "ts": "2018-04-27T20:35:30.000Z",
+            "maneuverCommand": "Takeoff in Auto mode and begin flight plan."
+        },
+        {
+            "ts": "2018-04-27T20:36:56.000Z",
+            "maneuverCommand": "Fly to POI in Guided mode."
+        }
+    ],
+    "timeManeuverCommandSent": [
+        {
+            "ts": "2018-04-27T20:35:30.000Z"
+        },
+        {
+            "ts": "2018-04-27T20:36:56.000Z"
+        }
+    ],
+    "estimatedTimeToVerifyManeuver": [
+        {
+            "ts": "2018-04-27T20:35:30.000Z",
+            "estimatedTimeToVerifyManeuver_sec": 1.5
+        },
+        {
+            "ts": "2018-04-27T20:36:56.000Z",
+            "estimatedTimeToVerifyManeuver_sec": 0.25
+        }
+    ],
+    "timeManeuverVerification": [
+        {
+            "ts": "2018-04-27T20:36:05.881Z"
+        },
+        {
+            "ts": "2018-04-27T20:37:32.044Z"
+        }
+    ],
+    "primaryLinkDescription": [
+        {
+            "ts": "2018-04-27T20:35:30.000Z",
+            "primaryLinkDescription": "The two RFD900 Radio Modems are a high powered 900Mhz, ISM band radio modems\ndesigned for long range communication operating between 902 to 928Mhz at a 57600\nbaud rate."
+        }
+    ],
+    "redundantLinkDescription": [
+        {
+            "ts": "2018-04-27T20:36:56.000Z",
+            "redundantLinkDescription": "The two RFD900 Radio Modems are a high powered 900Mhz, ISM band radio modems\ndesigned for long range communication operating between 902 to 928Mhz at a 57600\nbaud rate."
+        }
+    ],
+    "timePrimaryLinkDisconnect": [
+        {
+            "ts": "2018-04-27T20:36:10.000Z"
+        }
+    ],
+    "timeRedundantLinkSwitch": [
+        {
+            "ts": "2018-04-27T20:36:10.000Z"
+        }
+    ]
+}

@@ -6,7 +6,7 @@ import helpers.system_helpers as system_helpers
 import helpers.constants as constants
 
 def flight_data_df(model, files):
-
+    """Global parser for generating flight_data, primarily from the dataflash file"""
     with open(files["MI_FILE"], "r") as mi_file:
         mi_reader = csv.DictReader(mi_file)
         for row in mi_reader:
@@ -361,7 +361,7 @@ def flight_data_df(model, files):
                         wp_type = 0
                     else:
                         wp_type = None
-                        
+
                     waypoint = {"wpTime": timestamp, "wpAlt_ft": cmd["Alt"], "hoverTime_sec": 0,
                                 "wpLon_deg": cmd["Lon"], "wpLat_deg": cmd["Lat"],
                                 "wpSequenceNum_nonDim": cmd["CNum"], "wpType_nonDim": wp_type,

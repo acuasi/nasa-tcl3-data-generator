@@ -1,0 +1,403 @@
+{
+    "basic": {
+        "uvin": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "gufi": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "submitTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "ussName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "ussInstanceID": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        }
+    },
+    "fType": {
+        "match": {
+            "type": "str",
+            "enum": [
+                "CON1"
+            ]
+        }
+    },
+    "UTM-TCL3-DMP-RevF-CONPDF": {
+        "match": {
+            "type": "str",
+            "pattern": "^UTM-[^-]+-CON-[0-9]+.pdf$"
+        }
+    },
+    "plannedBvlosLandingPoint_deg": {
+        "match": {
+            "type": "list",
+            "minLength": 1,
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "lat": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -90.0,
+                                "maximum": 90.0
+                            }
+                        },
+                        "lon": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -180.0,
+                                "maximum": 180.0
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "plannedBvlosLandingPointAlt_ft": {
+        "match": {
+            "type": "list",
+            "minLength": 1,
+            "children": {
+                "match": {
+                    "type": "float|int"
+                }
+            }
+        }
+    },
+    "actualBvlosLandingPoint": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "actualBvlosLandingPoint_deg": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "dict",
+                                        "children": {
+                                            "lat": {
+                                                "match": {
+                                                    "type": "float|int",
+                                                    "minimum": -90.0,
+                                                    "maximum": 90.0
+                                                }
+                                            },
+                                            "lon": {
+                                                "match": {
+                                                    "type": "float|int",
+                                                    "minimum": -180.0,
+                                                    "maximum": 180.0
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "actualBVLOSLandingPointAlt_ft": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "float|int"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "landingOffset_ft": {
+        "match": {
+            "type": "list",
+            "minLength": 1,
+            "children": {
+                "match": {
+                    "type": "float|int",
+                    "minimum": 0
+                }
+            }
+        }
+    },
+    "alongTrackDistanceFlown_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "distanceFromLaunchSite_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "bvlosLandingZoneSize_ft": {
+        "match": {
+            "type": "list",
+            "minLength": 1,
+            "children": {
+                "match": {
+                    "type": "float|int",
+                    "minimum": 0
+                }
+            }
+        }
+    },
+    "bvlosLandingZoneStructure_deg": {
+        "match": {
+            "type": "list",
+            "minLength": 1,
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "lat": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -90.0,
+                                "maximum": 90.0
+                            }
+                        },
+                        "lon": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -180.0,
+                                "maximum": 180.0
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "bvlosLandingZonePeople_deg": {
+        "match": {
+            "type": "list",
+            "minLength": 1,
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "lat": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -90.0,
+                                "maximum": 90.0
+                            }
+                        },
+                        "lon": {
+                            "match": {
+                                "type": "float|int",
+                                "minimum": -180.0,
+                                "maximum": 180.0
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "wxBvlosLandingZone": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "wxBvlosLandingZone1Data": {
+                            "temp": {
+                                "match": {
+                                    "type": "float|int"
+                                }
+                            },
+                            "pressure": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 5,
+                                    "maximum": 40
+                                }
+                            },
+                            "windspeed": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 0,
+                                    "maximum": 1000
+                                }
+                            },
+                            "windDir": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 0,
+                                    "maximum": 360
+                                }
+                            }
+                        },
+                        "wxBvlosLandingZone2Data": {
+                            "temp": {
+                                "match": {
+                                    "type": "float|int"
+                                }
+                            },
+                            "pressure": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 5,
+                                    "maximum": 40
+                                }
+                            },
+                            "windspeed": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 0,
+                                    "maximum": 1000
+                                }
+                            },
+                            "windDir": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 0,
+                                    "maximum": 360
+                                }
+                            }
+                        },
+                        "wxBvlosLandingZone3Data": {
+                            "temp": {
+                                "match": {
+                                    "type": "float|int"
+                                }
+                            },
+                            "pressure": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 5,
+                                    "maximum": 40
+                                }
+                            },
+                            "windspeed": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 0,
+                                    "maximum": 1000
+                                }
+                            },
+                            "windDir": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": 0,
+                                    "maximum": 360
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "c2": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "c2RssiAircraft_dBm": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "c2RssiGcs_dBm": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "c2NoiseAircraft_dBm": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "c2NoiseGcs_dBm": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "c2PacketLoss": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "c2PacketLossRateAircraftPrct_nonDim": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        },
+                        "c2PacketLossRateGcsPrct_nonDim": {
+                            "match": {
+                                "type": "float|int"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

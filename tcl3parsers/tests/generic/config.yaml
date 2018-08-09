@@ -52,7 +52,7 @@ parsers:
                 parser: field_vars
         variable_parsers:
             fType:
-                exact: "CNS1"
+                exact: CNS1
             UTM-TCL3-DMP-RevF-CNSPDF:
                 exact: UTM-ACUASI-CNS-1.pdf
             plannedContingency[plannedContingencyLoiterAlt_ft]:
@@ -92,7 +92,21 @@ parsers:
 
     con1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+        sub_parser: flight_data
         required_files:
+            MI_FILE:
+                - mission_insight.csv
+                - CON1_.+Flight.+\.csv
+            DF_FILE:
+                - .log
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        variable_parsers:
+            fType:
+                exact: CON1
+            UTM-TCL3-DMP-RevF-CNSPDF:
+                exact: UTM-ACUASI-CON-1.pdf
 
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
@@ -136,7 +150,7 @@ cache_specifications: true
 specification_cache_directory: "specifications"
 
 # This directory holds all of the flight format folders and their associated data
-parent_data_directory: example_files
+parent_data_directory: flight_files
 
 # This directory is inside of a format folder and contains all of the flights
 flight_data_directory: data

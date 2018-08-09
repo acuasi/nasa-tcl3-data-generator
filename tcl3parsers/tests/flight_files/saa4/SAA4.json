@@ -1,0 +1,68 @@
+{
+    "fType": "SAA4",
+    "basic": {
+        "uvin": "dba3e39d-c822-43bf-999f-2e558d6d5488",
+        "gufi": "cfd401cd-a303-4ce5-95e7-8756ad9dc5fc",
+        "submitTime": "2018-05-09T20:35:04.933Z",
+        "ussInstanceID": "c9705268-74e1-45ee-b16b-58d567a2cc3e",
+        "ussName": "ussSimulyze"
+    },
+    "geoFence": {
+        "geoFenceAvailable_nonDim": 1,
+        "geoFenceStartTime": [
+            "2018-05-09T20:56:33.000Z"
+        ],
+        "geoFenceEndTime": [
+            "2018-04-18T21:06:39.000Z"
+        ],
+        "geoFenceType_nonDim": 0,
+        "geoFenceMinAltitude_ft": 0,
+        "geoFenceMaxAltitude_ft": 1181,
+        "geoFenceCircularPointLat_deg": 64.8547582,
+        "geoFenceCircularPointLon_deg": -147.8588913,
+        "geoFenceCircularRadius_ft": 16141,
+        "geoFenceEnable": [
+            {
+                "ts": "2018-05-09T20:56:33.000Z",
+                "geoFenceEnable_nonDim": 0
+            }
+        ],
+        "geoFenceDynamicPolygonPoint": null
+    },
+    "typeOfSaaSensor": "Radar",
+    "intruder": {
+        "ts": "2018-05-09T20:57:07Z",
+        "intruderPositionLat_deg": 64.8547639,
+        "intruderPositionLon_deg": -147.8597525,
+        "intruderPositionAlt_ft": 570.5,
+        "intruderGroundSpeed_ftPerSec": 10.78173028,
+        "intruderVelNorth_ftPerSec": null,
+        "intruderVelEast_ftPerSec": null,
+        "intruderVelDown_ftPerSec": null,
+        "intruderGroundCourse_deg": null
+    },
+    "relativeHeadingAtFirstDetection_deg": null,
+    "azimuthSensorMin_deg": -60,
+    "azimuthSensorMax_deg": 60,
+    "elevationSensorMin_deg": -40,
+    "elevationSensorMax_deg": 40,
+    "saaSensorMinSlantRange_ft": 32.8,
+    "saaSensorMaxSlantRange_ft": 11152.0,
+    "minRcsOfSensor_ft2": 0.032799999999999996,
+    "maxRcsOfSensor_ft2": 3280.0,
+    "updateRateSensor_hz": 5,
+    "saaSensorAzimuthAccuracy_deg": 1,
+    "saaSensorAltitudeAccuracy_ft": null,
+    "horRangeAccuracy_ft": null,
+    "verRangeAccuracy_ft": null,
+    "slantRangeAccuracy_ft": 10.66,
+    "timeToTrack_sec": 1.0,
+    "probabilityFalseAlarmPrct_nonDim": null,
+    "probabilityIntruderDetectionPrct_nonDim": null,
+    "targetTrackCapacity_nonDim": 20,
+    "dataPacketRatio_nonDim": null,
+    "transmissionDelay_sec": null,
+    "numberOfLostTracks_nonDim": null,
+    "intruderRadarCrossSection_ft2": 0.158,
+    "txRadioFrequencyPower_w": 538.9
+}
