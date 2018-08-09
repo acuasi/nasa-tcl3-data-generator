@@ -357,8 +357,11 @@ def flight_data_df(model, files):
                     # aicraftFlightPlan values
                     if cmd["CId"] == 16:
                         wp_type = 1
-                    if cmd["CId"] == 82:
+                    elif cmd["CId"] == 82:
                         wp_type = 0
+                    else:
+                        wp_type = None
+                        
                     waypoint = {"wpTime": timestamp, "wpAlt_ft": cmd["Alt"], "hoverTime_sec": 0,
                                 "wpLon_deg": cmd["Lon"], "wpLat_deg": cmd["Lat"],
                                 "wpSequenceNum_nonDim": cmd["CNum"], "wpType_nonDim": wp_type,
@@ -372,7 +375,7 @@ def flight_data_df(model, files):
                     timestamp = system_helpers.sys_ts_converter(float(row[1]), boot_ts)
                     sensor = ["aircraftControlMode"]
                     try:
-                        value = ac_cntrl_mode[mode]
+                        value = [ac_cntrl_mode[mode]]
                         state_value = {"ts": timestamp, "sensor": sensor, "value": value}
                         uas_state.append(state_value)
                     except KeyError:
