@@ -16,7 +16,7 @@ REDUN_CMD = """Fly to POI in Guided mode."""
 
 LINK = {"RFD900": RFD900, "UAVCast": UAVCAST}
 
-def field_vars(model, fileName):
+def field_vars_cns1(model, fileName):
     PRIMARY = ""
     REDUN = ""
     ac_link = "Primary"

@@ -42,6 +42,7 @@ class Runner():
         self.outFile = outFile
         self.parserFlightOutputFolder = ""
         self.outputFolderPrepend = outputFolderPrepend
+        self.isSubParser = parserName not in options['parsers']
 
     def getRequiredFlightFile(self, flightFiles, requiredFile, requirements):
         flightPath = self.dataDirectory +  "/" + self.flightName
@@ -52,8 +53,23 @@ class Runner():
         print("Data malformed, " + requiredFile + " not found for " + self.flightName + " in " + flightPath)
         exit()
 
-    def setFlightInfo(self, flightName, requiredFiles, specLink, cache_specs, outputFolder, specCacheDir):
+    def setFlightInfo(self, flightName):
         """Adds all information and checks files for the specified flight"""
+        cache_specs = self.options['cache_specifications']
+        outputFolder = self.options['output_directory']
+        specCacheDir = self.options['specification_cache_directory']
+        specNameOverride = ""
+        if not self.isSubParser:
+            requiredFiles = self.options['parsers'][self.parserName]['required_files']
+            specLink = self.options['parsers'][self.parserName]['swagger_hub_spec']
+            if "name_override" in self.options['parsers'][self.parserName]:
+                specNameOverride = self.options['parsers'][self.parserName]['name_override']
+        else:
+            requiredFiles = self.options['sub_parsers'][self.parserName]['required_files']
+            specLink = self.options['sub_parsers'][self.parserName]['swagger_hub_spec']
+            if "name_override" in self.options['sub_parsers'][self.parserName]:
+                specNameOverride = self.options['sub_parsers'][self.parserName]['name_override']
+
         self.flightName = flightName
         flightPath = self.dataDirectory +  "/" + self.flightName
         flightFiles = [name for name in os.listdir(flightPath)]
@@ -83,7 +99,10 @@ class Runner():
 
         escapedFlightName = flightName.lower().replace(" ", "_")
 
-        parserFlightOutputFolder = "{0}/{1}".format(parserOutputFolder, self.outputFolderPrepend + "_" + escapedFlightName)
+        # Only add separator if there is something to prepend
+        if self.outputFolderPrepend:
+            self.outputFolderPrepend += "_"
+        parserFlightOutputFolder = "{0}/{1}".format(parserOutputFolder, self.outputFolderPrepend + escapedFlightName)
 
         if not os.path.isdir(parserFlightOutputFolder):
             os.mkdir(parserFlightOutputFolder)
@@ -101,14 +120,21 @@ class Runner():
         if not os.path.isdir(specCacheDir):
             os.mkdir(specCacheDir)
 
-        spec_output_name = "{0}/{1}_specification.json".format(specCacheDir, self.parserName)
+        specName = specNameOverride if specNameOverride else self.parserName
+
+        spec_output_name = "{0}/{1}_specification.json".format(specCacheDir, specName)
         if cache_specs and os.path.isfile(spec_output_name):
             specification = json.load(open(spec_output_name, "r"))
         else:
-            if re.match(r".+[0-9]", self.parserName):
-                mopName = "{0}_MOP".format(self.parserName.upper())
+            # First check if user set an override name. If so, this is the mopName. If not, then check to see if the parser name ends in a number
+            # if it does (like in the case of cns1) then try using the {parserName}_MOP as the mopName. If it is still different, then just use
+            # an uppercase version of the parserName (ex. FLIGHT_DATA)
+            if specNameOverride:
+                mopName = specName
+            elif re.match(r".+[0-9]", specName):
+                mopName = "{0}_MOP".format(specName.upper())
             else:
-                mopName = self.parserName.upper()
+                mopName = specName.upper()
             spec_parser = SwaggerHubParser.SwaggerHubParser(mopName, link=specLink)
             specification = spec_parser.parse()
             if cache_specs:
@@ -137,50 +163,54 @@ class Runner():
         runner = unittest.TextTestRunner(verbosity=3)
         return runner.run(self.suite)
 
-def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outFile="", parentParserName="", outputFolderPrepend=""):
+def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, outFile="", parentParserName="", outputFolderPrepend=""):
     testRunner = Runner(dataDirectory, options, parserName, outFile, parentParserName, outputFolderPrepend)
-    testSet = testRunner.setFlightInfo(flightName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir)
+    testSet = testRunner.setFlightInfo(flightName)
     print("Testing against: " + flightName)
     testSet = testRunner.run()
     print("Tested against: " + flightName + "\n\n")
     return len(testSet.failures) != 0
 
-def runAgainstAllData(dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outputFolderPrepend=[]):
+def runAgainstAllData(dataDirectory, options, parserName, outputFolderPrepend=[]):
     """Runs test against every flight in the specified dataDirectory folder"""
     flightData = [name for name in os.listdir(dataDirectory) if os.path.isdir(dataDirectory + "/" + name)]
 
     mainFlightDataDirectory = True
     # Find the lowest level directory that doesn't have any subdirectories in it and then run against its parent directory, ignore any directory with subdirectories
     for directoryItem in flightData:
-        if os.path.isdir(dataDirectory + "/" + directoryItem):
-            tempOutputFolderPrepend = outputFolderPrepend[:]
-            tempOutputFolderPrepend.append(directoryItem.lower().replace(" ", "_"))
-            mainFlightDataDirectory = False
-            runAgainstAllData(dataDirectory + "/" + directoryItem, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, tempOutputFolderPrepend)
+        subDirectory = dataDirectory + "/" + directoryItem
+        if os.path.isdir(subDirectory):
+            # We want to find the directory that contains directories that DONT contain directories, so we need to perform a look ahead.
+            # When it finally reaches the data directory containing said folders, then this should only check the first folder and break once.
+            # This means that the bottom level flight directories (technically only the first one) cannot have folders within them.
+            for subDirectoryItem in os.listdir(subDirectory):
+                if os.path.isdir(subDirectory + "/" + subDirectoryItem):
+                    tempOutputFolderPrepend = outputFolderPrepend[:]
+                    tempOutputFolderPrepend.append(directoryItem.lower().replace(" ", "_"))
+                    runAgainstAllData(subDirectory, options, parserName, tempOutputFolderPrepend)
+                    mainFlightDataDirectory = False
+                    break
+            if mainFlightDataDirectory:
+                break
 
     if not mainFlightDataDirectory:
         return
-    else:
-        outputFolderPrepend = "_".join(outputFolderPrepend[:-1])
-        dataDirectory = dataDirectory[:dataDirectory.rfind("/")]
-        flightData = [name for name in os.listdir(dataDirectory) if os.path.isdir(dataDirectory + "/" + name)]
+
+    outputFolderPrepend = "_".join(outputFolderPrepend)
 
     flightData.sort()
     for flightName in flightData:
-        failure = runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outputFolderPrepend=outputFolderPrepend)
+        failure = runAgainstSingleFlight(flightName, dataDirectory, options, parserName, outputFolderPrepend=outputFolderPrepend)
         if failure:
             break
 
         if "sub_parser" in options["parsers"][parserName].keys():
             subParserName = options["parsers"][parserName]["sub_parser"]
-            subParserRequiredFiles = options['sub_parsers'][subParserName]['required_files']
-            subParserSpecLink = options['sub_parsers'][subParserName]['swagger_hub_spec']
             subParserOutputFile = subParserName + ".json"
 
             print("Starting " + parserName + "'s sub-parser: " + subParserName)
 
-            failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName,
-                                             subParserRequiredFiles, subParserSpecLink, cache_specs, outputFolder, specCacheDir, subParserOutputFile, parserName, outputFolderPrepend)
+            failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
             if failure:
                 break
 
@@ -195,10 +225,7 @@ def loadConfigAndRun():
 
     for parser_name in options['run']:
         flightDataDirectory = testing_directory + "/" + options["parent_data_directory"] + "/" + parser_name + "/" + options['flight_data_directory']
-        parser_required_files = options['parsers'][parser_name]['required_files']
-        specification_link = options['parsers'][parser_name]['swagger_hub_spec']
-        runAgainstAllData(flightDataDirectory, options, parser_name, parser_required_files,
-                          specification_link, options['cache_specifications'], options['output_directory'], options['specification_cache_directory'])
+        runAgainstAllData(flightDataDirectory, options, parser_name)
 
 if __name__ == '__main__':
     loadConfigAndRun()

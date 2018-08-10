@@ -96,7 +96,6 @@ parsers:
         required_files:
             MI_FILE:
                 - mission_insight.csv
-                - CON1_.+Flight.+\.csv
             DF_FILE:
                 - .log
             FIELD_VARS:
@@ -121,33 +120,22 @@ parsers:
                 exception: None
             c2PacketLoss[c2PacketLossRateGcsPrct_nonDim]:
                 exception: None
-    con2_ardu:
+    con2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
-        sub_parser: flight_data
+        # sub_parser: flight_data
         required_files:
             MI_FILE:
                 - mission_insight.csv
-                - CON2_.+Flight.+\.csv
-            DF_FILE:
-                - .log
-            FIELD_VARS:
-                - field_vars.csv
-            WEATHER_FILE:
-                - _weather_file.csv
         file_parsers:
             MI_FILE:
                 parser: mission_insight
-            FIELD_VARS:
-                parser: generic_field_vars
-            DF_FILE:
-                parser: con_data_flash
-            WEATHER_FILE:
-                parser: weather_file
         variable_parsers:
             fType:
                 exact: CON2
             UTM-TCL3-DMP-RevF-CONPDF:
                 exact: UTM-ACUASI-CON-2.pdf
+            UTM-TCL3-DMP-RevF-CONKML:
+                exact: UTM-ACUASI-CON-2.kml
 
 
 

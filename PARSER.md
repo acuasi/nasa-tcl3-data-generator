@@ -36,7 +36,7 @@ All configuration for the generic parser is done under the config.yaml file in t
     - The subdirectory containing all flight data for a single parser
 
 ### Configuring a parser
-New parsers are added under the *parsers* section of the config file. While any name can be specified for the parser, it must correspond to a folder name under the specified `parent_data_directory`.
+New parsers are added under the *parsers* section of the config file. The parser name must correspond to a folder name under the specified `parent_data_directory`.
 
 For example, if the `parent_data_directory` is named *flight_files* and a parser is to be named *cns1*, then the *flight_files* directory should look like this:
 ```
@@ -48,6 +48,15 @@ and the configuration for the parser should now start with this:
 ```yaml
 parsers:
     cns1:
+```
+
+In addition to this, the parser name is used to find the correct specification in the SwaggerHub file. By default, if the parser's name ends in a number, like in the case of cns1, then the name *CNS1_MOP* is looked for. If the parser's name doesn't end in a number, like in the case of *flight_data*, then an uppercase version of the name is searched for (ex. *FLIGHT_DATA*). To override this name search, a different specification name can be added by using the key `name_override`. If the specified name is not found in the SwaggerHub file, it will immediately fail.
+
+Example override:
+```yaml
+parsers:
+    cns1:
+        name_override: NEW_NAME_TO_SEARCH_FOR
 ```
 
 The next important thing to configure under a parser is the SwaggerHub specification. This can be specified by just passing its URL to the `swagger_hub_spec` key and it will be automatically scraped from the internet. This is where the `cache_specifications` option comes into play now; it is relatively expensive to have to download the specification file and convert it to a format that can be used by the parser, so by caching it, a copy of the specification converted to a format for internal use will be saved in the `specification_cache_directory`. The configuration for the parser should now look like:
