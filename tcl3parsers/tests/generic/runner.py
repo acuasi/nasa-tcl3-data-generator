@@ -25,7 +25,7 @@ import structure_tests
 
 class Runner():
     """Executes parser and runs the testing suite"""
-    def __init__(self, dataDirectory, options, parserName, outFile="", parentParserName=""):
+    def __init__(self, dataDirectory, options, parserName, outFile="", parentParserName="", outputFolderPrepend=""):
         """Loads all tests"""
         tests = unittest.TestSuite()
         loader = unittest.TestLoader()
@@ -41,6 +41,7 @@ class Runner():
         self.files = {}
         self.outFile = outFile
         self.parserFlightOutputFolder = ""
+        self.outputFolderPrepend = outputFolderPrepend
 
     def getRequiredFlightFile(self, flightFiles, requiredFile, requirements):
         flightPath = self.dataDirectory +  "/" + self.flightName
@@ -82,7 +83,7 @@ class Runner():
 
         escapedFlightName = flightName.lower().replace(" ", "_")
 
-        parserFlightOutputFolder = "{0}/{1}".format(parserOutputFolder, escapedFlightName)
+        parserFlightOutputFolder = "{0}/{1}".format(parserOutputFolder, self.outputFolderPrepend + "_" + escapedFlightName)
 
         if not os.path.isdir(parserFlightOutputFolder):
             os.mkdir(parserFlightOutputFolder)
@@ -136,20 +137,37 @@ class Runner():
         runner = unittest.TextTestRunner(verbosity=3)
         return runner.run(self.suite)
 
-def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outFile="", parentParserName=""):
-    testRunner = Runner(dataDirectory, options, parserName, outFile, parentParserName)
+def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outFile="", parentParserName="", outputFolderPrepend=""):
+    testRunner = Runner(dataDirectory, options, parserName, outFile, parentParserName, outputFolderPrepend)
     testSet = testRunner.setFlightInfo(flightName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir)
     print("Testing against: " + flightName)
     testSet = testRunner.run()
     print("Tested against: " + flightName + "\n\n")
     return len(testSet.failures) != 0
 
-def runAgainstAllData(dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir):
+def runAgainstAllData(dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outputFolderPrepend=[]):
     """Runs test against every flight in the specified dataDirectory folder"""
     flightData = [name for name in os.listdir(dataDirectory) if os.path.isdir(dataDirectory + "/" + name)]
+
+    mainFlightDataDirectory = True
+    # Find the lowest level directory that doesn't have any subdirectories in it and then run against its parent directory, ignore any directory with subdirectories
+    for directoryItem in flightData:
+        if os.path.isdir(dataDirectory + "/" + directoryItem):
+            tempOutputFolderPrepend = outputFolderPrepend[:]
+            tempOutputFolderPrepend.append(directoryItem.lower().replace(" ", "_"))
+            mainFlightDataDirectory = False
+            runAgainstAllData(dataDirectory + "/" + directoryItem, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, tempOutputFolderPrepend)
+
+    if not mainFlightDataDirectory:
+        return
+    else:
+        outputFolderPrepend = "_".join(outputFolderPrepend[:-1])
+        dataDirectory = dataDirectory[:dataDirectory.rfind("/")]
+        flightData = [name for name in os.listdir(dataDirectory) if os.path.isdir(dataDirectory + "/" + name)]
+
     flightData.sort()
     for flightName in flightData:
-        failure = runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir)
+        failure = runAgainstSingleFlight(flightName, dataDirectory, options, parserName, parserRequiredFiles, specLink, cache_specs, outputFolder, specCacheDir, outputFolderPrepend=outputFolderPrepend)
         if failure:
             break
 
@@ -162,7 +180,7 @@ def runAgainstAllData(dataDirectory, options, parserName, parserRequiredFiles, s
             print("Starting " + parserName + "'s sub-parser: " + subParserName)
 
             failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName,
-                                             subParserRequiredFiles, subParserSpecLink, cache_specs, outputFolder, specCacheDir, subParserOutputFile, parserName)
+                                             subParserRequiredFiles, subParserSpecLink, cache_specs, outputFolder, specCacheDir, subParserOutputFile, parserName, outputFolderPrepend)
             if failure:
                 break
 
