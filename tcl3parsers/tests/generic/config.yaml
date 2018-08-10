@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns1
+    - con1
 
 # Specify all new parsers below.
 
@@ -47,9 +47,9 @@ parsers:
             MI_FILE:
                 parser: mission_insight
             DF_FILE:
-                parser: data_flash
+                parser: cns_data_flash
             FIELD_VARS:
-                parser: field_vars
+                parser: field_vars_cns1
         variable_parsers:
             fType:
                 exact: CNS1
@@ -75,7 +75,7 @@ parsers:
             MI_FILE:
                 parser: mission_insight
             DF_FILE:
-                parser: data_flash
+                parser: cns_data_flash
         variable_parsers:
             fType:
                 exact: CNS2
@@ -99,14 +99,28 @@ parsers:
                 - CON1_.+Flight.+\.csv
             DF_FILE:
                 - .log
+            FIELD_VARS:
+                - field_vars.csv
+            WEATHER_FILE:
+                - _weather_file.csv
         file_parsers:
             MI_FILE:
                 parser: mission_insight
+            FIELD_VARS:
+                parser: generic_field_vars
+            DF_FILE:
+                parser: con_data_flash
+            WEATHER_FILE:
+                parser: weather_file
         variable_parsers:
             fType:
                 exact: CON1
-            UTM-TCL3-DMP-RevF-CNSPDF:
+            UTM-TCL3-DMP-RevF-CONPDF:
                 exact: UTM-ACUASI-CON-1.pdf
+            c2PacketLoss[c2PacketLossRateAircraftPrct_nonDim]:
+                exception: None
+            c2PacketLoss[c2PacketLossRateGcsPrct_nonDim]:
+                exception: None
 
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder

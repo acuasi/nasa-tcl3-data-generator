@@ -1,9 +1,8 @@
 import json
 import helpers.system_helpers
 
-
-def data_flash(model, fileName):
-    """Parse arducopter dataflash log file (.log format) and add to cns2 data JSON"""
+def cns_data_flash(model, fileName):
+    """Parse arducopter dataflash log file (.log format) and add to cns data JSON"""
     radio_count = 0
     arm_flag = 0
     boot_ts_flag = 0
@@ -88,4 +87,6 @@ def data_flash(model, fileName):
 
 def emptyFieldIfNull(field, model):
     """Get rid of the 'None' default value so that data can be appended"""
-    model[field] = [] if model[field] == [None] else model[field]
+    if field in model:
+        model[field] = [] if model[field] == [None] else model[field]
+    return model
