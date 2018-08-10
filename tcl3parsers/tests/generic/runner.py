@@ -164,12 +164,55 @@ class Runner():
         return runner.run(self.suite)
 
 def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, outFile="", parentParserName="", outputFolderPrepend=""):
+    # If there aren't any required files, then be lazy and stop immediately
+    if parserName in options['parsers'] and 'required_files' not in options['parsers'][parserName]:
+        return
+    elif parserName in options['sub_parsers'] and 'required_files' not in options['sub_parsers'][parserName]:
+        return
+
     testRunner = Runner(dataDirectory, options, parserName, outFile, parentParserName, outputFolderPrepend)
     testSet = testRunner.setFlightInfo(flightName)
     print("Testing against: " + flightName)
     testSet = testRunner.run()
     print("Tested against: " + flightName + "\n\n")
     return len(testSet.failures) != 0
+
+
+def runSubParsers(flightName, dataDirectory, options, parserName, outputFolderPrepend):
+    subParsers = options["parsers"][parserName]["sub_parsers"]
+    if isinstance(subParsers, list):
+        for subParser in subParsers:
+            if isinstance(subParser, str):
+                subParserName = subParser
+            elif isinstance(subParser, dict):
+                subParserName = list(subParser)[0]
+                if isinstance(subParser[subParserName], dict) and "if_in" in subParser[subParserName]:
+                    ifInConditions = subParser[subParserName]["if_in"]
+                    matchesIfInCondition = False
+                    for ifInCondition in ifInConditions:
+                        fullPath = dataDirectory + "/" + flightName
+                        # Only run if matches a condition
+                        if ifInCondition in fullPath:
+                            matchesIfInCondition = True
+                            break
+                    if not matchesIfInCondition:
+                        continue
+            else:
+                print("Misconfigured sub_parsers option in parsers section, skipping...")
+                return False
+            subParserOutputFile = subParserName + ".json"
+            print("Starting " + parserName + "'s sub-parser: " + subParserName)
+            failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
+            if failure:
+                return failure
+    elif isinstance(subParsers, str):
+        subParserName = subParsers
+        subParserOutputFile = subParserName + ".json"
+        print("Starting " + parserName + "'s sub-parser: " + subParserName)
+        return runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
+
+    return False
+
 
 def runAgainstAllData(dataDirectory, options, parserName, outputFolderPrepend=[]):
     """Runs test against every flight in the specified dataDirectory folder"""
@@ -204,13 +247,17 @@ def runAgainstAllData(dataDirectory, options, parserName, outputFolderPrepend=[]
         if failure:
             break
 
-        if "sub_parser" in options["parsers"][parserName].keys():
-            subParserName = options["parsers"][parserName]["sub_parser"]
-            subParserOutputFile = subParserName + ".json"
-
-            print("Starting " + parserName + "'s sub-parser: " + subParserName)
-
-            failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
+        if "sub_parsers" in options["parsers"][parserName].keys():
+            failure = runSubParsers(flightName, dataDirectory, options, parserName, outputFolderPrepend)
+            # print(options["parsers"][parserName]["sub_parser"])
+            #
+            # return
+            # subParserName = options["parsers"][parserName]["sub_parser"]
+            # subParserOutputFile = subParserName + ".json"
+            #
+            # print("Starting " + parserName + "'s sub-parser: " + subParserName)
+            #
+            # failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
             if failure:
                 break
 

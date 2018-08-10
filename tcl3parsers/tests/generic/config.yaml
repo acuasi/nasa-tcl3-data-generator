@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - con1
+    - CON2,4_ardu
 
 # Specify all new parsers below.
 
@@ -35,7 +35,7 @@ run:
 parsers:
     cns1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
-        sub_parser: flight_data
+        sub_parsers: flight_data
         required_files:
             MI_FILE:
                 - mission_insight.csv
@@ -62,7 +62,7 @@ parsers:
 
     cns2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
-        sub_parser: flight_data
+        sub_parsers: flight_data
         required_files:
             MI_FILE:
                 - mission_insight.csv
@@ -92,7 +92,7 @@ parsers:
 
     con1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
-        sub_parser: flight_data
+        sub_parsers: flight_data
         required_files:
             MI_FILE:
                 - mission_insight.csv
@@ -120,22 +120,33 @@ parsers:
                 exception: None
             c2PacketLoss[c2PacketLossRateGcsPrct_nonDim]:
                 exception: None
-    con2:
-        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
-        # sub_parser: flight_data
-        required_files:
-            MI_FILE:
-                - mission_insight.csv
-        file_parsers:
-            MI_FILE:
-                parser: mission_insight
-        variable_parsers:
-            fType:
-                exact: CON2
-            UTM-TCL3-DMP-RevF-CONPDF:
-                exact: UTM-ACUASI-CON-2.pdf
-            UTM-TCL3-DMP-RevF-CONKML:
-                exact: UTM-ACUASI-CON-2.kml
+    # con2:
+    #     swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+    #     sub_parsers: flight_data
+    #     required_files:
+    #         MI_FILE:
+    #             - mission_insight.csv
+    #     file_parsers:
+    #         MI_FILE:
+    #             parser: mission_insight
+    #     variable_parsers:
+    #         fType:
+    #             exact: CON2
+    #         UTM-TCL3-DMP-RevF-CONPDF:
+    #             exact: UTM-ACUASI-CON-2.pdf
+    #         UTM-TCL3-DMP-RevF-CONKML:
+    #             exact: UTM-ACUASI-CON-2.kml
+    CON2,4_ardu:
+        sub_parsers:
+            - con4
+            - con2:
+                if_in: [
+                    2018-05-25/N253MH/Flight 2,
+                    2018-05-25/N253MH/Flight 4,
+                    2018-05-25/N260MH/Flight 2,
+                    2018-05-25/N260MH/Flight 5
+                ]
+
 
 
 
@@ -169,6 +180,9 @@ sub_parsers:
                 exception: None
             aircraftFlightPlan[wpType_nonDim]:
                 exception: None
+
+        con4:
+            
 
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then
