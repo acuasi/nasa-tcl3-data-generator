@@ -110,7 +110,7 @@ class Runner():
         self.parserFlightOutputFolder = parserFlightOutputFolder
 
         if self.outFile == "":
-            outfile = "{0}/{1}_data_{2}.json".format(parserFlightOutputFolder, self.parserName, escapedFlightName)
+            outfile = "{0}/{1}.json".format(parserFlightOutputFolder, self.parserName)
         else:
             outfile = "{0}/{1}".format(parserFlightOutputFolder, self.outFile)
         self.outFile = outfile
@@ -249,15 +249,6 @@ def runAgainstAllData(dataDirectory, options, parserName, outputFolderPrepend=[]
 
         if "sub_parsers" in options["parsers"][parserName].keys():
             failure = runSubParsers(flightName, dataDirectory, options, parserName, outputFolderPrepend)
-            # print(options["parsers"][parserName]["sub_parser"])
-            #
-            # return
-            # subParserName = options["parsers"][parserName]["sub_parser"]
-            # subParserOutputFile = subParserName + ".json"
-            #
-            # print("Starting " + parserName + "'s sub-parser: " + subParserName)
-            #
-            # failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
             if failure:
                 break
 

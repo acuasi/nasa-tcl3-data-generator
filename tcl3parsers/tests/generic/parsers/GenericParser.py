@@ -52,6 +52,11 @@ class GenericParser():
         return tempJSON
 
     def executeFileParsers(self):
+        if not isinstance(self.fileParserList, dict):
+            return
+        # Since Python is lazily evaluated, this is actually just a reference to the model,
+        # which makes file parsers much more efficient than if they had to copy a potentially
+        # massive model every time they were executed.
         jsonModel = self.jsonModel
         for shortname, source in self.fileParserList.items():
             file_parser_module = importlib.import_module(source['parser'])
@@ -62,6 +67,8 @@ class GenericParser():
         self.jsonModel = jsonModel
 
     def executeGlobalParsers(self):
+        if not isinstance(self.globalParserList, list):
+            return
         jsonModel = self.jsonModel
         for parser_name in self.globalParserList:
             file_parser_module = importlib.import_module(parser_name)
@@ -72,6 +79,8 @@ class GenericParser():
         self.jsonModel = jsonModel
 
     def executeVariableParsers(self):
+        if not isinstance(self.variableParserList, dict):
+            return
         for masterVariable, source in self.variableParserList.items():
             if "exact" in source and source["exact"]:
                 if "[" in masterVariable and "]" in masterVariable:

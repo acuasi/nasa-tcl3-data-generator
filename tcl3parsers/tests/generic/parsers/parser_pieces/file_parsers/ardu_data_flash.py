@@ -1,7 +1,7 @@
 import json
 import helpers.system_helpers
 
-def cns_data_flash(model, fileName):
+def ardu_data_flash(model, fileName):
     """Parse arducopter dataflash log file (.log format) and add to cns data JSON"""
     radio_count = 0
     arm_flag = 0
@@ -13,6 +13,7 @@ def cns_data_flash(model, fileName):
         emptyFieldIfNull('contingencyLanding', model)
         emptyFieldIfNull('contingencyCause', model)
         emptyFieldIfNull('contingencyResponse', model)
+        model['plannedContingency']["plannedContingencyLandingPoint_deg"] = []
 
         for line in dataflash_file:
             # Split by commas and strip leading and trailing whitespaces
@@ -42,9 +43,12 @@ def cns_data_flash(model, fileName):
                     boot_ts_flag = 1
 
             if arm_flag and boot_ts_flag:
-                cl_point = "[{0},{1}]".format(gps["lat"], gps["lon"])
-                cl_point_alt = "[{0}]".format(gps["alt"])
-                model['plannedContingency']["plannedContingencyLandingPoint_deg"] = cl_point
+                cl_point = {
+                "lat": float(gps["lat"]),
+                "lon": float(gps["lon"])
+                }
+                cl_point_alt = [gps["alt"]]
+                model['plannedContingency']["plannedContingencyLandingPoint_deg"].append(cl_point)
                 model['plannedContingency']["plannedContingencyLandingPointAlt_ft"] = cl_point_alt
 
             # 1 Hz
@@ -56,12 +60,12 @@ def cns_data_flash(model, fileName):
                         int(row[1]), boot_ts)
                     model["contingencyLanding"].append({
                         "ts": ts,
-                        "contingencyLandingPoint_deg": cl_point,
+                        "contingencyLandingPoint_deg": [cl_point],
                         "contingencyLandingPointAlt_ft": cl_point_alt
                     })
                     model["contingencyCause"].append({
                         "ts": ts,
-                        "contingencyCause_nonDim": "[0]"
+                        "contingencyCause_nonDim": [0]
                     })
                     model["contingencyResponse"].append({
                         "ts": ts,

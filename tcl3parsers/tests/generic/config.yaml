@@ -47,7 +47,7 @@ parsers:
             MI_FILE:
                 parser: mission_insight
             DF_FILE:
-                parser: cns_data_flash
+                parser: ardu_data_flash_str
             FIELD_VARS:
                 parser: field_vars_cns1
         variable_parsers:
@@ -75,7 +75,7 @@ parsers:
             MI_FILE:
                 parser: mission_insight
             DF_FILE:
-                parser: cns_data_flash
+                parser: ardu_data_flash_str
         variable_parsers:
             fType:
                 exact: CNS2
@@ -108,7 +108,7 @@ parsers:
             FIELD_VARS:
                 parser: generic_field_vars
             DF_FILE:
-                parser: con_data_flash
+                parser: con1_data_flash
             WEATHER_FILE:
                 parser: weather_file
         variable_parsers:
@@ -120,25 +120,10 @@ parsers:
                 exception: None
             c2PacketLoss[c2PacketLossRateGcsPrct_nonDim]:
                 exception: None
-    # con2:
-    #     swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
-    #     sub_parsers: flight_data
-    #     required_files:
-    #         MI_FILE:
-    #             - mission_insight.csv
-    #     file_parsers:
-    #         MI_FILE:
-    #             parser: mission_insight
-    #     variable_parsers:
-    #         fType:
-    #             exact: CON2
-    #         UTM-TCL3-DMP-RevF-CONPDF:
-    #             exact: UTM-ACUASI-CON-2.pdf
-    #         UTM-TCL3-DMP-RevF-CONKML:
-    #             exact: UTM-ACUASI-CON-2.kml
+
     CON2,4_ardu:
         sub_parsers:
-            - con4
+            # - con4
             - con2:
                 if_in: [
                     2018-05-25/N253MH/Flight 2,
@@ -146,9 +131,7 @@ parsers:
                     2018-05-25/N260MH/Flight 2,
                     2018-05-25/N260MH/Flight 5
                 ]
-
-
-
+            # - flight_data
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
@@ -181,8 +164,62 @@ sub_parsers:
             aircraftFlightPlan[wpType_nonDim]:
                 exception: None
 
-        con4:
-            
+    con2:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            DF_FILE:
+                - .log
+            FIELD_VARS:
+                - field_vars.csv
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            DF_FILE:
+                parser: ardu_data_flash
+            FIELD_VARS:
+                parser: generic_field_vars
+        variable_parsers:
+            fType:
+                exact: CON2
+            UTM-TCL3-DMP-RevF-CONPDF:
+                exact: UTM-ACUASI-CON-2.pdf
+            UTM-TCL3-DMP-RevF-CONKML:
+                exact: UTM-ACUASI-CON-2.kml
+            plannedContingency[plannedContingencyLoiterAlt_ft]:
+                exact: [0]
+            plannedContingency[plannedContingencyLoiterRadius_ft]:
+                exact: [0]
+            declaredEmerg[ts]:
+                exception: None
+            contingencyCause[ts]:
+                exception: None
+            contingencyResponse[ts]:
+                exception: None
+            contingencyLoiterType[ts]:
+                exception: None
+            contingencyLoiterAlt[ts]:
+                exception: None
+            contingencyLoiterRadius[ts]:
+                exception: None
+
+    con4:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+                - CON4.+\.csv
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        variable_parsers:
+            fType:
+                exact: CON4
+            UTM-TCL3-DMP-RevF-CONPDF:
+                exact: UTM-ACUASI-CON-4.pdf
+            UTM-TCL3-DMP-RevF-CONKML:
+                exact: UTM-ACUASI-CON-4.kml
 
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then

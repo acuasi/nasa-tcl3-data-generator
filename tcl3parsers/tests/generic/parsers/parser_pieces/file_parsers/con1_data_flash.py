@@ -1,6 +1,6 @@
 import helpers.system_helpers as system_helpers
 
-def con_data_flash(model, fileName):
+def con1_data_flash(model, fileName):
     with open(fileName, "r") as dataflash_file:
         gps = {}
         boot_ts_flag = 0
