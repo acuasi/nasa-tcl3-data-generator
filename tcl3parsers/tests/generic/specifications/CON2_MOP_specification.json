@@ -1,0 +1,372 @@
+{
+    "basic": {
+        "uvin": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "gufi": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "submitTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "ussName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "ussInstanceID": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        }
+    },
+    "fType": {
+        "match": {
+            "type": "str",
+            "enum": [
+                "CON2"
+            ]
+        }
+    },
+    "UTM-TCL3-DMP-RevF-CONPDF": {
+        "match": {
+            "type": "str",
+            "pattern": "^UTM-[^-]+-CON-[0-9]+.pdf$"
+        }
+    },
+    "UTM-TCL3-DMP-RevF-CONKML": {
+        "match": {
+            "type": "str",
+            "pattern": "^UTM-[^-]+-CON-[0-9]+.kml$"
+        }
+    },
+    "declaredEmerg": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "declaredEmergency": {
+                            "match": {
+                                "type": "str",
+                                "maxLength": 280
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "emergencyInitiationTime": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "str",
+                    "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                }
+            }
+        }
+    },
+    "emergencyCompletionTime": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "str",
+                    "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                }
+            }
+        }
+    },
+    "contingencyCause": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyCause_nonDim": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "int",
+                                        "minimum": 0,
+                                        "maximum": 13
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyResponse": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyResponse_nonDim": {
+                            "match": {
+                                "type": "int",
+                                "enum": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "plannedContingency": {
+        "plannedContingencyLandingPoint_deg": {
+            "match": {
+                "type": "list",
+                "minLength": 1,
+                "children": {
+                    "match": {
+                        "type": "dict",
+                        "children": {
+                            "lat": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": -90.0,
+                                    "maximum": 90.0
+                                }
+                            },
+                            "lon": {
+                                "match": {
+                                    "type": "float|int",
+                                    "minimum": -180.0,
+                                    "maximum": 180.0
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "plannedContingencyLandingPointAlt_ft": {
+            "match": {
+                "type": "list",
+                "minLength": 1,
+                "children": {
+                    "match": {
+                        "type": "float|int"
+                    }
+                }
+            }
+        },
+        "plannedContingencyLoiterAlt_ft": {
+            "match": {
+                "type": "list",
+                "minLength": 1,
+                "children": {
+                    "match": {
+                        "type": "float|int"
+                    }
+                }
+            }
+        },
+        "plannedContingencyLoiterRadius_ft": {
+            "match": {
+                "type": "list",
+                "minLength": 1,
+                "children": {
+                    "match": {
+                        "type": "float|int",
+                        "minimum": 0
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLanding": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLandingPoint_deg": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "dict",
+                                        "children": {
+                                            "lat": {
+                                                "match": {
+                                                    "type": "float|int",
+                                                    "minimum": -90.0,
+                                                    "maximum": 90.0
+                                                }
+                                            },
+                                            "lon": {
+                                                "match": {
+                                                    "type": "float|int",
+                                                    "minimum": -180.0,
+                                                    "maximum": 180.0
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "contingencyLandingPointAlt_ft": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "float|int"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLoiterType": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLoiterType_nonDim": {
+                            "match": {
+                                "type": "int",
+                                "enum": [
+                                    0,
+                                    1,
+                                    2,
+                                    3
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLoiterAlt": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLoiterAlt_ft": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "float|int"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "contingencyLoiterRadius": {
+        "match": {
+            "type": "list",
+            "children": {
+                "match": {
+                    "type": "dict",
+                    "children": {
+                        "ts": {
+                            "match": {
+                                "type": "str",
+                                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                            }
+                        },
+                        "contingencyLoiterRadius_ft": {
+                            "match": {
+                                "type": "list",
+                                "minLength": 1,
+                                "children": {
+                                    "match": {
+                                        "type": "float|int",
+                                        "minimum": 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

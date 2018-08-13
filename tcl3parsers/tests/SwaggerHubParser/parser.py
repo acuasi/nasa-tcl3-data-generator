@@ -72,7 +72,9 @@ class SwaggerHubParser():
                             "children": value
                         }
                     }
-            if isinstance(value, dict):
+            if key in self.ignoreList:
+                pass
+            elif isinstance(value, dict):
                 noMatchedParams = True
                 if key != "match" and "children" in value:
                     tempJSON[key] = self.recursivelyFormStructure(value['children'])

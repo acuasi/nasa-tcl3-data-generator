@@ -5,7 +5,7 @@ from pathlib import Path
 import helpers.system_helpers as system_helpers
 import helpers.constants as constants
 
-def flight_data_df(model, files):
+def flight_data_ardu(model, files):
     """Global parser for generating flight_data, primarily from the dataflash file"""
     with open(files["MI_FILE"], "r") as mi_file:
         mi_reader = csv.DictReader(mi_file)

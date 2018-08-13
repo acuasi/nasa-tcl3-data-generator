@@ -141,6 +141,7 @@ class StructureTestController(unittest.TestCase):
         """Iterates through every key in outputted JSON and compares it to parameters set in a testing JSON"""
         self.parentKey = parentKey
         self.allowedExceptions = allowedExceptions
+
         # Base case - if the structure is empty or not the right type, return
         if not isinstance(expectedData, dict) or not hasattr(actualData, '__iter__') or not expectedData or not actualData:
             return actualData

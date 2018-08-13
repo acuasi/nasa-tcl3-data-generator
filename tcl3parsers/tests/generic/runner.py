@@ -50,6 +50,14 @@ class Runner():
             for requirement in requirements:
                 if requirement in fileName or re.match(requirement, fileName):
                     return flightPath + "/" + fileName
+
+        if self.isSubParser:
+            if "skip_if_files_not_found" in self.options["sub_parsers"][self.parserName] and self.options["sub_parsers"][self.parserName]["skip_if_files_not_found"]:
+                return False
+        else:
+            if "skip_if_files_not_found" in self.options["parsers"][self.parserName] and self.options["parsers"][self.parserName]["skip_if_files_not_found"]:
+                return False
+
         print("Data malformed, " + requiredFile + " not found for " + self.flightName + " in " + flightPath)
         exit()
 
@@ -76,6 +84,8 @@ class Runner():
 
         for requiredFileName, requiredFileRequirements in requiredFiles.items():
             file_path = self.getRequiredFlightFile(flightFiles, requiredFileName, requiredFileRequirements)
+            if not file_path:
+                return "\n\nCould not find " + requiredFileName + ", skipping...\n\n"
             self.parserParameters.append(file_path)
 
             if self.parserName in self.options['parsers']:
@@ -172,6 +182,12 @@ def runAgainstSingleFlight(flightName, dataDirectory, options, parserName, outFi
 
     testRunner = Runner(dataDirectory, options, parserName, outFile, parentParserName, outputFolderPrepend)
     testSet = testRunner.setFlightInfo(flightName)
+
+    # Check for file not found errors and skip them if the skip_if_files_not_found flag is set
+    if isinstance(testSet, str):
+        # If testSet is a str and not None, then it must contain an error message, so print it
+        print(testSet)
+        return True
     print("Testing against: " + flightName)
     testSet = testRunner.run()
     print("Tested against: " + flightName + "\n\n")
@@ -186,16 +202,16 @@ def runSubParsers(flightName, dataDirectory, options, parserName, outputFolderPr
                 subParserName = subParser
             elif isinstance(subParser, dict):
                 subParserName = list(subParser)[0]
-                if isinstance(subParser[subParserName], dict) and "if_in" in subParser[subParserName]:
-                    ifInConditions = subParser[subParserName]["if_in"]
-                    matchesIfInCondition = False
-                    for ifInCondition in ifInConditions:
+                if isinstance(subParser[subParserName], dict) and "for" in subParser[subParserName]:
+                    forConditions = subParser[subParserName]["for"]
+                    matchesForCondition = False
+                    for forCondition in forConditions:
                         fullPath = dataDirectory + "/" + flightName
                         # Only run if matches a condition
-                        if ifInCondition in fullPath:
-                            matchesIfInCondition = True
+                        if forCondition in fullPath:
+                            matchesForCondition = True
                             break
-                    if not matchesIfInCondition:
+                    if not matchesForCondition:
                         continue
             else:
                 print("Misconfigured sub_parsers option in parsers section, skipping...")

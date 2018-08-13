@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - CON2,4_ardu
+    - CON2,4_dji
 
 # Specify all new parsers below.
 
@@ -123,15 +123,33 @@ parsers:
 
     CON2,4_ardu:
         sub_parsers:
-            # - con4
-            - con2:
-                if_in: [
+            - con4
+            - con2_ardu:
+                for: [
                     2018-05-25/N253MH/Flight 2,
                     2018-05-25/N253MH/Flight 4,
                     2018-05-25/N260MH/Flight 2,
                     2018-05-25/N260MH/Flight 5
                 ]
-            # - flight_data
+            - flight_data
+    CON2,4_dji:
+        sub_parsers:
+            - con4
+            - con2_dji:
+                for: [
+                    2018-05-25/N252MH/Flight 2,
+                    2018-05-25/N252MH/Flight 5
+                ]
+            - dji_flight_data
+    CON2,4_ptar:
+        sub_parsers:
+            - con4
+            - con2_ptar:
+                for: [
+                    2018-05-25/N241UA/Flight 2,
+                    2018-05-25/N241UA/Flight 5
+                ]
+            - ptar_flight_data
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
@@ -139,14 +157,16 @@ sub_parsers:
     # will greatly speed things up.
     flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
+        skip_if_files_not_found: true
         required_files:
             MI_FILE:
                 - mission_insight.csv
                 - ^[A-Z]{3,3}[1-9]_.+Flight.+\.csv
+                - ^[A-Z]{3,3}[1-9].+\.csv
             DF_FILE:
                 - .log
         global_parsers:
-            - flight_data_df
+            - flight_data_ardu
         file_parsers:
             MI_FILE:
                 parser: mission_insight
@@ -164,7 +184,42 @@ sub_parsers:
             aircraftFlightPlan[wpType_nonDim]:
                 exception: None
 
-    con2:
+    dji_flight_data:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
+        name_override: FLIGHT_DATA
+        skip_if_files_not_found: true
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+                - ^[A-Z]{3,3}[1-9]_.+Flight.+\.csv
+                - ^[A-Z]{3,3}[1-9]_.+\.csv
+            WAYPOINTS:
+                - waypoints.csv
+            LITCHI:
+                - _v2.csv
+        global_parsers:
+            - flight_data_dji
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        variable_parsers:
+            fType:
+                exact: FLIGHT_DATA
+            auxiliaryUASOperation:
+                parser: auxiliaryUASOperation
+            aircraftFlightPlan[wpTargetGroundSpeed_ftPerSec]:
+                exception: None
+            aircraftFlightPlan[wpTargetAirSpeed_ftPerSec]:
+                exception: None
+            uasState[value]:
+                exception: None
+            aircraftFlightPlan[wpType_nonDim]:
+                exception: None
+            aircraftFlightPlan[wpTime]:
+                exception: None
+
+    con2_ardu:
+        name_override: CON2_MOP
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
             MI_FILE:
@@ -205,6 +260,7 @@ sub_parsers:
                 exception: None
 
     con4:
+        name_override: CON4_MOP
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
             MI_FILE:
@@ -220,6 +276,31 @@ sub_parsers:
                 exact: UTM-ACUASI-CON-4.pdf
             UTM-TCL3-DMP-RevF-CONKML:
                 exact: UTM-ACUASI-CON-4.kml
+
+    con2_dji:
+        name_override: CON2_MOP
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            LITCHI:
+                - _v2.csv
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            LITCHI:
+                parser: dji_litchi
+        variable_parsers:
+            fType:
+                exact: CON2
+            UTM-TCL3-DMP-RevF-CONPDF:
+                exact: UTM-ACUASI-CON-2.pdf
+            UTM-TCL3-DMP-RevF-CONKML:
+                exact: UTM-ACUASI-CON-2.kml
+            plannedContingency[plannedContingencyLoiterAlt_ft]:
+                exact: [0]
+            plannedContingency[plannedContingencyLoiterRadius_ft]:
+                exact: [0]
 
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then

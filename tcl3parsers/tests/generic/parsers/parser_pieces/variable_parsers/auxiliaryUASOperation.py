@@ -1,6 +1,7 @@
 import json
 import csv
 import os
+import itertools
 from pathlib import Path
 
 def auxiliaryUASOperation(files):
@@ -20,7 +21,8 @@ def auxiliaryUASOperation(files):
 
     # Get aircraft N number from mi_dict and use that to get take-off weight from
     # aircraft specs file
-    takeoff_weight = float(ac_specs_dict[mi_dict["VEHICLE_DESIGNATION"]]["weight_lbs"])
+    vehicle_designation = mi_dict["VEHICLE_DESIGNATION"].strip()
+    takeoff_weight = float(ac_specs_dict[vehicle_designation]["weight_lbs"])
     type_of_operation = "Live"
 
     aux_op["flightTestCardName"] = mi_dict["test_card"]
@@ -33,3 +35,26 @@ def auxiliaryUASOperation(files):
         aux_op["gcsPosLat_deg"] = float(gcs_locs_dict[gcs_location]["latitude"])
         aux_op["gcsPosLon_deg"] = float(gcs_locs_dict[gcs_location]["longitude"])
         aux_op["gcsPosAlt_ft"] = float(gcs_locs_dict[gcs_location]["altitude"])
+
+
+    if "LITCHI" in files:
+        with open(files["LITCHI"], "r") as litchi:
+            litchi_reader = csv.DictReader(litchi)
+            for currentRow, nextRow in pairwise(litchi_reader):
+
+                if currentRow["flightmode"] == "TakeOff" and nextRow["flightmode"] != "TakeOff":
+                    aux_op["takeOffTime"] = currentRow["datetime(utc)"].replace(" ", "T")
+                    aux_op["takeoffPosLat_deg"] = float(currentRow["latitude"])
+                    aux_op["takeoffPosLon_deg"] = float(currentRow["longitude"])
+                    aux_op["takeoffPosAlt_ft"] = float(currentRow["altitude(feet)"])
+                if currentRow["isMotorsOn"] == "1" and nextRow["isMotorsOn"] == "0":
+                    aux_op["landingTime"] = nextRow["datetime(utc)"].replace(" ", "T")
+                    aux_op["landingPosLat_deg"] = float(nextRow["latitude"])
+                    aux_op["landingPosLon_deg"] = float(nextRow["longitude"])
+                    aux_op["landingPosAlt_ft"] = float(nextRow["altitude(feet)"])
+    return aux_op
+
+def pairwise(iterable):
+    a, b = itertools.tee(iterable)
+    next(b, None)
+    return zip(a, b)

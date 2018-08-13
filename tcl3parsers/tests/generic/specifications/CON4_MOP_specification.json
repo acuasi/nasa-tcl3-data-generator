@@ -1,0 +1,59 @@
+{
+    "basic": {
+        "uvin": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "gufi": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "submitTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "ussName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "ussInstanceID": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        }
+    },
+    "fType": {
+        "match": {
+            "type": "str",
+            "enum": [
+                "CON4"
+            ]
+        }
+    },
+    "UTM-TCL3-DMP-RevF-CONPDF": {
+        "match": {
+            "type": "str",
+            "pattern": "^UTM-[^-]+-CON-[0-9]+.pdf$"
+        }
+    },
+    "UTM-TCL3-DMP-RevF-CONKML": {
+        "match": {
+            "type": "str",
+            "pattern": "^UTM-[^-]+-CON-[0-9]+.kml$"
+        }
+    }
+}

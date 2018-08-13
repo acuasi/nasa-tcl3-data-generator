@@ -1,3 +1,5 @@
+# NOTICE
+While this structure is still used, it is now encapsulated in an entirely automated generation and testing suite. This can be found in `tcl3parsers/tests/generic`. Documentation for this is available [here](../PARSER.md).
 # Testing the parsers
 In order to make testing easier, a controller was created for generically testing the structure of any JSON. This controller matches outputted JSON files from the parser directly against every specification for the variables.
 ## Creating Structure Tests
