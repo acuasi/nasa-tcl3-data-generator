@@ -3,7 +3,6 @@ import csv
 import json
 import helpers.constants as constants
 
-# TODO: Figure out where to get takeOffTime for auxillaryOperations and figure out why there is a key error on SUBMIT_TIME
 def flight_data_dji(model, files):
     # Set up data structures
     ac_flight_plan = []

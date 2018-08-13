@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - CON2,4_dji
+    - CON2,4_ptar
 
 # Specify all new parsers below.
 
@@ -143,12 +143,12 @@ parsers:
             - dji_flight_data
     CON2,4_ptar:
         sub_parsers:
-            - con4
-            - con2_ptar:
-                for: [
-                    2018-05-25/N241UA/Flight 2,
-                    2018-05-25/N241UA/Flight 5
-                ]
+            # - con4
+            # - con2_ptar:
+            #     for: [
+            #         2018-05-25/N241UA/Flight 2,
+            #         2018-05-25/N241UA/Flight 5
+            #     ]
             - ptar_flight_data
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
@@ -199,6 +199,40 @@ sub_parsers:
                 - _v2.csv
         global_parsers:
             - flight_data_dji
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        variable_parsers:
+            fType:
+                exact: FLIGHT_DATA
+            auxiliaryUASOperation:
+                parser: auxiliaryUASOperation
+            aircraftFlightPlan[wpTargetGroundSpeed_ftPerSec]:
+                exception: None
+            aircraftFlightPlan[wpTargetAirSpeed_ftPerSec]:
+                exception: None
+            uasState[value]:
+                exception: None
+            aircraftFlightPlan[wpType_nonDim]:
+                exception: None
+            aircraftFlightPlan[wpTime]:
+                exception: None
+
+    ptar_flight_data:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
+        name_override: FLIGHT_DATA
+        skip_if_files_not_found: true
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+                - ^[A-Z]{3,3}[1-9]_.+Flight.+\.csv
+                - ^[A-Z]{3,3}[1-9]_.+\.csv
+            WAYPOINTS:
+                - .waypoints
+            TLOG:
+                - _tlog.csv
+        global_parsers:
+            - flightDataPtar
         file_parsers:
             MI_FILE:
                 parser: mission_insight
@@ -301,6 +335,33 @@ sub_parsers:
                 exact: [0]
             plannedContingency[plannedContingencyLoiterRadius_ft]:
                 exact: [0]
+
+    con2_ptar:
+        name_override: CON2_MOP
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TLOG:
+                - _v2.csv
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            TLOG:
+                parser: ptar_tlog
+        variable_parsers:
+            fType:
+                exact: CON2
+            UTM-TCL3-DMP-RevF-CONPDF:
+                exact: UTM-ACUASI-CON-2.pdf
+            UTM-TCL3-DMP-RevF-CONKML:
+                exact: UTM-ACUASI-CON-2.kml
+            plannedContingency[plannedContingencyLoiterAlt_ft]:
+                exact: [0]
+            plannedContingency[plannedContingencyLoiterRadius_ft]:
+                exact: [0]
+            auxiliaryUASOperation[takeOffTime]:
+                exception: None
 
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then
