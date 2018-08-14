@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - CON2,4_ardu
+
 
 # Specify all new parsers below.
 
@@ -144,6 +144,7 @@ parsers:
                     2018-05-25/N260MH/Flight 5
                 ]
             - flight_data
+
     CON2,4_dji:
         sub_parsers:
             - con4

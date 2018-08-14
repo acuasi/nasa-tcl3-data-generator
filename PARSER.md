@@ -248,9 +248,7 @@ def uasTruth(files):
             uasTruthVariable.append(formRadarRecord(radarRecord))
 
     return uasTruthVariable
-.
-.
-.
+...
 ```
 
 In the above example, notice that it is a regular python file. Libraries can be imported and other functions can (and should) be declared to make things more readable. For example, the function formRadarRecord is used above. This function exists elsewhere in the actual *uasTruth.py* and is used to handle most of the work of forming the record. Also note that to get the radar file's location, the shortname for it in the config.yaml file is used as a key. At the end of the function, the formed variable is then returned.
@@ -300,15 +298,14 @@ An example of a sub parser is the flight_data parser:
 parsers:
     cns1:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
-        sub_parser: flight_data
+        sub_parsers:
+            - flight_data
         required_files:
             MI_FILE:
                 - mission_insight.csv
             DF_FILE:
                 - .log
-        .
-        .
-        .
+        ...
 
 sub_parsers:
     flight_data:
@@ -321,9 +318,50 @@ sub_parsers:
                 - .log
         global_parsers:
             - flight_data_df
-        .
-        .
-        .
-
+        ...
 ```
-Notice that all the parent parser needs to do to include the sub parser is have a key called `sub_parser` that has a value corresponding to the arbitrary name of the sub parser under the `sub_parsers` key.
+Notice that all the parent parser needs to do to include the sub parser is have a key called `sub_parsers` that has values corresponding to the arbitrary name of the sub parsers under the top level `sub_parsers` key. An arbitrary number of sub parsers can be included in a list. However, sometimes a sub parser should only be run for certain folders that the parent parser iterates over. In these cases, the `for` keyword can be used to specify what the directory hierarchy must contain in order for it to run.
+
+An example using the `for` keyword:
+```yaml
+parsers:
+    CON2,4_dji:
+        sub_parsers:
+            - con4
+            - con2_dji:
+                for: [
+                    2018-05-25/N252MH/Flight 2,
+                    2018-05-25/N252MH/Flight 5
+                ]
+            - dji_flight_data
+sub_parsers:
+    con4:
+        ...
+    con2_dji:
+        ...
+    dji_flight_data:
+        ...
+```
+
+Another feature that comes in handy when dealing with sub parsers is the `skip_if_files_not_found` keyword. As the name suggests, if this is under a parser or a sub parser and set to true, then if one of the required files needed for proper execution of the parser is not found, then it will be skipped.
+
+An example using the `skip_if_files_not_found: true` keyword:
+```yaml
+sub_parsers:
+    flight_data:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
+        skip_if_files_not_found: true
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+                - ^[A-Z]{3,3}[1-9]_.+Flight.+\.csv
+                - ^[A-Z]{3,3}[1-9].+\.csv
+            DF_FILE:
+                - .log
+        global_parsers:
+            - flight_data_ardu
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        ...
+```
