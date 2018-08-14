@@ -120,9 +120,32 @@ class Runner():
         self.parserFlightOutputFolder = parserFlightOutputFolder
 
         if self.outFile == "":
-            outfile = "{0}/{1}.json".format(parserFlightOutputFolder, self.parserName)
+            self.outFile = self.parserName
+
+        year, month, day, hour, minute = 0,0,0,0,0
+        for fileShortName, fileName in self.files.items():
+            yearMonthDayHourMinute = re.compile(r'.*([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})[\s_]([0-9]{2,2})-([0-9]{2,2})-([0-9]{2,2}).*')
+            if yearMonthDayHourMinute.search(fileName):
+                matchDateFormat = re.match(yearMonthDayHourMinute, fileName)
+                year = matchDateFormat.group(1)
+                month = matchDateFormat.group(2)
+                day = matchDateFormat.group(3)
+                hour = matchDateFormat.group(4)
+                minute = matchDateFormat.group(5)
+
+                if fileName.endswith(".log") or fileName.endswith("_v2.csv") or fileName.endswith(".tlog") or fileName.endswith("mission_insight.csv") or fileName.endswith("field_vars.csv"):
+                    break
+
+        dateFormat = "{0}{1}{2}-{3}{4}".format(year, month, day, hour, minute)
+
+        if not year or not month or not day or not hour or not minute:
+            dateFormat = ""
+            print("No valid timestamped file was found! Using default name for:", self.parserName)
+
+            outfile = "{0}/ACUASI-{1}.json".format(parserFlightOutputFolder, self.outFile)
         else:
-            outfile = "{0}/{1}".format(parserFlightOutputFolder, self.outFile)
+            outfile = "{0}/ACUASI-{1}-{2}.json".format(parserFlightOutputFolder, dateFormat, self.outFile)
+
         self.outFile = outfile
         self.parserParameters.append(outfile)
         structure_tests.ACTUAL_DATA_FILE = outfile
@@ -216,14 +239,14 @@ def runSubParsers(flightName, dataDirectory, options, parserName, outputFolderPr
             else:
                 print("Misconfigured sub_parsers option in parsers section, skipping...")
                 return False
-            subParserOutputFile = subParserName + ".json"
+            subParserOutputFile = subParserName
             print("Starting " + parserName + "'s sub-parser: " + subParserName)
             failure = runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
             if failure:
                 return failure
     elif isinstance(subParsers, str):
         subParserName = subParsers
-        subParserOutputFile = subParserName + ".json"
+        subParserOutputFile = subParserName
         print("Starting " + parserName + "'s sub-parser: " + subParserName)
         return runAgainstSingleFlight(flightName, dataDirectory, options, subParserName, subParserOutputFile, parserName, outputFolderPrepend)
 
