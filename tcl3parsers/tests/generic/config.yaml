@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns2
+    - CON2,4_ardu
 
 # Specify all new parsers below.
 
@@ -143,7 +143,7 @@ parsers:
                     2018-05-25/N260MH/Flight 2,
                     2018-05-25/N260MH/Flight 5
                 ]
-            - flight_data:
+            - flight_data
     CON2,4_dji:
         sub_parsers:
             - con4
@@ -435,6 +435,10 @@ sub_parsers:
             contingencyLoiterAlt[ts]:
                 exception: None
             contingencyLoiterRadius[ts]:
+                exception: None
+            declaredEmerg[emergencyInitiationTime]:
+                exception: None
+            declaredEmerg[emergencyCompletionTime]:
                 exception: None
 
     con4:
