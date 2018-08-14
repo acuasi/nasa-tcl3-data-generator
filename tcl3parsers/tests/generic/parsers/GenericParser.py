@@ -93,7 +93,7 @@ class GenericParser():
                     exec("self.jsonModel{0} = {1}".format(masterVariable, source["exact"]))
                 else:
                     self.jsonModel[masterVariable] = source["exact"]
-            elif "exception" in source and source["exception"]:
+            elif "exception" in source:
                 if "[" in masterVariable and "]" in masterVariable:
                     masterVariable = masterVariable.replace("[", "['").replace("]", "']")
                     topLevelMasterVariable = masterVariable[:masterVariable.find("[")]
@@ -106,6 +106,7 @@ class GenericParser():
                     }
                     if "fix" in source:
                         self.exceptionList[masterVariable]["fix"] = source["fix"]
+                        continue
 
             else:
                 variable_parser_module = importlib.import_module(source['parser'])

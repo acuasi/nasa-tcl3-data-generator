@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - CON5
+    - cns1
 
 # Specify all new parsers below.
 
@@ -56,9 +56,11 @@ parsers:
             UTM-TCL3-DMP-RevF-CNSPDF:
                 exact: UTM-ACUASI-CNS-1.pdf
             plannedContingency[plannedContingencyLoiterAlt_ft]:
-                exact: '[0]'
+                exception: ""
+                fix: None
             plannedContingency[plannedContingencyLoiterRadius_ft]:
-                exact: '[0]'
+                exception: ""
+                fix: None
 
     cns2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
@@ -154,7 +156,15 @@ parsers:
 
     CON5:
         sub_parsers:
-            - flight_data
+            - flight_data:
+                for: [
+                    N241UA,
+                    N260MH
+                ]
+            - dji_flight_data:
+                for: [
+                    N251MH
+                ]
 
     SAA2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
@@ -300,6 +310,7 @@ sub_parsers:
                 - waypoints.csv
             LITCHI:
                 - _v2.csv
+                - _telemetry.csv
         global_parsers:
             - flight_data_dji
         file_parsers:

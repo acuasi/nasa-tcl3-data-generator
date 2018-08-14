@@ -56,7 +56,7 @@ def searchModel(model, targetName, targetValue, targetFound=False, fileName=""):
 def checkHardCodedMatches(model, targetName, targetValue):
     matchedCase = True
     if targetName == "geoFenceType_nonDim" and targetValue.lower() == "cylinder":
-        model[targetName] = 1
+        model[targetName] = 0
     else:
         matchedCase = False
 
