@@ -184,6 +184,7 @@ class Runner():
         parsedJSON = genericParser.generate()
 
         allowedExceptions = genericParser.getAllowedExceptions()
+
         structure_tests.ALLOWED_EXCEPTIONS = allowedExceptions
 
         with open(self.outFile, "w") as jsonWriter:

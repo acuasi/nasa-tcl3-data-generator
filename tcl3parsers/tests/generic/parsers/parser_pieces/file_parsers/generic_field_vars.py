@@ -12,7 +12,7 @@ def generic_field_vars(model, fileName):
             if not caseHandled and 'Value' in fieldVar and fieldVar['Variable'] in model.keys():
                 success, fieldVar['Value'] = field_var.maybeNumber(fieldVar['Value'])
                 if success and fieldVar['Value'] == 0:
-                    # fieldVar['Value'] = {}
+                    model[fieldVar['Variable']] = None
                     continue
                 elif not success:
                     success, fieldVar['Value'] = field_var.maybeGetLatLonDict(fieldVar['Value'])

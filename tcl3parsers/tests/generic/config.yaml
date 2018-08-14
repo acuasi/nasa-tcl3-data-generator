@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - CON2,4_dji
+    - con1
 
 # Specify all new parsers below.
 
@@ -122,6 +122,10 @@ parsers:
                 exception: None
             c2PacketLoss[c2PacketLossRateGcsPrct_nonDim]:
                 exception: None
+            bvlosLandingZoneStructure_deg:
+                exception: None
+            bvlosLandingZonePeople_deg:
+                exception: None
 
     CON2,4_ardu:
         sub_parsers:
@@ -133,7 +137,7 @@ parsers:
                     2018-05-25/N260MH/Flight 2,
                     2018-05-25/N260MH/Flight 5
                 ]
-            - flight_data
+            - flight_data:
     CON2,4_dji:
         sub_parsers:
             - con4

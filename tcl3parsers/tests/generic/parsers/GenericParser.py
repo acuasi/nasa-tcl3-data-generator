@@ -93,22 +93,24 @@ class GenericParser():
                     exec("self.jsonModel{0} = {1}".format(masterVariable, source["exact"]))
                 else:
                     self.jsonModel[masterVariable] = source["exact"]
-            elif "exception" in source:
+            if "exception" in source:
                 if "[" in masterVariable and "]" in masterVariable:
                     masterVariable = masterVariable.replace("[", "['").replace("]", "']")
                     topLevelMasterVariable = masterVariable[:masterVariable.find("[")]
                     masterVariable = "['" + topLevelMasterVariable + "']" + masterVariable[masterVariable.find("["):]
+                else:
+                    masterVariable = "['" + masterVariable + "']"
+                    
+                exceptionKeyMatchChain = [exceptionMatch for exceptionMatch in masterVariable.replace("['", "").split("']") if exceptionMatch]
+                self.exceptionList[masterVariable] = {
+                    "type": source["exception"],
+                    "chain": exceptionKeyMatchChain
+                }
+                if "fix" in source:
+                    self.exceptionList[masterVariable]["fix"] = source["fix"]
+                    continue
 
-                    exceptionKeyMatchChain = [exceptionMatch for exceptionMatch in masterVariable.replace("['", "").split("']") if exceptionMatch]
-                    self.exceptionList[masterVariable] = {
-                        "type": source["exception"],
-                        "chain": exceptionKeyMatchChain
-                    }
-                    if "fix" in source:
-                        self.exceptionList[masterVariable]["fix"] = source["fix"]
-                        continue
-
-            else:
+            if "parser" in source:
                 variable_parser_module = importlib.import_module(source['parser'])
                 self.jsonModel[masterVariable] = eval("variable_parser_module.{0}(self.files)".format(source['parser']))
 
