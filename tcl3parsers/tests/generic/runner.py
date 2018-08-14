@@ -133,6 +133,7 @@ class Runner():
                 hour = matchDateFormat.group(4)
                 minute = matchDateFormat.group(5)
 
+                # Will end early if one of these files are found, if not, but a date is still found, then this will be used instead
                 if fileName.endswith(".log") or fileName.endswith("_v2.csv") or fileName.endswith(".tlog") or fileName.endswith("mission_insight.csv") or fileName.endswith("field_vars.csv"):
                     break
 

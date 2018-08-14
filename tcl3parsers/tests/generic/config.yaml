@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - SAA4
+    - CON5
 
 # Specify all new parsers below.
 
@@ -153,26 +153,8 @@ parsers:
             - ptar_flight_data
 
     CON5:
-        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
-        skip_if_files_not_found: true
         sub_parsers:
             - flight_data
-        required_files:
-            MI_FILE:
-                - mission_insight.csv
-                - '[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}\s[0-9]{2,2}-[0-9]{2,2}-[0-9]{2,2}\.csv'
-            DF_FILE:
-                - .log
-        file_parsers:
-            MI_FILE:
-                parser: mission_insight
-            DF_FILE:
-                - con5_ardu_data_flash
-        variable_parsers:
-            fType:
-                exact: CON5
-            UTM-TCL3-DMP-RevF-CONPDF:
-                exact: UTM-ACUASI-CON-5.pdf
 
     SAA2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
@@ -188,9 +170,13 @@ parsers:
                 - TD.csv
             FIELD_VARS:
                 - field_vars.csv
+            DF_FILE:
+                - .log
         file_parsers:
             MI_FILE:
                 parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
         global_parsers:
                 - geoFence
         variable_parsers:
@@ -222,14 +208,35 @@ parsers:
         file_parsers:
             MI_FILE:
                 parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
         variable_parsers:
             fType:
                 exact: SAA4
             UTM-TCL3-DMP-RevF-CONPDF:
                 exact: UTM-ACUASI-SAA-4.pdf
-            intruder[intruderVelNorth_ftPerSec]:
+            intruder[intruderVelDown_ftPerSec]:
                 exception: None
-
+            intruder[intruderGroundCourse_deg]:
+                exception: None
+            intruder[relativeHeadingAtFirstDetection_deg]:
+                exception: None
+            intruder[horRangeAccuracy_ft]:
+                exception: None
+            intruder[verRangeAccuracy_ft]:
+                exception: None
+            intruder[probabilityFalseAlarmPrct_nonDim]:
+                exception: None
+            intruder[probabilityIntruderDetectionPrct_nonDim]:
+                exception: None
+            intruder[dataPacketRatio_nonDim]:
+                exception: None
+            intruder[transmissionDelay_sec]:
+                exception: None
+            intruder[numberOfLostTracks_nonDim]:
+                exception: None
+            intruder[saaSensorAltitudeAccuracy_ft]:
+                exception: None
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
@@ -237,7 +244,7 @@ sub_parsers:
     # will greatly speed things up.
     flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
-        skip_if_files_not_found: true
+        # skip_if_files_not_found: true
         required_files:
             MI_FILE:
                 - mission_insight.csv
@@ -262,6 +269,22 @@ sub_parsers:
             uasState[value]:
                 exception: None
             aircraftFlightPlan[wpType_nonDim]:
+                exception: None
+            auxiliaryUASOperation[takeOffTime]:
+                exception: None
+            auxiliaryUASOperation[takeoffPosLat_deg]:
+                exception: None
+            auxiliaryUASOperation[takeoffPosLon_deg]:
+                exception: None
+            auxiliaryUASOperation[takeoffPosAlt_ft]:
+                exception: None
+            auxiliaryUASOperation[landingTime]:
+                exception: None
+            auxiliaryUASOperation[landingPosLat_deg]:
+                exception: None
+            auxiliaryUASOperation[landingPosLon_deg]:
+                exception: None
+            auxiliaryUASOperation[landingPosAlt_ft]:
                 exception: None
 
     dji_flight_data:

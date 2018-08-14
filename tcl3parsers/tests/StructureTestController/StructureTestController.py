@@ -127,6 +127,10 @@ class StructureTestController(unittest.TestCase):
     def __addInAllowedExceptions(self, key, expectedParams):
         if self.allowedExceptions:
             for exceptionMatch, allowedException in self.allowedExceptions.copy().items():
+                if allowedException["chain"] and key != allowedException["chain"][0] and self.parentKey.replace("Last Key:", "") == allowedException["chain"][0]:
+                    self.allowedExceptions[exceptionMatch]["chain"] = allowedException["chain"][1:]
+                    allowedException = self.allowedExceptions[exceptionMatch]
+
                 if allowedException["chain"] and key == allowedException["chain"][0]:
                     self.allowedExceptions[exceptionMatch]["chain"] = allowedException["chain"][1:]
                     if not self.allowedExceptions[exceptionMatch]["chain"]:
@@ -136,7 +140,7 @@ class StructureTestController(unittest.TestCase):
                         del self.allowedExceptions[exceptionMatch]
         return expectedParams
 
-    # start with constants.CNS2_MOP and self.cns2_data, recurse
+    # Starts with the modified swaggerhub spec in a custom format and the actual data, recurses
     def runStructureTest(self, expectedData, actualData, parentKey="", allowedExceptions=[]):
         """Iterates through every key in outputted JSON and compares it to parameters set in a testing JSON"""
         self.parentKey = parentKey
@@ -152,6 +156,6 @@ class StructureTestController(unittest.TestCase):
 
                 actualData[key] = self.__matchParameters(key, expectedParams, actualData[key])
             else:
-                actualData[key] = self.runStructureTest(value, actualData[key], "Last Key: " + key, self.allowedExceptions)
+                actualData[key] = self.runStructureTest(value, actualData[key], "Last Key:" + key, self.allowedExceptions)
 
         return actualData

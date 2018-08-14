@@ -1,4 +1,5 @@
 import csv
+import helpers.field_var_helpers as field_var
 
 def generic_field_vars(model, fileName):
     with open(fileName, "r") as field_vars_file:
@@ -9,12 +10,12 @@ def generic_field_vars(model, fileName):
             caseHandled, model = hardCodedVariableCases(model, fieldVar)
 
             if not caseHandled and 'Value' in fieldVar and fieldVar['Variable'] in model.keys():
-                success, fieldVar['Value'] = maybeNumber(fieldVar['Value'])
+                success, fieldVar['Value'] = field_var.maybeNumber(fieldVar['Value'])
                 if success and fieldVar['Value'] == 0:
                     # fieldVar['Value'] = {}
                     continue
                 elif not success:
-                    success, fieldVar['Value'] = maybeGetLatLonDict(fieldVar['Value'])
+                    success, fieldVar['Value'] = field_var.maybeGetLatLonDict(fieldVar['Value'])
 
                 caseHandled, model = hardCodedVariableCases(model, fieldVar)
 
@@ -62,34 +63,3 @@ def hardCodedVariableCases(model, fieldVar):
     else:
         caseHandled = False
     return caseHandled, model
-
-
-def maybeNumber(value):
-    try:
-        tempValue = float(value)
-        if value == int(tempValue):
-            tempValue = int(value)
-    except ValueError:
-        return False, value
-    return True, tempValue
-
-def maybeGetLatLonDict(value):
-    try:
-        if " " in value:
-            potentialLatLon = value.split(" ")
-        if " " not in value or len(potentialLatLon) != 2:
-            return False, value
-
-        lat = float(potentialLatLon[0])
-        lon = float(potentialLatLon[1])
-        if lat < -90 or lat > 90 or lon < -180 or lon > 180:
-            raise ValueError('Not Lat Lon')
-    except:
-        return False, value
-
-    latLonDict = {
-        "lat": lat,
-        "lon": lon
-    }
-
-    return True, latLonDict
