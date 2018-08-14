@@ -13,12 +13,25 @@ class StructureTestController(unittest.TestCase):
         print("\n\n")
         for exceptionMatched, exceptionInfo in self.exceptionsMatched.items():
             print("EXCEPTION MATCHED:", exceptionMatched, "was matched", exceptionInfo["exceptionCount"], "times with the values:", exceptionInfo["exceptionValues"])
-            if exceptionInfo["fix"]:
-                print("\tEXCEPTION FIXED TO:", exceptionInfo["fix"])
+            if "fix" in exceptionInfo:
+                print("\tEXCEPTION FIXED TO:", exceptionInfo["fix"] if exceptionInfo["fix"] else "EMPTY(" + str(type(exceptionInfo["fix"])) + ")")
         print("\n")
 
-    def __matchException(self, key, exceptionMatchList, actualData, fix=""):
-        if not isinstance(exceptionMatchList, list):
+    def recordExceptionToPrintList(self, key, actualData, fix="_______"):
+        if key not in self.exceptionsMatched.keys():
+            self.exceptionsMatched[key] = {
+                "exceptionCount": 1,
+                "exceptionValues": [str(actualData)]
+            }
+            if fix != "_______":
+                self.exceptionsMatched[key]["fix"] = fix
+        else:
+            self.exceptionsMatched[key]["exceptionCount"] += 1
+            if str(actualData) not in self.exceptionsMatched[key]["exceptionValues"]:
+                self.exceptionsMatched[key]["exceptionValues"].append(str(actualData))
+
+    def __matchException(self, key, exceptionMatchList, actualData, fix="_______"):
+        if not isinstance(exceptionMatchList, list) or not exceptionMatchList:
             exceptionMatchList = [exceptionMatchList]
 
         exceptionMatched = False
@@ -31,16 +44,7 @@ class StructureTestController(unittest.TestCase):
                 break
 
         if exceptionMatched:
-            if key not in self.exceptionsMatched.keys():
-                self.exceptionsMatched[key] = {
-                    "exceptionCount": 1,
-                    "exceptionValues": [str(actualData)],
-                    "fix": fix
-                }
-            else:
-                self.exceptionsMatched[key]["exceptionCount"] += 1
-                if str(actualData) not in self.exceptionsMatched[key]["exceptionValues"]:
-                    self.exceptionsMatched[key]["exceptionValues"].append(str(actualData))
+            self.recordExceptionToPrintList(key, actualData, fix)
         return exceptionMatched
 
     def __fixException(self, fix):
@@ -91,7 +95,7 @@ class StructureTestController(unittest.TestCase):
         # If the exception case matches, then ignore checking any other parameters
         # This check is done first so that "exception" can be included in any order
         if "exception" in expectedParams:
-            fix = expectedParams["fix"] if "fix" in expectedParams else ""
+            fix = expectedParams["fix"] if "fix" in expectedParams else "_______"
             if self.__matchException(key, expectedParams["exception"], actualData, fix):
                 return
         for expectedParam in expectedParams:
@@ -99,7 +103,7 @@ class StructureTestController(unittest.TestCase):
             if expectedParam == "exception":
                 continue
             elif expectedParam == "fix":
-                actualData = self.__fixException(expectedParams["fix"]);
+                actualData = self.__fixException(expectedParams["fix"])
                 continue
             elif expectedParam == 'exact':
                 self.__checkExact(key, expectedParams[expectedParam], actualData)
