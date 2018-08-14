@@ -1,0 +1,367 @@
+{
+    "basic": {
+        "uvin": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "gufi": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "submitTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "ussName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "ussInstanceID": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        }
+    },
+    "fType": {
+        "match": {
+            "type": "str",
+            "enum": [
+                "SAA4"
+            ]
+        }
+    },
+    "intruder": {
+        "ts": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "intruderPositionLat_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -90.0,
+                "maximum": 90.0
+            }
+        },
+        "intruderPositionLon_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -180.0,
+                "maximum": 180.0
+            }
+        },
+        "intruderPositionAlt_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "intruderGroundSpeed_ftPerSec": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "intruderVelNorth_ftPerSec": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "intruderVelEast_ftPerSec": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "intruderVelDown_ftPerSec": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "intruderGroundCourse_deg": {
+            "match": {
+                "type": "float|int"
+            }
+        }
+    },
+    "relativeHeadingAtFirstDetection_deg": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "azimuthSensorMin_deg": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "azimuthSensorMax_deg": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "elevationSensorMin_deg": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "elevationSensorMax_deg": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "typeOfSaaSensor": {
+        "match": {
+            "type": "str"
+        }
+    },
+    "saaSensorMinSlantRange_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "saaSensorMaxSlantRange_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "minRcsOfSensor_ft2": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "maxRcsOfSensor_ft2": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "updateRateSensor_hz": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "saaSensorAzimuthAccuracy_deg": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "saaSensorAltitudeAccuracy_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "horRangeAccuracy_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "verRangeAccuracy_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "slantRangeAccuracy_ft": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "timeToTrack_sec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "probabilityFalseAlarmPrct_nonDim": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "probabilityIntruderDetectionPrct_nonDim": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "targetTrackCapacity_nonDim": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "dataPacketRatio_nonDim": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "transmissionDelay_sec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "numberOfLostTracks_nonDim": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "intruderRadarCrossSection_ft2": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "txRadioFrequencyPower_w": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "geoFence": {
+        "geoFenceAvailable_nonDim": {
+            "match": {
+                "type": "int",
+                "enum": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "geoFenceEnable": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "dict",
+                        "children": {
+                            "ts": {
+                                "match": {
+                                    "type": "str",
+                                    "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                                }
+                            },
+                            "geoFenceEnable_nonDim": {
+                                "match": {
+                                    "type": "int",
+                                    "enum": [
+                                        0,
+                                        1
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "geoFenceStartTime": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "str",
+                        "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                    }
+                }
+            }
+        },
+        "geoFenceEndTime": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "str",
+                        "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                    }
+                }
+            }
+        },
+        "geoFenceType_nonDim": {
+            "match": {
+                "type": "int",
+                "enum": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "geoFenceMinAltitude_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "geoFenceMaxAltitude_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "geoFenceCircularPointLat_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -90.0,
+                "maximum": 90.0
+            }
+        },
+        "geoFenceCircularPointLon_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -180.0,
+                "maximum": 180.0
+            }
+        },
+        "geoFenceCircularRadius_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "geoFenceDynamicPolygonPoint": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "dict",
+                        "children": {
+                            "ts": {
+                                "match": {
+                                    "type": "str",
+                                    "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                                }
+                            },
+                            "geoFenceDynamicPolygonPoint_deg": {
+                                "match": {
+                                    "type": "list",
+                                    "minLength": 1,
+                                    "children": {
+                                        "match": {
+                                            "type": "dict",
+                                            "children": {
+                                                "lat": {
+                                                    "match": {
+                                                        "type": "float|int",
+                                                        "minimum": -90.0,
+                                                        "maximum": 90.0
+                                                    }
+                                                },
+                                                "lon": {
+                                                    "match": {
+                                                        "type": "float|int",
+                                                        "minimum": -180.0,
+                                                        "maximum": 180.0
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

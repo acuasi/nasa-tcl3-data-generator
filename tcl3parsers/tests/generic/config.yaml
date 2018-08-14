@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - CON2,4_ptar
+    - SAA4
 
 # Specify all new parsers below.
 
@@ -141,15 +141,95 @@ parsers:
                     2018-05-25/N252MH/Flight 5
                 ]
             - dji_flight_data
+
     CON2,4_ptar:
         sub_parsers:
-            # - con4
-            # - con2_ptar:
-            #     for: [
-            #         2018-05-25/N241UA/Flight 2,
-            #         2018-05-25/N241UA/Flight 5
-            #     ]
+            - con4
+            - con2_ptar:
+                for: [
+                    2018-05-25/N241UA/Flight 2,
+                    2018-05-25/N241UA/Flight 5
+                ]
             - ptar_flight_data
+
+    CON5:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
+        skip_if_files_not_found: true
+        sub_parsers:
+            - flight_data
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+                - '[0-9]{4,4}-[0-9]{2,2}-[0-9]{2,2}\s[0-9]{2,2}-[0-9]{2,2}-[0-9]{2,2}\.csv'
+            DF_FILE:
+                - .log
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            DF_FILE:
+                - con5_ardu_data_flash
+        variable_parsers:
+            fType:
+                exact: CON5
+            UTM-TCL3-DMP-RevF-CONPDF:
+                exact: UTM-ACUASI-CON-5.pdf
+
+    SAA2:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        name_override: SAA2
+        sub_parsers:
+            - flight_data
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        global_parsers:
+                - geoFence
+        variable_parsers:
+            fType:
+                exact: SAA2
+            UTM-TCL3-DMP-RevF-CONPDF:
+                exact: UTM-ACUASI-SAA-2.pdf
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: None
+
+    SAA4:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        name_override: SAA4
+        sub_parsers:
+            - flight_data
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+            RADAR_FILE:
+                - radar_data.csv
+        global_parsers:
+            - saa4_main
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+        variable_parsers:
+            fType:
+                exact: SAA4
+            UTM-TCL3-DMP-RevF-CONPDF:
+                exact: UTM-ACUASI-SAA-4.pdf
+            intruder[intruderVelNorth_ftPerSec]:
+                exception: None
+
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
@@ -343,7 +423,7 @@ sub_parsers:
             MI_FILE:
                 - mission_insight.csv
             TLOG:
-                - _v2.csv
+                - _tlog.csv
         file_parsers:
             MI_FILE:
                 parser: mission_insight
@@ -360,8 +440,6 @@ sub_parsers:
                 exact: [0]
             plannedContingency[plannedContingencyLoiterRadius_ft]:
                 exact: [0]
-            auxiliaryUASOperation[takeOffTime]:
-                exception: None
 
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then

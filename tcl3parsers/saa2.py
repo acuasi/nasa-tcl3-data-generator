@@ -7,12 +7,12 @@ M_TO_FT = 3.28
 
 def generate(mi_file_name, saa2_ti_name, saa2_td_name, outfile_name):
     """Generate saa2 json file.
-    
+
     Args:
         mi_file_name            (str): Name of the mission insight file.                    [.csv]
         saa2_ti_name            (str): Name of the time independent field variables file    [.log]
         saa2_td_name            (str): Name of the time dependent field variables file      [.log]
-        outfile_name            (str): Name of the output file to be created.               [e.g. 'SAA2.json'] 
+        outfile_name            (str): Name of the output file to be created.               [e.g. 'SAA2.json']
 
     Returns:
         None
