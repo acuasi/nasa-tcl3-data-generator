@@ -10,6 +10,35 @@ This file serves as documentation for the descriptive specification language usi
 
 In order to run the generic parser, navigate to the `tcl3parsers/tests/generic` directory on the command line and execute `python runner.py`. This will run all parsers configured to run in the *config.yaml* file in the same directory. Running this file will generate a JSON file for each flight folder configured for that parser under the *flight_files* folder. These JSON files will be outputted to the directory specified in the config.yaml. Testing is run concurrently with the generation of the output files, so if data outputted for one flight does not match the specification, then the entire parser will halt and the appropriate error message will be displayed.
 
+### Command Line Interface
+The other way to run the parser is by using the Command Line Interface. To run this, navigate to the same directory as `runner.py`. Instead of running this however, run `./flightParser` to run the spec. The flightParser interface has several command line options. First off, instead of having to specify which parser or parsers to run in the `config.yaml` file, these can be run by using the `-p/--parsers` option like below:
+```sh
+$ ./flightParser -p cns1 cns2 CON2,4_ardu
+```
+
+There are also command line options to change the data directory, the inner data folder, and the output directory. A built in `--help` function exists to describe these options.
+```sh
+$ ./flightParser --help
+usage: flightParser [-h] [-p [PARSERS [PARSERS ...]]] [-d DATADIRECTORY]
+                    [-f FLIGHTDATADIRECTORY] [-o OUTPUT]
+
+Command line utility to run parsers specified in the config.yaml file.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p [PARSERS [PARSERS ...]], --parsers [PARSERS [PARSERS ...]]
+                        Specify the parsers to run (run)
+  -d DATADIRECTORY, --dataDirectory DATADIRECTORY
+                        Specify the data directory holding all flight data
+                        (parent_data_directory)
+  -f FLIGHTDATADIRECTORY, --flightDataDirectory FLIGHTDATADIRECTORY
+                        Specify the flight data folder inside of the data
+                        directory for each project (flight_data_directory)
+  -o OUTPUT, --output OUTPUT
+                        Specify the output directory for all data
+                        (output_directory)
+```
+
 ## Logging output
 The generic parser is meant to be used as a command line tool. This means all testing errors or misconstrued data will be logged to the command line. In addition to this, all exception cases (mentioned in depth below) that are matched will be logged for each flight. To prevent a large amount of repetitive output, these exception match messages will be collapsed and a message containing the count of exception matches that occurred and the values that the exceptions matched with will be outputted. To log to a file instead of the command line, run the following:
 ```sh
