@@ -28,6 +28,7 @@ class StructureTests(StructureTestController.StructureTestController):
         """Run all test cases comparing the outputted JSON file against the expected structure from SwaggerHub"""
         self.data = self.runStructureTest(self.specData, self.data, "Top Level", self.allowedExceptions)
 
+        # If the "fix" keyword is used, then the data needs to be rewritten to add in the fix.
         # Since Python is lazily evaluated, there is no performance impact UNLESS self.fixedData has been set to True
         if self.fixedData:
             with open(self.outFile, "w") as jsonWriter:

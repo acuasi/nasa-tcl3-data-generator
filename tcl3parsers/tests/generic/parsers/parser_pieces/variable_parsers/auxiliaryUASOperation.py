@@ -58,6 +58,7 @@ def auxiliaryUASOperation(files):
         aux_op["gcsPosLat_deg"] = float(gcs_locs_dict[gcs_location]["latitude"])
         aux_op["gcsPosLon_deg"] = float(gcs_locs_dict[gcs_location]["longitude"])
         aux_op["gcsPosAlt_ft"] = float(gcs_locs_dict[gcs_location]["altitude"])
+        print("SETTING GCS LOCATION", aux_op)
 
 
     if "LITCHI" in files:
@@ -96,11 +97,11 @@ def auxiliaryUASOperation(files):
                     aux_op["landingTime"] = timestamp
                     alt = float(row[constants.COL_T]) * 0.00328084
                     alt_avg = 0
-                    if len(alt_avg_values) < 10:
+                    if len(alt_avg_values) <= 10:
                         alt_avg_values.append(alt)
 
                     if len(alt_avg_values) == 10 and not alt_flag:
-                        alt_avg = sum(i for i in alt_avg_values)/10.0
+                        alt_avg = sum(i for i in alt_avg_values)/len(alt_avg_values)
                         alt_flag = True
 
                     if len(alt_avg_values) >= 10 and alt_flag:

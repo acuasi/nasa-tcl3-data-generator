@@ -100,7 +100,7 @@ class GenericParser():
                     masterVariable = "['" + topLevelMasterVariable + "']" + masterVariable[masterVariable.find("["):]
                 else:
                     masterVariable = "['" + masterVariable + "']"
-                    
+
                 exceptionKeyMatchChain = [exceptionMatch for exceptionMatch in masterVariable.replace("['", "").split("']") if exceptionMatch]
                 self.exceptionList[masterVariable] = {
                     "type": source["exception"],
@@ -115,11 +115,17 @@ class GenericParser():
                 self.jsonModel[masterVariable] = eval("variable_parser_module.{0}(self.files)".format(source['parser']))
 
     def generate(self):
-        # Iterate through global and file parsers and execute them by passing them the jsonModel and setting it equal to whatever they return
-        # Then iterate through variable parsers and set the specified variable equal to what they return
-        self.executeGlobalParsers()
-        self.executeFileParsers()
+        """ Iterate through global and file parsers and execute them by passing them the jsonModel and setting it equal to whatever they return.
+        Then iterate through variable parsers and set the specified variable equal to what they return. """
         self.executeVariableParsers()
+        self.executeFileParsers()
+        self.executeGlobalParsers()
+
+        if "flight_data" in self.parserName.lower():
+            if "auxiliaryUASOperation" in self.jsonModel.keys() and "takeOffTime" in self.jsonModel["auxiliaryUASOperation"]:
+                takeOffTime = self.jsonModel["auxiliaryUASOperation"]["takeOffTime"]
+                # print(takeOffTime)
+                # exit()
 
         return self.jsonModel
 

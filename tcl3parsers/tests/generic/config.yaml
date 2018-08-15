@@ -313,8 +313,8 @@ sub_parsers:
                 exception: None
             aircraftFlightPlan[wpType_nonDim]:
                 exception: None
-            auxiliaryUASOperation[takeOffTime]:
-                exception: None
+            # auxiliaryUASOperation[takeOffTime]:
+            #     exception: None
             auxiliaryUASOperation[takeoffPosLat_deg]:
                 exception: None
             auxiliaryUASOperation[takeoffPosLon_deg]:

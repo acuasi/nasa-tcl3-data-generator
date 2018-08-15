@@ -182,7 +182,7 @@ def flight_data_ardu(model, files):
                 if len(baro_avg_values) <= 10:
                     baro_avg_values.append(float(row[2]))
                 if len(baro_avg_values) > 10 and baro_flag == 0:
-                    baro_avg = sum(i for i in baro_avg_values)/10.0
+                    baro_avg = sum(i for i in baro_avg_values)/len(baro_avg_values)
                     baro_flag = 1
 
                 if boot_ts_flag:
