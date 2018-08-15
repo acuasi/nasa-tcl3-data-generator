@@ -421,6 +421,8 @@ sub_parsers:
                 exception: None
             aircraftFlightPlan[wpTime]:
                 exception: None
+            auxiliaryUASOperation[gcsPosLat_deg]:
+                exception: None
 
     con2_ardu:
         name_override: CON2_MOP
