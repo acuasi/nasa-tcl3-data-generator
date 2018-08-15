@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns1
+    - CON2,4_ardu
 
 # Specify all new parsers below.
 
@@ -303,6 +303,8 @@ sub_parsers:
                 exact: FLIGHT_DATA
             auxiliaryUASOperation:
                 parser: auxiliaryUASOperation
+            aircraftFlightPlan:
+                exception: None
             aircraftFlightPlan[wpTargetGroundSpeed_ftPerSec]:
                 exception: None
             aircraftFlightPlan[wpTargetAirSpeed_ftPerSec]:
