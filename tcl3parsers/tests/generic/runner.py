@@ -181,7 +181,31 @@ class Runner():
     def __runParser(self):
         """Imports the parser module and executes it dynamically using the parameters specified in the config.yaml file"""
         genericParser = GenericParser.GenericParser(self.specification, self.options, self.parserName, self.files)
-        parsedJSON = genericParser.generate()
+        parsedJSON, takeOffTime = genericParser.generate()
+
+        # If a value for takeOffTime is passed back from the generic parser, then this is a flight_data parser and
+        # need to rename all of the files to include the take off time in their name
+        if takeOffTime:
+            yearMonthDayHourMinuteFromTimeStamp = re.compile(r"([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})T([0-9]{2,2}):([0-9]{2,2}):[0-9]{2,2}.[0-9]{3,4}Z")
+            takeOffTimeDateFormatMatch = yearMonthDayHourMinuteFromTimeStamp.match(takeOffTime)
+            if takeOffTimeDateFormatMatch:
+                year = takeOffTimeDateFormatMatch.group(1)
+                month = takeOffTimeDateFormatMatch.group(2)
+                day = takeOffTimeDateFormatMatch.group(3)
+                hour = takeOffTimeDateFormatMatch.group(4)
+                minute = takeOffTimeDateFormatMatch.group(5)
+                takeOffTimeFormatted = "{0}{1}{2}-{3}{4}".format(year, month, day, hour, minute)
+                self.outFile = re.sub(r"[0-9]{8,8}-[0-9]{4,4}", takeOffTimeFormatted, self.outFile)
+                structure_tests.ACTUAL_DATA_FILE = self.outFile
+
+                print("\n")
+                for fileName in os.listdir(self.parserFlightOutputFolder):
+                    fullFilePath = self.parserFlightOutputFolder + "/" + fileName
+                    newFileName = self.parserFlightOutputFolder + "/" + re.sub(r"[0-9]{8,8}-[0-9]{4,4}", takeOffTimeFormatted, fileName)
+                    if fullFilePath != newFileName:
+                        print("Renaming:", fullFilePath, "to:", newFileName)
+                        os.rename(fullFilePath, newFileName)
+                print("\n")
 
         allowedExceptions = genericParser.getAllowedExceptions()
 

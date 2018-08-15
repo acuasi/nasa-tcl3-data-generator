@@ -121,13 +121,12 @@ class GenericParser():
         self.executeFileParsers()
         self.executeGlobalParsers()
 
+        takeOffTime = None
         if "flight_data" in self.parserName.lower():
             if "auxiliaryUASOperation" in self.jsonModel.keys() and "takeOffTime" in self.jsonModel["auxiliaryUASOperation"]:
                 takeOffTime = self.jsonModel["auxiliaryUASOperation"]["takeOffTime"]
-                # print(takeOffTime)
-                # exit()
 
-        return self.jsonModel
+        return self.jsonModel, takeOffTime
 
     def getAllowedExceptions(self):
         return self.exceptionList
