@@ -63,9 +63,7 @@ def saa4_main(model, files):
                 speed = float(row[headers.index("Speed")]) * constants.KTS_TO_FT
                 intruder = {"ts": ts, "intruderPositionLat_deg": lat,
                             "intruderPositionLon_deg": lon, "intruderPositionAlt_ft": alt,
-                            "intruderGroundSpeed_ftPerSec": speed,
-                            "intruderVelNorth_ftPerSec": None, "intruderVelEast_ftPerSec": None,
-                            "intruderVelDown_ftPerSec": None, "intruderGroundCourse_deg": None}
+                            "intruderGroundSpeed_ftPerSec": speed}
                 break
 
 
@@ -75,7 +73,10 @@ def saa4_main(model, files):
 
     model["geoFence"] = geo_fence
     model["typeOfSaaSensor"] = "Radar"
-    model["intruder"] = intruder
+    model["intruder"].update(intruder)
+    for intruderKey in model["intruder"].keys():
+        if model["intruder"][intruderKey] == 0:
+            model["intruder"][intruderKey] = None
     model["relativeHeadingAtFirstDetection_deg"] = None # Need value
     model["azimuthSensorMin_deg"] = -60
     model["azimuthSensorMax_deg"] = 60

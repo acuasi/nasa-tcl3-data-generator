@@ -20,8 +20,6 @@ def searchModel(model, targetName, targetValue, targetFound=False, fileName=""):
                 return model, True
 
             if targetValue != "Null" and targetValue != "null":
-                if masterVariable == "intruderVelNorth_ftPerSec":
-                    print(masterVariable, targetName, targetValue)
                 convertedToNumber, targetValue = field_var.maybeNumber(targetValue)
 
                 if not convertedToNumber and field_var.noDoubleDigitDayDateFormat.match(targetValue):
