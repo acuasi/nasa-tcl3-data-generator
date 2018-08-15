@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - cns2
+    - CON5
 
 # Specify all new parsers below.
 
@@ -187,9 +187,12 @@ parsers:
 
     CON5:
         sub_parsers:
+            - ptar_flight_data:
+                for: [
+                    N241UA
+                ]
             - flight_data:
                 for: [
-                    N241UA,
                     N260MH
                 ]
             - dji_flight_data:
