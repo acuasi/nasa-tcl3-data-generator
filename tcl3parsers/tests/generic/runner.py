@@ -330,7 +330,7 @@ def loadConfigAndRun(commandLineArgs):
         options['parent_data_directory'] = commandLineArgs.dataDirectory
     if commandLineArgs.flightDataDirectory:
         options['flight_data_directory'] = commandLineArgs.flightDataDirectory
-    if commandLineArgs.o:
+    if commandLineArgs.output:
         options['output_directory'] = commandLineArgs.o
     if not options['run']:
         options['run'] = options['parsers'].keys()

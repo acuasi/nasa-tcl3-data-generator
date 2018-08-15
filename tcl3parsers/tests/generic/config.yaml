@@ -261,6 +261,10 @@ parsers:
                 exact: UTM-ACUASI-SAA-4.pdf
             intruder[intruderVelDown_ftPerSec]:
                 exception: None
+            intruder[intruderVelNorth_ftPerSec]:
+                exception: None
+            intruder[intruderVelEast_ftPerSec]:
+                exception: None
             intruder[intruderGroundCourse_deg]:
                 exception: None
             intruder[relativeHeadingAtFirstDetection_deg]:
@@ -281,6 +285,9 @@ parsers:
                 exception: None
             intruder[saaSensorAltitudeAccuracy_ft]:
                 exception: None
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: []
+                fix: None
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
