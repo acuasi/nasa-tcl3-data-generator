@@ -78,7 +78,7 @@ def flight_data_ardu(model, files):
 
                 if boot_ts_flag:
                     timestamp = system_helpers.sys_ts_converter(int(gps["sys_time"]), boot_ts)
-                    sensors = [
+                    sensors = list(set([
                         "vehiclePositionLat_deg",
                         "vehiclePositionLon_deg",
                         "vehiclePositionAlt_ft",
@@ -88,7 +88,7 @@ def flight_data_ardu(model, files):
                         "vdop_nonDim",
                         "numGpsSatellitesInView_nonDim",
                         "numGpsSat_nonDim"
-                    ]
+                    ]))
 
                     for sensor in sensors:
                         if sensor == "vehiclePositionLat_deg":
@@ -117,14 +117,13 @@ def flight_data_ardu(model, files):
                     sys_time = int(row[1])
                     timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
 
-                    sensors = [
+                    sensors = list(set([
                         "c2RssiGcs_dBm",
                         "c2RssiAircraft_dBm",
                         "c2NoiseGcs_dBm",
                         "c2NoiseAircraft_dBm",
                         "c2PacketLossRateGcsPrct_nonDim",
                         "c2PacketLossRateAircraftPrct_nonDim",
-                        "aircraftAirborneState_nonDim",
                         "aircraftAirborneState_nonDim",
                         "indicatedAirspeed_ftPerSec",
                         "trueAirspeed_ftPerSec",
@@ -146,7 +145,7 @@ def flight_data_ardu(model, files):
                         "verticalNavVelocityError_ftPerSec",
                         "radarSensorAltitude_ft",
                         "acousticSensorAltitude_ft"
-                    ]
+                    ]))
 
                     for i in range(num_motors, 16):
                         sensors.append("motor" + str(i + 1) + "ControlThrottleCommand_nonDim")
@@ -184,7 +183,7 @@ def flight_data_ardu(model, files):
                     sys_time = int(baro["sys_time"])
                     timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
 
-                    sensors = [
+                    sensors = list(set([
                         "barometricAltitude_ft",
                         "barometricPressure_psi",
                         "altitudeUsedByAutopilot_ft",
@@ -192,7 +191,7 @@ def flight_data_ardu(model, files):
                         "laserSensorAltitude_ft",
                         "opticalSensorAltitude_ft",
                         "imageSensorAltitude_ft"
-                    ]
+                    ]))
 
                     for sensor in sensors:
                         if sensor == "barometricAltitude_ft":
@@ -234,11 +233,11 @@ def flight_data_ardu(model, files):
                     sys_time = float(att["sys_time"])
                     timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
 
-                    sensors = [
+                    sensors = list(set([
                         "roll_deg",
                         "pitch_deg",
                         "yaw_deg"
-                    ]
+                    ]))
 
                     for sensor in sensors:
                         value = [att[sensor[:-4]]]
@@ -255,11 +254,11 @@ def flight_data_ardu(model, files):
                     sys_time = float(nkf1["sys_time"])
                     timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
 
-                    sensors = [
+                    sensors = list(set([
                         "velNorth_ftPerSec",
                         "velEast_ftPerSec",
                         "velDown_ftPerSec"
-                    ]
+                    ]))
 
                     for sensor in sensors:
                         # Format: vel_[north|east|down]
@@ -305,10 +304,10 @@ def flight_data_ardu(model, files):
                     uas_state.append(state_value)
 
             if row[0] == "IMU":
-                nkf1["sys_time"] = row[1]
-                nkf1["acc_x"] = row[5]
-                nkf1["acc_y"] = row[6]
-                nkf1["acc_z"] = row[7]
+                acc1["sys_time"] = row[1]
+                acc1["acc_x"] = row[5]
+                acc1["acc_y"] = row[6]
+                acc1["acc_z"] = row[7]
 
                 if boot_ts_flag:
                     sys_time = float(acc1["sys_time"])
