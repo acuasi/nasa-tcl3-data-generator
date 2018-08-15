@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+import math
 from pathlib import Path
 import helpers.system_helpers as system_helpers
 import helpers.constants as constants
@@ -50,6 +51,7 @@ def flight_data_ardu(model, files):
                      "RTL": 1, "Guided": 2, "Land": 1}
 
     with open(files["DF_FILE"], "r") as dataflash_file:
+        prevTimeStampRoundedToSeconds = ""
         for line in dataflash_file:
             # Split by commas and strip leading and trailing whitespaces
             row = [item.strip() for item in line.split(",")]
@@ -117,55 +119,59 @@ def flight_data_ardu(model, files):
                     sys_time = int(row[1])
                     timestamp = system_helpers.sys_ts_converter(sys_time, boot_ts)
 
-                    sensors = list(set([
-                        "c2RssiGcs_dBm",
-                        "c2RssiAircraft_dBm",
-                        "c2NoiseGcs_dBm",
-                        "c2NoiseAircraft_dBm",
-                        "c2PacketLossRateGcsPrct_nonDim",
-                        "c2PacketLossRateAircraftPrct_nonDim",
-                        "aircraftAirborneState_nonDim",
-                        "indicatedAirspeed_ftPerSec",
-                        "trueAirspeed_ftPerSec",
-                        "groundSpeed_ftPerSec",
-                        "aileronActuatorCommand_nonDim",
-                        "elevatorActuatorCommand_nonDim",
-                        "rudderActuatorCommand_nonDim",
-                        "flapActuatorCommand_nonDim",
-                        "landingGearActuatorCommand_nonDim",
-                        "angleOfAttack_deg",
-                        "sideSlip_deg",
-                        "targetGroundSpeed_ftPerSec",
-                        "targetAirSpeed_ftPerSec",
-                        "minDistToDefinedAreaLateralBoundary_ft",
-                        "minDistToDefinedAreaVerticalBoundary_ft",
-                        "lateralNavPositionError_ft",
-                        "verticalNavPositionError_ft",
-                        "lateralNavVelocityError_ftPerSec",
-                        "verticalNavVelocityError_ftPerSec",
-                        "radarSensorAltitude_ft",
-                        "acousticSensorAltitude_ft"
-                    ]))
+                    timeStampRoundedToSeconds = timestamp[:-5]
+                    if timeStampRoundedToSeconds != prevTimeStampRoundedToSeconds:
+                        prevTimeStampRoundedToSeconds = timeStampRoundedToSeconds
 
-                    for i in range(num_motors, 16):
-                        sensors.append("motor" + str(i + 1) + "ControlThrottleCommand_nonDim")
+                        sensors = list(set([
+                            "c2RssiGcs_dBm",
+                            "c2RssiAircraft_dBm",
+                            "c2NoiseGcs_dBm",
+                            "c2NoiseAircraft_dBm",
+                            "c2PacketLossRateGcsPrct_nonDim",
+                            "c2PacketLossRateAircraftPrct_nonDim",
+                            "aircraftAirborneState_nonDim",
+                            "indicatedAirspeed_ftPerSec",
+                            "trueAirspeed_ftPerSec",
+                            "groundSpeed_ftPerSec",
+                            "aileronActuatorCommand_nonDim",
+                            "elevatorActuatorCommand_nonDim",
+                            "rudderActuatorCommand_nonDim",
+                            "flapActuatorCommand_nonDim",
+                            "landingGearActuatorCommand_nonDim",
+                            "angleOfAttack_deg",
+                            "sideSlip_deg",
+                            "targetGroundSpeed_ftPerSec",
+                            "targetAirSpeed_ftPerSec",
+                            "minDistToDefinedAreaLateralBoundary_ft",
+                            "minDistToDefinedAreaVerticalBoundary_ft",
+                            "lateralNavPositionError_ft",
+                            "verticalNavPositionError_ft",
+                            "lateralNavVelocityError_ftPerSec",
+                            "verticalNavVelocityError_ftPerSec",
+                            "radarSensorAltitude_ft",
+                            "acousticSensorAltitude_ft"
+                        ]))
 
-                    for sensor in sensors:
-                        if sensor == "c2RssiGcs_dBm":
-                            value = [(float(row[2]) / 1.9) - 127]
-                        elif sensor == "c2RssiAircraft_dBm":
-                            value = [(float(row[3]) / 1.9) - 127]
-                        elif sensor == "c2NoiseGcs_dBm":
-                            value = [(float(row[5]) / 1.9) - 127]
-                        elif sensor == "c2NoiseAircraft_dBm":
-                            value = [(float(row[6]) / 1.9) - 127]
-                        elif sensor == "aircraftAirborneState_nonDim":
-                            value = [1] if take_off_flag else [0]
-                        else:
-                            value = None
+                        for i in range(num_motors, 16):
+                            sensors.append("motor" + str(i + 1) + "ControlThrottleCommand_nonDim")
 
-                        state_value = {"ts": timestamp, "sensor": [sensor], "value": value}
-                        uas_state.append(state_value)
+                        for sensor in sensors:
+                            if sensor == "c2RssiGcs_dBm":
+                                value = [(float(row[2]) / 1.9) - 127]
+                            elif sensor == "c2RssiAircraft_dBm":
+                                value = [(float(row[3]) / 1.9) - 127]
+                            elif sensor == "c2NoiseGcs_dBm":
+                                value = [(float(row[5]) / 1.9) - 127]
+                            elif sensor == "c2NoiseAircraft_dBm":
+                                value = [(float(row[6]) / 1.9) - 127]
+                            elif sensor == "aircraftAirborneState_nonDim":
+                                value = [1] if take_off_flag else [0]
+                            else:
+                                value = None
+
+                            state_value = {"ts": timestamp, "sensor": [sensor], "value": value}
+                            uas_state.append(state_value)
 
             if row[0] == "BARO":
                 baro["sys_time"] = int(row[1])

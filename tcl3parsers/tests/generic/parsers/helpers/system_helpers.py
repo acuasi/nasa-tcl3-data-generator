@@ -21,6 +21,9 @@ def sys_boot_time(sys_time, gps_ms, gps_wks):
     boot_ts = utc_ts - sys_ts
     return boot_ts
 
+def unix_ts_converter(sys_time, boot_ts):
+    return (sys_time / 1.0E6) + boot_ts
+
 def sys_ts_converter(sys_time, boot_ts):
     """Convert system time to UTC ISO8601 timestamp.
 
@@ -31,7 +34,7 @@ def sys_ts_converter(sys_time, boot_ts):
     Returns:
         sys_ts          (str): ISO8601 formatted timestamp of current system time.
     """
-    unix_ts = (sys_time / 1.0E6) + boot_ts
+    unix_ts = unix_ts_converter(sys_time, boot_ts)
     return datetime.utcfromtimestamp(unix_ts).isoformat(timespec="milliseconds")+"Z"
 
 def lat_lon_converter(lat, lon):

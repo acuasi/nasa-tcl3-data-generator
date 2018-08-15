@@ -48,7 +48,7 @@ def ardu_data_flash(model, fileName):
                 "lat": float(gps["lat"]),
                 "lon": float(gps["lon"])
                 }
-                cl_point_alt = [gps["alt"]]
+                cl_point_alt = gps["alt"]
                 model['plannedContingency']["plannedContingencyLandingPoint_deg"].append(cl_point)
                 model['plannedContingency']["plannedContingencyLandingPointAlt_ft"].append(cl_point_alt)
 
@@ -62,7 +62,7 @@ def ardu_data_flash(model, fileName):
                     model["contingencyLanding"].append({
                         "ts": ts,
                         "contingencyLandingPoint_deg": [cl_point],
-                        "contingencyLandingPointAlt_ft": cl_point_alt
+                        "contingencyLandingPointAlt_ft": [cl_point_alt]
                     })
                     model["contingencyCause"].append({
                         "ts": ts,
