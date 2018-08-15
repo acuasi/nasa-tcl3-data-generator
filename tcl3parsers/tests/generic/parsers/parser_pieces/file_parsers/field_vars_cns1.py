@@ -30,7 +30,7 @@ def field_vars_cns1(model, fileName):
                 value = int(row[1])
                 if value:
                     ts = row[2]
-                    model["contingencyCause"].append({"ts": ts, variable: "[{0}]".format(value)})
+                    model["contingencyCause"].append({"ts": ts, variable: [value]})
 
             elif row[0] == "contingencyResponse_nonDim":
                 variable = "contingencyResponse_nonDim"
