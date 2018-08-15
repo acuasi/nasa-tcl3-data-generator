@@ -122,8 +122,8 @@ class Runner():
         if self.outFile == "":
             self.outFile = self.parserName
 
-        year, month, day, hour, minute = 0,0,0,0,0
-        for fileShortName, fileName in self.files.items():
+        year, month, day, hour, minute = 0, 0, 0, 0, 0
+        for fileName in os.listdir(self.dataDirectory + "/" + self.flightName):
             yearMonthDayHourMinute = re.compile(r'.*([0-9]{4,4})-([0-9]{2,2})-([0-9]{2,2})[\s_]([0-9]{2,2})-([0-9]{2,2})-([0-9]{2,2}).*')
             if yearMonthDayHourMinute.search(fileName):
                 matchDateFormat = re.match(yearMonthDayHourMinute, fileName)
