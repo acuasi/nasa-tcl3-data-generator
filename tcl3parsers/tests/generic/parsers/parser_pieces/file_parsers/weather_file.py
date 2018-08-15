@@ -15,7 +15,7 @@ def weather_file(model, fileName):
             pressure = float(row[headers.index("Barometer")])
             wind_speed = float(row[headers.index("Wind Speed")].strip().split(" ")[0]) * constants.KTS_TO_FT
             wind_dir = float(row[headers.index("Wind Direction")])
-            wx = {"temp": temp, "pressure": pressure, "windspeed": wind_speed, "windDir": wind_dir}
+            wx = {"temp": temp, "pressure": pressure, "windSpeed": wind_speed, "windDir": wind_dir}
             wx_zones = {"ts": ts, "wxBvlosLandingZone1Data": wx, "wxBvlosLandingZone2Data": wx, "wxBvlosLandingZone3Data": wx}
             model["wxBvlosLandingZone"].append(wx_zones)
     return model

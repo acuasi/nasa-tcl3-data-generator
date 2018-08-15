@@ -151,7 +151,7 @@
             }
         }
     },
-    "prnGpsSat": {
+    "prnGPSSat": {
         "match": {
             "type": "list",
             "children": {

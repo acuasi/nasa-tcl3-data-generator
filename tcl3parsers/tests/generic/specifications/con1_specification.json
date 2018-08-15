@@ -258,7 +258,7 @@
                                     "maximum": 40
                                 }
                             },
-                            "windspeed": {
+                            "windSpeed": {
                                 "match": {
                                     "type": "float|int",
                                     "minimum": 0,
@@ -286,7 +286,7 @@
                                     "maximum": 40
                                 }
                             },
-                            "windspeed": {
+                            "windSpeed": {
                                 "match": {
                                     "type": "float|int",
                                     "minimum": 0,
@@ -314,7 +314,7 @@
                                     "maximum": 40
                                 }
                             },
-                            "windspeed": {
+                            "windSpeed": {
                                 "match": {
                                     "type": "float|int",
                                     "minimum": 0,

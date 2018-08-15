@@ -102,7 +102,7 @@ parsers:
                 parser: uasTruth
             uasTruth[estimatedTruthPositionError95Prct_in]:
                 exception: None
-            prnGpsSat:
+            prnGPSSat:
                 exception: []
                 fix: None
             uere:
@@ -226,8 +226,6 @@ parsers:
         variable_parsers:
             fType:
                 exact: SAA2
-            UTM-TCL3-DMP-RevF-CONPDF:
-                exact: UTM-ACUASI-SAA-2.pdf
             geoFence[geoFenceDynamicPolygonPoint]:
                 exception: None
 
@@ -257,8 +255,6 @@ parsers:
         variable_parsers:
             fType:
                 exact: SAA4
-            UTM-TCL3-DMP-RevF-CONPDF:
-                exact: UTM-ACUASI-SAA-4.pdf
             intruder[intruderVelDown_ftPerSec]:
                 exception: None
             intruder[intruderVelNorth_ftPerSec]:
