@@ -1,7 +1,7 @@
 ---
 # Specify which parsers you want to run. If this is empty, then all parsers will run
 run:
-    - CON2,4_ardu
+    - cns2
 
 # Specify all new parsers below.
 

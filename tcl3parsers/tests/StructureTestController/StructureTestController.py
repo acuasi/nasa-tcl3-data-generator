@@ -97,13 +97,16 @@ class StructureTestController(unittest.TestCase):
         if "exception" in expectedParams:
             fix = expectedParams["fix"] if "fix" in expectedParams else "_______"
             if self.__matchException(key, expectedParams["exception"], actualData, fix):
+                if fix != "_______":
+                    actualData = self.__fixException(expectedParams["fix"])
                 return
         for expectedParam in expectedParams:
+            if "contingency" in key and expectedParam == "fix":
+                print(key, expectedParam)
             # This case is handled above, so should be skipped
             if expectedParam == "exception":
                 continue
             elif expectedParam == "fix":
-                actualData = self.__fixException(expectedParams["fix"])
                 continue
             elif expectedParam == 'exact':
                 self.__checkExact(key, expectedParams[expectedParam], actualData)
