@@ -6,6 +6,7 @@ import re
 import yaml
 import importlib
 import json
+import argparse
 
 testing_directory = os.path.abspath(os.path.join(os.path.join(__file__, os.path.pardir), os.path.pardir))
 sys.path.append(testing_directory)
@@ -318,11 +319,19 @@ def runAgainstAllData(dataDirectory, options, parserName, outputFolderPrepend=[]
                 break
 
 
-def loadConfigAndRun():
+def loadConfigAndRun(commandLineArgs):
     """Loads the config file and runs testing/generation for all parsers specified in the config"""
     with open("config.yaml", "r") as config:
         options = yaml.load(config)
 
+    if commandLineArgs.parsers:
+        options['run'] = commandLineArgs.parsers[0]
+    if commandLineArgs.dataDirectory:
+        options['parent_data_directory'] = commandLineArgs.dataDirectory
+    if commandLineArgs.flightDataDirectory:
+        options['flight_data_directory'] = commandLineArgs.flightDataDirectory
+    if commandLineArgs.o:
+        options['output_directory'] = commandLineArgs.o
     if not options['run']:
         options['run'] = options['parsers'].keys()
 
@@ -330,5 +339,16 @@ def loadConfigAndRun():
         flightDataDirectory = testing_directory + "/" + options["parent_data_directory"] + "/" + parser_name + "/" + options['flight_data_directory']
         runAgainstAllData(flightDataDirectory, options, parser_name)
 
+def cli_interface():
+    clArgParser = argparse.ArgumentParser(description='Command line utility to run parsers specified in the config.yaml file.')
+    clArgParser.add_argument('-p', '--parsers', action='append', nargs='*', default=None, help='Specify the parsers to run (run)')
+    clArgParser.add_argument('-d', '--dataDirectory', action='store', default=None, help='Specify the data directory holding all flight data (parent_data_directory)')
+    clArgParser.add_argument('-f', '--flightDataDirectory', action='store', default=None, help='Specify the flight data folder inside of the data directory for each project (flight_data_directory)')
+    clArgParser.add_argument('-o', '--output', action='store', default=None, help='Specify the output directory for all data (output_directory)')
+
+    commandLineArgs = clArgParser.parse_args()
+
+    loadConfigAndRun(commandLineArgs)
+
 if __name__ == '__main__':
-    loadConfigAndRun()
+    cli_interface()

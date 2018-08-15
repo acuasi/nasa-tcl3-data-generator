@@ -58,8 +58,6 @@ def auxiliaryUASOperation(files):
         aux_op["gcsPosLat_deg"] = float(gcs_locs_dict[gcs_location]["latitude"])
         aux_op["gcsPosLon_deg"] = float(gcs_locs_dict[gcs_location]["longitude"])
         aux_op["gcsPosAlt_ft"] = float(gcs_locs_dict[gcs_location]["altitude"])
-        print("SETTING GCS LOCATION", aux_op)
-
 
     if "LITCHI" in files:
         with open(files["LITCHI"], "r") as litchi:
