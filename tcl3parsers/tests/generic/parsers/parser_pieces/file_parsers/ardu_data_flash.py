@@ -14,6 +14,7 @@ def ardu_data_flash(model, fileName):
         emptyFieldIfNull('contingencyCause', model)
         emptyFieldIfNull('contingencyResponse', model)
         model['plannedContingency']["plannedContingencyLandingPoint_deg"] = []
+        model['plannedContingency']["plannedContingencyLandingPointAlt_ft"] = []
 
         for line in dataflash_file:
             # Split by commas and strip leading and trailing whitespaces
@@ -49,7 +50,7 @@ def ardu_data_flash(model, fileName):
                 }
                 cl_point_alt = [gps["alt"]]
                 model['plannedContingency']["plannedContingencyLandingPoint_deg"].append(cl_point)
-                model['plannedContingency']["plannedContingencyLandingPointAlt_ft"] = cl_point_alt
+                model['plannedContingency']["plannedContingencyLandingPointAlt_ft"].append(cl_point_alt)
 
             # 1 Hz
             if row[0] == "RAD":
