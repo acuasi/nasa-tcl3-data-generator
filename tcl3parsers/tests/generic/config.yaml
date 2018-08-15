@@ -285,7 +285,7 @@ sub_parsers:
     # will greatly speed things up.
     flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
-        # skip_if_files_not_found: true
+        skip_if_files_not_found: true
         required_files:
             MI_FILE:
                 - mission_insight.csv

@@ -404,7 +404,7 @@ def flight_data_ardu(model, files):
         ac_flight_plan.append(None)
 
     model["auxiliaryUASOperation"].update(aux_op)
-    model["aircraftFlightPlan"] = ac_flight_plan
+    model["aircraftFlightPlan"] = ac_flight_plan if ac_flight_plan and ac_flight_plan[0] is not None else None
     model["uasState"] = uas_state
 
     return model
