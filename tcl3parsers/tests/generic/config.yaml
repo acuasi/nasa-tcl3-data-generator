@@ -34,7 +34,7 @@ run:
 
 parsers:
     cns1:
-        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v3
         sub_parsers: flight_data
         required_files:
             MI_FILE:
@@ -47,7 +47,7 @@ parsers:
             MI_FILE:
                 parser: mission_insight
             DF_FILE:
-                parser: ardu_data_flash_str
+                parser: ardu_data_flash
             FIELD_VARS:
                 parser: field_vars_cns1
         variable_parsers:
@@ -56,14 +56,23 @@ parsers:
             UTM-TCL3-DMP-RevF-CNSPDF:
                 exact: UTM-ACUASI-CNS-1.pdf
             plannedContingency[plannedContingencyLoiterAlt_ft]:
-                exception: ""
+                exception: []
                 fix: None
             plannedContingency[plannedContingencyLoiterRadius_ft]:
-                exception: ""
+                exception: []
+                fix: None
+            contingencyLoiterType:
+                exception: []
+                fix: None
+            contingencyLoiterAlt:
+                exception: []
+                fix: None
+            contingencyLoiterRadius:
+                exception: []
                 fix: None
 
     cns2:
-        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v2
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-cns/v3
         sub_parsers: flight_data
         required_files:
             MI_FILE:
@@ -77,16 +86,18 @@ parsers:
             MI_FILE:
                 parser: mission_insight
             DF_FILE:
-                parser: ardu_data_flash_str
+                parser: ardu_data_flash
         variable_parsers:
             fType:
                 exact: CNS2
             UTM-TCL3-DMP-RevF-CNSPDF:
                 exact: UTM-ACUASI-CNS-2.pdf
             plannedContingency[plannedContingencyLoiterAlt_ft]:
-                exact: '[0]'
+                exception: []
+                fix: None
             plannedContingency[plannedContingencyLoiterRadius_ft]:
-                exact: '[0]'
+                exception: []
+                fix: None
             uasTruth:
                 parser: uasTruth
             uasTruth[estimatedTruthPositionError95Prct_in]:
@@ -95,6 +106,15 @@ parsers:
                 exception: []
                 fix: None
             uere:
+                exception: []
+                fix: None
+            contingencyLoiterType:
+                exception: []
+                fix: None
+            contingencyLoiterAlt:
+                exception: []
+                fix: None
+            contingencyLoiterRadius:
                 exception: []
                 fix: None
 
