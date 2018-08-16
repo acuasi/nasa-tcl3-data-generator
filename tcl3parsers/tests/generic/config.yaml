@@ -620,6 +620,10 @@ sub_parsers:
         variable_parsers:
             fType:
                 exact: SAA4
+            geoFence[geoFenceCircularPointLon_deg]:
+                exact: ""
+                exception: ""
+                fix: None
             intruder[ts]:
                 exception: ""
                 fix: None
