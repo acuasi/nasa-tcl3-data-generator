@@ -79,14 +79,16 @@ parsers:
     cns1:
 ```
 
-In addition to this, the parser name is used to find the correct specification in the SwaggerHub file. By default, if the parser's name ends in a number, like in the case of cns1, then the name *CNS1_MOP* is looked for. If the parser's name doesn't end in a number, like in the case of *flight_data*, then an uppercase version of the name is searched for (ex. *FLIGHT_DATA*). To override this name search, a different specification name can be added by using the key `name_override`. If the specified name is not found in the SwaggerHub file, it will immediately fail.
+In addition to this, the parser name is used to find the correct specification in the SwaggerHub file. By default, if the parser's name ends in a number, like in the case of cns1, then the name *CNS1_MOP* is looked for. If the parser's name doesn't end in a number, like in the case of *flight_data*, then an uppercase version of the name is searched for (ex. *FLIGHT_DATA*). To override this name search, a different specification name can be added by using the key `swaggerhub_name_override`. If the specified name is not found in the SwaggerHub file, it will immediately fail.
 
 Example override:
 ```yaml
 parsers:
     cns1:
-        name_override: NEW_NAME_TO_SEARCH_FOR
+        swaggerhub_name_override: NEW_NAME_TO_SEARCH_FOR
 ```
+
+Another case to handle in regards to naming is when a sub parser (or parser) is running, but should output a file with a different name than its own. To handle these cases, the keyword `output_name` can be used. Note however that the name is currently fixed to be in the format `ACUASI-{YEAR}{MONTH}{DAY}-{HOUR}{MINUTE}-{NAME}.json`. Updating `output_name` will only update `{NAME}` in this format.
 
 The next important thing to configure under a parser is the SwaggerHub specification. This can be specified by just passing its URL to the `swagger_hub_spec` key and it will be automatically scraped from the internet. This is where the `cache_specifications` option comes into play now; it is relatively expensive to have to download the specification file and convert it to a format that can be used by the parser, so by caching it, a copy of the specification converted to a format for internal use will be saved in the `specification_cache_directory`. The configuration for the parser should now look like:
 ```yaml

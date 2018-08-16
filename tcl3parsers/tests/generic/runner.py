@@ -75,13 +75,13 @@ class Runner():
         if not self.isSubParser:
             requiredFiles = self.options['parsers'][self.parserName]['required_files']
             specLink = self.options['parsers'][self.parserName]['swagger_hub_spec']
-            if "name_override" in self.options['parsers'][self.parserName]:
-                specNameOverride = self.options['parsers'][self.parserName]['name_override']
+            if "swaggerhub_name_override" in self.options['parsers'][self.parserName]:
+                specNameOverride = self.options['parsers'][self.parserName]['swaggerhub_name_override']
         else:
             requiredFiles = self.options['sub_parsers'][self.parserName]['required_files']
             specLink = self.options['sub_parsers'][self.parserName]['swagger_hub_spec']
-            if "name_override" in self.options['sub_parsers'][self.parserName]:
-                specNameOverride = self.options['sub_parsers'][self.parserName]['name_override']
+            if "swaggerhub_name_override" in self.options['sub_parsers'][self.parserName]:
+                specNameOverride = self.options['sub_parsers'][self.parserName]['swaggerhub_name_override']
 
         self.flightName = flightName
         flightPath = self.dataDirectory +  "/" + self.flightName

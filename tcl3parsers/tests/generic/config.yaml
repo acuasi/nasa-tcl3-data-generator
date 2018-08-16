@@ -203,7 +203,7 @@ parsers:
 
     SAA2:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
-        name_override: SAA2
+        swaggerhub_name_override: SAA2
         sub_parsers:
             - flight_data
         required_files:
@@ -232,7 +232,7 @@ parsers:
 
     SAA4:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
-        name_override: SAA4
+        swaggerhub_name_override: SAA4
         sub_parsers:
             - flight_data
         required_files:
@@ -343,7 +343,7 @@ sub_parsers:
 
     dji_flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
-        name_override: FLIGHT_DATA
+        swaggerhub_name_override: FLIGHT_DATA
         output_name: flight_data
         skip_if_files_not_found: true
         required_files:
@@ -393,7 +393,7 @@ sub_parsers:
 
     ptar_flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
-        name_override: FLIGHT_DATA
+        swaggerhub_name_override: FLIGHT_DATA
         output_name: flight_data
         skip_if_files_not_found: true
         required_files:
@@ -429,7 +429,7 @@ sub_parsers:
                 exception: None
 
     con2_ardu:
-        name_override: CON2_MOP
+        swaggerhub_name_override: CON2_MOP
         output_name: con2
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
@@ -475,7 +475,7 @@ sub_parsers:
                 exception: None
 
     con4:
-        name_override: CON4_MOP
+        swaggerhub_name_override: CON4_MOP
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
             MI_FILE:
@@ -493,7 +493,7 @@ sub_parsers:
                 exact: UTM-ACUASI-CON-4.kml
 
     con2_dji:
-        name_override: CON2_MOP
+        swaggerhub_name_override: CON2_MOP
         output_name: con2
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
@@ -519,7 +519,7 @@ sub_parsers:
                 exact: [0]
 
     con2_ptar:
-        name_override: CON2_MOP
+        swaggerhub_name_override: CON2_MOP
         output_name: con2
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
