@@ -1,0 +1,236 @@
+{
+    "basic": {
+        "uvin": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "gufi": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        },
+        "submitTime": {
+            "match": {
+                "type": "str",
+                "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+            }
+        },
+        "ussName": {
+            "match": {
+                "type": "str"
+            }
+        },
+        "ussInstanceID": {
+            "match": {
+                "type": "str",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+                "maxLength": 36,
+                "minLength": 36
+            }
+        }
+    },
+    "fType": {
+        "match": {
+            "type": "str",
+            "enum": [
+                "SAA5"
+            ]
+        }
+    },
+    "lookAheadTime_sec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "UTM-TCL3-DMP-RevF-SAAPDF": {
+        "match": {
+            "type": "str",
+            "pattern": "^UTM-[^-]+-SAA-[0-9]+.pdf$"
+        }
+    },
+    "typeOfConflictResolution_nonDim": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "expectedOperatorResponseTime_sec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "expectedUASResponseTime_sec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "expectedCommLatency_sec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "expectedClimbRateOwnship_ftPerSec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "expectedDescendRateOwnship_ftPerSec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "expectedTurnRateOwnship_degPerSec": {
+        "match": {
+            "type": "float|int"
+        }
+    },
+    "geoFence": {
+        "geoFenceAvailable_nonDim": {
+            "match": {
+                "type": "int",
+                "enum": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "geoFenceEnable": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "dict",
+                        "children": {
+                            "ts": {
+                                "match": {
+                                    "type": "str",
+                                    "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                                }
+                            },
+                            "geoFenceEnable_nonDim": {
+                                "match": {
+                                    "type": "int",
+                                    "enum": [
+                                        0,
+                                        1
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "geoFenceStartTime": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "str",
+                        "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                    }
+                }
+            }
+        },
+        "geoFenceEndTime": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "str",
+                        "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                    }
+                }
+            }
+        },
+        "geoFenceType_nonDim": {
+            "match": {
+                "type": "int",
+                "enum": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "geoFenceMinAltitude_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "geoFenceMaxAltitude_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "geoFenceCircularPointLat_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -90.0,
+                "maximum": 90.0
+            }
+        },
+        "geoFenceCircularPointLon_deg": {
+            "match": {
+                "type": "float|int",
+                "minimum": -180.0,
+                "maximum": 180.0
+            }
+        },
+        "geoFenceCircularRadius_ft": {
+            "match": {
+                "type": "float|int"
+            }
+        },
+        "geoFenceDynamicPolygonPoint": {
+            "match": {
+                "type": "list",
+                "children": {
+                    "match": {
+                        "type": "dict",
+                        "children": {
+                            "ts": {
+                                "match": {
+                                    "type": "str",
+                                    "pattern": "^2[0-9][0-9][0-9]-[01][0-9]-[0123][0-9]T[012][0-9]:[012345][0-9]:[012345][0-9]\\.[0-9][0-9][0-9][0-9]*Z{0,1}$"
+                                }
+                            },
+                            "geoFenceDynamicPolygonPoint_deg": {
+                                "match": {
+                                    "type": "list",
+                                    "minLength": 1,
+                                    "children": {
+                                        "match": {
+                                            "type": "dict",
+                                            "children": {
+                                                "lat": {
+                                                    "match": {
+                                                        "type": "float|int",
+                                                        "minimum": -90.0,
+                                                        "maximum": 90.0
+                                                    }
+                                                },
+                                                "lon": {
+                                                    "match": {
+                                                        "type": "float|int",
+                                                        "minimum": -180.0,
+                                                        "maximum": 180.0
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

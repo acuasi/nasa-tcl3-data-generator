@@ -200,91 +200,25 @@ parsers:
                 for: [
                     N251MH
                 ]
-
     SAA2:
-        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
-        swaggerhub_name_override: SAA2
         sub_parsers:
+            - SAA1
+            - SAA2_sub
+            - SAA3
+            - SAA4_sub
+            - SAA5
+            - SAA6
             - flight_data
-        required_files:
-            MI_FILE:
-                - mission_insight.csv
-            TI_FILE:
-                - TI.csv
-            TD_FILE:
-                - TD.csv
-            FIELD_VARS:
-                - field_vars.csv
-            DF_FILE:
-                - .log
-        file_parsers:
-            MI_FILE:
-                parser: mission_insight
-            FIELD_VARS:
-                parser: saa_field_vars
-        global_parsers:
-                - geoFence
-        variable_parsers:
-            fType:
-                exact: SAA2
-            geoFence[geoFenceDynamicPolygonPoint]:
-                exception: None
 
     SAA4:
-        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
-        swaggerhub_name_override: SAA4
         sub_parsers:
+            - SAA1
+            - SAA2_sub
+            - SAA3
+            - SAA4_sub
+            - SAA5
+            - SAA6
             - flight_data
-        required_files:
-            MI_FILE:
-                - mission_insight.csv
-            TI_FILE:
-                - TI.csv
-            TD_FILE:
-                - TD.csv
-            FIELD_VARS:
-                - field_vars.csv
-            RADAR_FILE:
-                - radar_data.csv
-        global_parsers:
-            - saa4_main
-        file_parsers:
-            MI_FILE:
-                parser: mission_insight
-            FIELD_VARS:
-                parser: saa_field_vars
-        variable_parsers:
-            fType:
-                exact: SAA4
-            intruder[intruderVelDown_ftPerSec]:
-                exception: None
-            intruder[intruderVelNorth_ftPerSec]:
-                exception: None
-            intruder[intruderVelEast_ftPerSec]:
-                exception: None
-            intruder[intruderGroundCourse_deg]:
-                exception: None
-            intruder[relativeHeadingAtFirstDetection_deg]:
-                exception: None
-            intruder[horRangeAccuracy_ft]:
-                exception: None
-            intruder[verRangeAccuracy_ft]:
-                exception: None
-            intruder[probabilityFalseAlarmPrct_nonDim]:
-                exception: None
-            intruder[probabilityIntruderDetectionPrct_nonDim]:
-                exception: None
-            intruder[dataPacketRatio_nonDim]:
-                exception: None
-            intruder[transmissionDelay_sec]:
-                exception: None
-            intruder[numberOfLostTracks_nonDim]:
-                exception: None
-            intruder[saaSensorAltitudeAccuracy_ft]:
-                exception: None
-            geoFence[geoFenceDynamicPolygonPoint]:
-                exception: []
-                fix: None
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
@@ -543,6 +477,260 @@ sub_parsers:
                 exact: [0]
             plannedContingency[plannedContingencyLoiterRadius_ft]:
                 exact: [0]
+    SAA1:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        swaggerhub_name_override: SAA1
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+            DF_FILE:
+                - .log
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
+        global_parsers:
+                - geoFence
+        variable_parsers:
+            fType:
+                exact: SAA1
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: None
+            timeAtEncounterInit:
+                exception: None
+            timeAtConflictAlert:
+                exception: None
+            timeAtConflictResManeuverInit:
+                exception: None
+            timeAtConflictResManeuverComplt:
+                exception: None
+            timeAtClearOfConflict:
+                exception: None
+
+    SAA2_sub:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        swaggerhub_name_override: SAA2
+        output_name: saa2
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+            DF_FILE:
+                - .log
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
+        global_parsers:
+                - geoFence
+        variable_parsers:
+            fType:
+                exact: SAA2
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: None
+
+    SAA4_sub:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        swaggerhub_name_override: SAA4
+        output_name: saa4
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+            RADAR_FILE:
+                - radar_data.csv
+        global_parsers:
+            - saa4_main
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
+        variable_parsers:
+            fType:
+                exact: SAA4
+            intruder[intruderVelDown_ftPerSec]:
+                exception: None
+            intruder[intruderVelNorth_ftPerSec]:
+                exception: None
+            intruder[intruderVelEast_ftPerSec]:
+                exception: None
+            intruder[intruderGroundCourse_deg]:
+                exception: None
+            intruder[relativeHeadingAtFirstDetection_deg]:
+                exception: None
+            intruder[horRangeAccuracy_ft]:
+                exception: None
+            intruder[verRangeAccuracy_ft]:
+                exception: None
+            intruder[probabilityFalseAlarmPrct_nonDim]:
+                exception: None
+            intruder[probabilityIntruderDetectionPrct_nonDim]:
+                exception: None
+            intruder[dataPacketRatio_nonDim]:
+                exception: None
+            intruder[transmissionDelay_sec]:
+                exception: None
+            intruder[numberOfLostTracks_nonDim]:
+                exception: None
+            intruder[saaSensorAltitudeAccuracy_ft]:
+                exception: None
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: []
+                fix: None
+
+    SAA3:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        swaggerhub_name_override: SAA3
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+            DF_FILE:
+                - .log
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
+        global_parsers:
+                - geoFence
+        variable_parsers:
+            fType:
+                exact: SAA3
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: None
+    SAA5:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        swaggerhub_name_override: SAA5
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+            DF_FILE:
+                - .log
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
+        global_parsers:
+                - geoFence
+        variable_parsers:
+            fType:
+                exact: SAA5
+            UTM-TCL3-DMP-RevF-SAAPDF:
+                exact: UTM-ACUASI-SAA-5.pdf
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: None
+            lookAheadTime_sec:
+                exception: None
+            typeOfConflictResolution_nonDim:
+                exception: None
+            expectedOperatorResponseTime_sec:
+                exception: None
+            expectedUASResponseTime_sec:
+                exception: None
+            expectedCommLatency_sec:
+                exception: None
+            expectedClimbRateOwnship_ftPerSec:
+                exception: None
+            expectedDescendRateOwnship_ftPerSec:
+                exception: None
+            expectedTurnRateOwnship_degPerSec:
+                exception: None
+
+    SAA6:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        swaggerhub_name_override: SAA6
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+            DF_FILE:
+                - .log
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
+        global_parsers:
+                - geoFence
+        variable_parsers:
+            fType:
+                exact: SAA6
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: None
+            slantRangeAtPtOfApproach_ft:
+                exception: None
+            verMissDistAtClosestPtApproach_ft:
+                exception: None
+            numberOfAlertsPerInducedConflict_nonDim:
+                exception: None
+            numberOfStrengtheningAlertsPerConflict_nonDim:
+                exception: None
+            numberOfStrengtheningAlertsTotal_nonDim:
+                exception: None
+            numberOfWeakeningAlertsPerConflict_nonDim:
+                exception: None
+            numberOfWeakeningAlertsTotal_nonDim:
+                exception: None
+            numberOfReversalAlertsPerConflict_nonDim:
+                exception: None
+            numberOfReversalAlertsTotal_nonDim:
+                exception: None
+            numberOfYoYoAlertsPerConflict_nonDim:
+                exception: None
+            numberOfYoYoAlertsTotal_nonDim:
+                exception: None
+            horFlightPathDeviation_ft:
+                exception: None
+            verFlightPathDeviation_ft:
+                exception: None
+            maxAbsolutePathDeviation_ft:
+                exception: None
+            maxHorPathDeviation_ft:
+                exception: None
+            maxVerPathDeviation_ft:
+                exception: None
+            totalHorPathDeviation_ft2:
+                exception: None
+            totalVerPathDeviation_ft2:
+                exception: None
+
 
 # This specifies the global output directory where all parsed JSON files will be placed.
 # This can either be a relative or absolute path, if nothing is specified, then

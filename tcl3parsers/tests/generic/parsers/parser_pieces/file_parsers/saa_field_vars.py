@@ -7,8 +7,8 @@ def saa_field_vars(model, fileName):
         fieldVars = csv.DictReader(field_vars_file)
         for fieldVar in fieldVars:
             model, targetFound = searchModel(model, fieldVar["Variable"], fieldVar["Value"], fileName=fileName)
-            if not targetFound:
-                print("Field Variable [", fieldVar["Variable"], "] not found in expected JSON, skipping...")
+            # if not targetFound:
+            #     print("Field Variable [", fieldVar["Variable"], "] not found in expected JSON, skipping...")
 
     return model
 
@@ -38,6 +38,7 @@ def searchModel(model, targetName, targetValue, targetFound=False, fileName=""):
                         print("ERROR: Field Var:", targetName ,"contains an improperly formed date that can't be corrected.")
                         return model, True
             else:
+                model[masterVariable] = None
                 return model, True
 
             if isinstance(model[masterVariable], list):
