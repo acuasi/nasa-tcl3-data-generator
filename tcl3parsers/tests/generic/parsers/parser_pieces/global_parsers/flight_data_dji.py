@@ -26,7 +26,7 @@ def flight_data_dji(model, files):
 
             timeStampRoundedToSeconds = timestamp[:-5]
             if timeStampRoundedToSeconds == prevTimeStampRoundedToSeconds:
-                    continue
+                continue
             else:
                 prevTimeStampRoundedToSeconds = timeStampRoundedToSeconds
 
