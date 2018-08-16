@@ -65,7 +65,7 @@
                 "minLength": 1,
                 "children": {
                     "match": {
-                        "type": "dict"
+                        "type": "str"
                     }
                 }
             }

@@ -15,6 +15,7 @@ def flight_data_dji(model, files):
     with open(files["LITCHI"], "r") as litchi_file:
         headers = litchi_file.readline().strip().split(",")
 
+        prevTimeStampRoundedToSeconds = ""
         for line in litchi_file:
             # Split by commas and strip leading and trailing whitespaces
             row = [item.strip() for item in line.split(",")]
@@ -22,6 +23,12 @@ def flight_data_dji(model, files):
             # Format timestamp to ISO8601 standard
             dt = row[headers.index("datetime(utc)")]
             timestamp = dt.split(" ")[0] + "T" + dt.split(" ")[1] + "Z"
+
+            timeStampRoundedToSeconds = timestamp[:-5]
+            if timeStampRoundedToSeconds == prevTimeStampRoundedToSeconds:
+                    continue
+            else:
+                prevTimeStampRoundedToSeconds = timeStampRoundedToSeconds
 
             sensor = ["vehiclePositionLat_deg"]
             value = float(row[headers.index("latitude")])
