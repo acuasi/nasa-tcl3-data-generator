@@ -794,6 +794,8 @@ sub_parsers:
                 exception: None
             totalVerPathDeviation_ft2:
                 exception: None
+            horMissDistAtClosestPtApproach_ft:
+                exception: None
 
 
 # This specifies the global output directory where all parsed JSON files will be placed.
