@@ -4,6 +4,7 @@ run:
     - CON5
 
 # Specify all new parsers below.
+# Full documentation on this parser language can be found in the 'PARSER.md' file.
 
 # required_files:
 # The order they are specified below is the order they will be added as parameters when
@@ -287,8 +288,8 @@ parsers:
 
 # These parsers are the same as regular parsers, except they get their files from a parent parser, operate concurrently, and output to the parent's folder
 sub_parsers:
-    # Note: flight_data is an expensive subparser to run, taking up to 30 seconds per flight. For testing, commenting out the sub_parser in the parent parser
-    # will greatly speed things up.
+    # Note: flight_data is an expensive subparser to run, taking up to 30 seconds per flight. For testing, commenting out the sub parser in the parent parser
+    # will greatly speed things up when it is not necessary.
     flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
         skip_if_files_not_found: true
@@ -319,8 +320,6 @@ sub_parsers:
                 exception: None
             aircraftFlightPlan[wpType_nonDim]:
                 exception: None
-            # auxiliaryUASOperation[takeOffTime]:
-            #     exception: None
             auxiliaryUASOperation[takeoffPosLat_deg]:
                 exception: None
             auxiliaryUASOperation[takeoffPosLon_deg]:
@@ -345,6 +344,7 @@ sub_parsers:
     dji_flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
         name_override: FLIGHT_DATA
+        output_name: flight_data
         skip_if_files_not_found: true
         required_files:
             MI_FILE:
@@ -394,6 +394,7 @@ sub_parsers:
     ptar_flight_data:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-flight-data/v3
         name_override: FLIGHT_DATA
+        output_name: flight_data
         skip_if_files_not_found: true
         required_files:
             MI_FILE:
@@ -429,6 +430,7 @@ sub_parsers:
 
     con2_ardu:
         name_override: CON2_MOP
+        output_name: con2
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
             MI_FILE:
@@ -492,6 +494,7 @@ sub_parsers:
 
     con2_dji:
         name_override: CON2_MOP
+        output_name: con2
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
             MI_FILE:
@@ -517,6 +520,7 @@ sub_parsers:
 
     con2_ptar:
         name_override: CON2_MOP
+        output_name: con2
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-con/v2
         required_files:
             MI_FILE:

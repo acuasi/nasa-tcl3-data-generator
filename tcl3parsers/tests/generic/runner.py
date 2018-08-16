@@ -20,8 +20,6 @@ generic_parser_directory = os.path.abspath(os.path.join(os.path.join(__file__, o
 sys.path.append(generic_parser_directory)
 
 import GenericParser
-
-# Test Modules
 import structure_tests
 
 class Runner():
@@ -44,6 +42,12 @@ class Runner():
         self.parserFlightOutputFolder = ""
         self.outputFolderPrepend = outputFolderPrepend
         self.isSubParser = parserName not in options['parsers']
+        self.outputName = None
+        if not self.isSubParser and "output_name" in options['parsers'][parserName]:
+            self.outputName = options['parsers'][parserName]["output_name"]
+        elif self.isSubParser and "output_name" in options['sub_parsers'][parserName]:
+            self.outputName = options['sub_parsers'][parserName]["output_name"]
+
 
     def getRequiredFlightFile(self, flightFiles, requiredFile, requirements):
         flightPath = self.dataDirectory +  "/" + self.flightName
@@ -120,8 +124,10 @@ class Runner():
 
         self.parserFlightOutputFolder = parserFlightOutputFolder
 
-        if self.outFile == "":
+        if self.outFile == "" and not self.outputName:
             self.outFile = self.parserName
+        elif self.outputName:
+            self.outFile = self.outputName
 
         year, month, day, hour, minute = 0, 0, 0, 0, 0
         for fileName in os.listdir(self.dataDirectory + "/" + self.flightName):
@@ -149,6 +155,7 @@ class Runner():
             outfile = "{0}/ACUASI-{1}-{2}.json".format(parserFlightOutputFolder, dateFormat, self.outFile)
 
         self.outFile = outfile
+
         self.parserParameters.append(outfile)
         structure_tests.ACTUAL_DATA_FILE = outfile
 
@@ -340,6 +347,7 @@ def loadConfigAndRun(commandLineArgs):
         runAgainstAllData(flightDataDirectory, options, parser_name)
 
 def cli_interface():
+    """Adds optional arguments to be checked for on the command line and runs all parsers."""
     clArgParser = argparse.ArgumentParser(description='Command line utility to run parsers specified in the config.yaml file.')
     clArgParser.add_argument('-p', '--parsers', action='append', nargs='*', default=None, help='Specify the parsers to run (run)')
     clArgParser.add_argument('-d', '--dataDirectory', action='store', default=None, help='Specify the data directory holding all flight data (parent_data_directory)')

@@ -23,11 +23,11 @@ def searchModel(model, targetName, targetValue, targetFound=False, fileName=""):
                 convertedToNumber, targetValue = field_var.maybeNumber(targetValue)
 
                 if not convertedToNumber and field_var.noDoubleDigitDayDateFormat.match(targetValue):
-                    # date in (incorrect) format: YYYY-MM-DTHH:MM:SS.000Z
+                    # fixes date in format: YYYY-MM-DTHH:MM:SS.000Z
                     noDoubleDigitDayInDate = field_var.noDoubleDigitDayDateFormat.match(targetValue)
                     targetValue = noDoubleDigitDayInDate.group(1) + "-0" + noDoubleDigitDayInDate.group(2) + noDoubleDigitDayInDate.group(3)
                 elif not convertedToNumber and field_var.noSecondsDateFormat.match(targetValue):
-                    # date in (incorrect) format: YYYY-MM-DD22:00.000Z
+                    # fixes date in format: YYYY-MM-DD22:00.000Z
                     noSecondsInDate = field_var.noSecondsDateFormat.match(targetValue)
                     targetValue = noSecondsInDate.group(1) + ":00" + noSecondsInDate.group(2)
                 elif not convertedToNumber and field_var.dateWithOnlyTime.match(targetValue):

@@ -17,7 +17,7 @@ $ ./flightParser -p cns1 cns2 CON2,4_ardu
 ```
 
 There are also command line options to change the data directory, the inner data folder, and the output directory. A built in `--help` function exists to describe these options.
-```sh
+```
 $ ./flightParser --help
 usage: flightParser [-h] [-p [PARSERS [PARSERS ...]]] [-d DATADIRECTORY]
                     [-f FLIGHTDATADIRECTORY] [-o OUTPUT]
