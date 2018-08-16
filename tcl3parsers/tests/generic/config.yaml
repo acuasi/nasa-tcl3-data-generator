@@ -205,7 +205,7 @@ parsers:
             - SAA1
             - SAA2_sub
             - SAA3
-            - SAA4_sub
+            - SAA4_sub_no_radar
             - SAA5
             - SAA6
             - flight_data
@@ -545,7 +545,7 @@ sub_parsers:
     SAA4_sub:
         swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
         swaggerhub_name_override: SAA4
-        output_name: saa4
+        output_name: SAA4
         required_files:
             MI_FILE:
                 - mission_insight.csv
@@ -567,6 +567,70 @@ sub_parsers:
         variable_parsers:
             fType:
                 exact: SAA4
+            intruder[intruderVelDown_ftPerSec]:
+                exception: None
+            intruder[intruderVelNorth_ftPerSec]:
+                exception: None
+            intruder[intruderVelEast_ftPerSec]:
+                exception: None
+            intruder[intruderGroundCourse_deg]:
+                exception: None
+            intruder[relativeHeadingAtFirstDetection_deg]:
+                exception: None
+            intruder[horRangeAccuracy_ft]:
+                exception: None
+            intruder[verRangeAccuracy_ft]:
+                exception: None
+            intruder[probabilityFalseAlarmPrct_nonDim]:
+                exception: None
+            intruder[probabilityIntruderDetectionPrct_nonDim]:
+                exception: None
+            intruder[dataPacketRatio_nonDim]:
+                exception: None
+            intruder[transmissionDelay_sec]:
+                exception: None
+            intruder[numberOfLostTracks_nonDim]:
+                exception: None
+            intruder[saaSensorAltitudeAccuracy_ft]:
+                exception: None
+            geoFence[geoFenceDynamicPolygonPoint]:
+                exception: []
+                fix: None
+
+    SAA4_sub_no_radar:
+        swagger_hub_spec: https://app.swaggerhub.com/apis/utm/tcl3-saa/v2
+        swaggerhub_name_override: SAA4
+        output_name: SAA4
+        required_files:
+            MI_FILE:
+                - mission_insight.csv
+            TI_FILE:
+                - TI.csv
+            TD_FILE:
+                - TD.csv
+            FIELD_VARS:
+                - field_vars.csv
+        global_parsers:
+            - saa4_main
+        file_parsers:
+            MI_FILE:
+                parser: mission_insight
+            FIELD_VARS:
+                parser: saa_field_vars
+        variable_parsers:
+            fType:
+                exact: SAA4
+            intruder[ts]:
+                exception: ""
+                fix: None
+            intruder[intruderPositionLat_deg]:
+                exception: None
+            intruder[intruderPositionLon_deg]:
+                exception: None
+            intruder[intruderPositionAlt_ft]:
+                exception: None
+            intruder[intruderGroundSpeed_ftPerSec]:
+                exception: None
             intruder[intruderVelDown_ftPerSec]:
                 exception: None
             intruder[intruderVelNorth_ftPerSec]:

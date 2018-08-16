@@ -45,26 +45,29 @@ def saa4_main(model, files):
                 geofence_polygon = {"ts": timestamp, "geoFenceDynamicPolygonPoint_deg": polygon}
                 geo_fence_dyn_poly.append(geofence_polygon)
 
-    with open(files["RADAR_FILE"], "r") as radar_file:
-        headers = radar_file.readline().split(",")
-        for line in radar_file:
-            # Split by commas and strip leading and trailing whitespaces
-            row = ([item.strip() for item in line.split(",")])
-            if (row[headers.index("Label")] == "T-362" or
-                    row[headers.index("Label")] == "T-189" and
-                    float(row[headers.index("Confidence Level")]) > 60.0):
 
-                dt_string = row[headers.index("Time of Intercept")]
-                ts = datetime.strptime(dt_string, "%d %B %Y %H:%M:%S").isoformat() + ".000Z"
-                lat_string = row[headers.index("Latitude")]
-                lon_string = row[headers.index("Longitude")]
-                lat, lon = system_helpers.lat_lon_converter(lat_string, lon_string)
-                alt = float(row[headers.index("Altitude")])
-                speed = float(row[headers.index("Speed")]) * constants.KTS_TO_FT
-                intruder = {"ts": ts, "intruderPositionLat_deg": lat,
-                            "intruderPositionLon_deg": lon, "intruderPositionAlt_ft": alt,
-                            "intruderGroundSpeed_ftPerSec": speed}
-                break
+    intruder = {}
+    if "RADAR_FILE" in files:
+        with open(files["RADAR_FILE"], "r") as radar_file:
+            headers = radar_file.readline().split(",")
+            for line in radar_file:
+                # Split by commas and strip leading and trailing whitespaces
+                row = ([item.strip() for item in line.split(",")])
+                if (row[headers.index("Label")] == "T-362" or
+                        row[headers.index("Label")] == "T-189" and
+                        float(row[headers.index("Confidence Level")]) > 60.0):
+
+                    dt_string = row[headers.index("Time of Intercept")]
+                    ts = datetime.strptime(dt_string, "%d %B %Y %H:%M:%S").isoformat() + ".000Z"
+                    lat_string = row[headers.index("Latitude")]
+                    lon_string = row[headers.index("Longitude")]
+                    lat, lon = system_helpers.lat_lon_converter(lat_string, lon_string)
+                    alt = float(row[headers.index("Altitude")])
+                    speed = float(row[headers.index("Speed")]) * constants.KTS_TO_FT
+                    intruder = {"ts": ts, "intruderPositionLat_deg": lat,
+                                "intruderPositionLon_deg": lon, "intruderPositionAlt_ft": alt,
+                                "intruderGroundSpeed_ftPerSec": speed}
+                    break
 
 
 
