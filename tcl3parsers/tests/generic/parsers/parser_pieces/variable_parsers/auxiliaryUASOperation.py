@@ -44,9 +44,7 @@ def auxiliaryUASOperation(files):
     type_of_operation = "Live"
 
     aux_op["flightTestCardName"] = mi_dict["test_card"]
-    aux_op["testIdentifiers"] = [{
-        mi_dict["test_identifiers"].lower(): mi_dict["TEST_NAME"]
-    }]
+    aux_op["testIdentifiers"] = mi_dict["test_identifiers"].split(" ")
     aux_op["typeOfOperation"] = type_of_operation
     aux_op["takeoffWeight_lb"] = float(takeoff_weight)
 
