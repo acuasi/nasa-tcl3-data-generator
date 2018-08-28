@@ -84,6 +84,7 @@ def flight_data_dji(model, files):
             sensor = ["aircraftAirborneState_nonDim"]
             value = int(row[headers.index("isflying")])
             state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+            uas_state.append(state_value)
 
             empty_values = [
                 "lateralNavPositionError_ft",
@@ -132,7 +133,8 @@ def flight_data_dji(model, files):
                 "targetGroundSpeed_ftPerSec",
                 "targetAirSpeed_ftPerSec",
                 "minDistToDefinedAreaLateralBoundary_ft",
-                "minDistToDefinedAreaVerticalBoundary_ft"
+                "minDistToDefinedAreaVerticalBoundary_ft",
+                "indicatedAirspeed_ftPerSec"
             ]
 
             for sensor in empty_sensors:

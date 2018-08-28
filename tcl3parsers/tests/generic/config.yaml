@@ -384,7 +384,7 @@ sub_parsers:
             fType:
                 exact: CON2
             UTM-TCL3-DMP-RevF-CONPDF:
-                exact: UTM-ACUASI-CON-2.pdf
+                exact: UTM-ACUASI-CON-0.pdf
             UTM-TCL3-DMP-RevF-CONKML:
                 exact: UTM-ACUASI-CON-2.kml
             plannedContingency[plannedContingencyLoiterAlt_ft]:
@@ -422,7 +422,7 @@ sub_parsers:
             fType:
                 exact: CON4
             UTM-TCL3-DMP-RevF-CONPDF:
-                exact: UTM-ACUASI-CON-4.pdf
+                exact: UTM-ACUASI-CON-0.pdf
             UTM-TCL3-DMP-RevF-CONKML:
                 exact: UTM-ACUASI-CON-4.kml
 
