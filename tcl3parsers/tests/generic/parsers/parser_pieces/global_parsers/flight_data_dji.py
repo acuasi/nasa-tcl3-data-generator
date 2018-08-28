@@ -46,8 +46,6 @@ def flight_data_dji(model, files):
             value = float(row[headers.index("altitude(feet)")])
             state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
             uas_state.append(state_value)
-            state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-            uas_state.append(state_value)
             sensor = ["groundSpeed_ftPerSec"]
             value = float(row[headers.index("speed(mph)")]) * constants.MPH_TO_FPS
             state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
@@ -113,20 +111,24 @@ def flight_data_dji(model, files):
             # Split by commas and strip leading and trailing whitespaces
             row = [item.strip() for item in line.split(",")]
 
-            sensor = ["targetWaypointLat_deg"]
-            value = float(row[headers.index('latitude')])
-            state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-            uas_state.append(state_value)
-            sensor = ["targetWaypointLon_deg"]
-            value = float(row[headers.index('longitude')])
-            state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-            uas_state.append(state_value)
-            sensor = ["targetWaypointAlt_ft"]
-            value = float(row[headers.index('altitude(m)')]) * constants.M_TO_FT
-            state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-            uas_state.append(state_value)
+            # We can't get timestamps for these target waypoint values so we don't include them
+            # sensor = ["targetWaypointLat_deg"]
+            # value = float(row[headers.index('latitude')])
+            # state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+            # uas_state.append(state_value)
+            # sensor = ["targetWaypointLon_deg"]
+            # value = float(row[headers.index('longitude')])
+            # state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+            # uas_state.append(state_value)
+            # sensor = ["targetWaypointAlt_ft"]
+            # value = float(row[headers.index('altitude(m)')]) * constants.M_TO_FT
+            # state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+            # uas_state.append(state_value)
 
             empty_sensors = [
+                "targetWaypointLat_deg",
+                "targetWaypointLon_deg",
+                "targetWaypointAlt_ft",
                 "targetGroundSpeed_ftPerSec",
                 "targetAirSpeed_ftPerSec",
                 "minDistToDefinedAreaLateralBoundary_ft",

@@ -6,6 +6,8 @@ import helpers.constants as constants
 def flightDataPtar(model, files):
     # Set up data structures
     wp_type = 0
+    old_timestamp = ""
+    old_timestamp2 = ""
     ac_flight_plan = []
     waypoint = {}
     uas_state = []
@@ -92,11 +94,14 @@ def flightDataPtar(model, files):
             if row[constants.COL_J] == "mavlink_scaled_pressure_t":
                 timestamp = row[constants.COL_A] + "Z"
 
-                sensor = ["barometricPressure_psi"]
-                # Given mmhg, convert to PSI
-                baro = float(row[constants.COL_N]) * 0.0193367778713
-                state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-                uas_state.append(state_value)
+                if(timestamp != old_timestamp2):
+
+                    sensor = ["barometricPressure_psi"]
+                    # Given mmhg, convert to PSI
+                    baro = float(row[constants.COL_N]) * 0.0193367778713
+                    state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+                    uas_state.append(state_value)
+                    old_timestamp2 = timestamp
 
             if row[constants.COL_J] == "mavlink_radio_t":
                 timestamp = row[constants.COL_A] + "Z"
@@ -208,21 +213,25 @@ def flightDataPtar(model, files):
             if row[constants.COL_J] == "mavlink_raw_imu_t":
                 timestamp = row[constants.COL_A] + "Z"
 
-                # Tlog units are mg
-                sensor = ["accBodyX_ftPerSec2"]
-                value = float(row[constants.COL_N]) * 0.00328084
-                state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-                uas_state.append(state_value)
+                if(timestamp != old_timestamp):
 
-                sensor = ["accBodyY_ftPerSec2"]
-                value = float(row[constants.COL_P]) * 0.00328084
-                state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-                uas_state.append(state_value)
+                    # Tlog units are mg
+                    sensor = ["accBodyX_ftPerSec2"]
+                    value = float(row[constants.COL_N]) * 0.00328084
+                    state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+                    uas_state.append(state_value)
 
-                sensor = ["accBodyZ_ftPerSec2"]
-                value = float(row[constants.COL_R]) * 0.00328084
-                state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
-                uas_state.append(state_value)
+                    sensor = ["accBodyY_ftPerSec2"]
+                    value = float(row[constants.COL_P]) * 0.00328084
+                    state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+                    uas_state.append(state_value)
+
+                    sensor = ["accBodyZ_ftPerSec2"]
+                    value = float(row[constants.COL_R]) * 0.00328084
+                    state_value = {"ts": timestamp, "sensor": sensor, "value": [value]}
+                    uas_state.append(state_value)
+
+                    old_timestamp = timestamp
 
             if row[constants.COL_J] == "mavlink_sys_status_t":
                 timestamp = row[constants.COL_A] + "Z"
